@@ -150,3 +150,7 @@ Artisan::command('analysis:database-activity', function () {
 })->purpose('Menampilkan query database yang masih aktif saat analisis berjalan');
 
 Schedule::command('analysis:cleanup')->hourly()->withoutOverlapping();
+Schedule::command('topology:poll-ports')
+    ->everyMinute()
+    ->withoutOverlapping()
+    ->when(fn (): bool => (bool) config('asset-topology.snmp.enabled'));

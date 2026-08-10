@@ -83,6 +83,13 @@ class UnitController extends Controller
 
     public function destroy(OrganizationalUnit $unit)
     {
+        if ($unit->networkAssets()->exists() || $unit->topologyDatasets()->exists()) {
+            return back()->with(
+                'unit_manager_error',
+                "Unit {$unit->name} masih digunakan oleh data aset atau topologi. Pindahkan data tersebut terlebih dahulu."
+            );
+        }
+
         if ($unit->analyses()->exists()) {
             return back()->with(
                 'unit_manager_error',

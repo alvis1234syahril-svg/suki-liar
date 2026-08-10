@@ -57,7 +57,11 @@
             <p class="mt-5 text-xs leading-5 text-slate-400">File dengan jutaan baris memang butuh waktu lebih lama. Biarkan halaman ini terbuka dan progres akan terus diperbarui.</p>
         @else
             <div class="mt-6 flex flex-wrap gap-3">
-                <a href="{{ route('analysis.create') }}" class="inline-flex rounded-xl bg-blue-600 px-5 py-3 text-sm font-extrabold text-white">Kembali dan unggah ulang</a>
+                <form method="POST" action="{{ route('analysis.retry', $batch) }}">
+                    @csrf
+                    <button type="submit" class="rounded-xl bg-blue-600 px-5 py-3 text-sm font-extrabold text-white">Proses ulang file ini</button>
+                </form>
+                <a href="{{ route('analysis.create') }}" class="inline-flex rounded-xl border border-slate-200 px-5 py-3 text-sm font-extrabold text-slate-700">Unggah file lain</a>
                 <form method="POST" action="{{ route('analysis.destroy', $batch) }}" onsubmit="return confirm('Hapus file dan seluruh data parsial dari analisis yang gagal?')">
                     @csrf
                     @method('DELETE')

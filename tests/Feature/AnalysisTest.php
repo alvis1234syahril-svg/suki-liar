@@ -243,6 +243,84 @@ class AnalysisTest extends TestCase
         $this->assertSame('DNS', json_decode($summary->top_apps, true, flags: JSON_THROW_ON_ERROR)[0]['app']);
     }
 
+    public function test_parser_chunks_large_inserts_below_the_sqlite_parameter_limit(): void
+    {
+        Storage::fake();
+        Queue::fake();
+        $path = 'uploads/more-than-one-thousand.log';
+        $line = 'date=2026-08-10 time=08:00:00 srcip=10.10.0.2 dstip=8.8.8.8 app=DNS action=accept sentbyte=120 rcvdbyte=340';
+        Storage::put($path, implode(PHP_EOL, array_fill(0, 1001, $line)));
+
+        $batch = AnalysisBatch::create([
+            'uuid' => fake()->uuid(),
+            'original_filename' => 'more-than-one-thousand.log',
+            'stored_path' => $path,
+            'status' => 'uploaded',
+            'file_size' => Storage::size($path),
+        ]);
+
+        (new ParseFortiGateLog($batch->id))->handle(app(FortiGateLogParser::class));
+
+        $batch->refresh();
+        $this->assertSame('summarizing', $batch->status);
+        $this->assertSame(1001, $batch->processed_lines);
+        $this->assertDatabaseCount('traffic_logs', 1001);
+        Queue::assertPushed(BuildAnalysisSummary::class, fn (BuildAnalysisSummary $job): bool => $job->batchId === $batch->id);
+    }
+
+    public function test_failed_analysis_can_retry_the_saved_file_without_uploading_again(): void
+    {
+        Storage::fake();
+        Queue::fake();
+        Storage::put('uploads/retry.log', 'date=2026-08-10 time=08:00:00 srcip=10.0.0.2 dstip=8.8.8.8 action=accept');
+        $batch = AnalysisBatch::create([
+            'uuid' => fake()->uuid(),
+            'original_filename' => 'retry.log',
+            'stored_path' => 'uploads/retry.log',
+            'status' => 'failed',
+            'failure_message' => 'SQLite parameter limit',
+            'processed_bytes' => 400,
+            'processed_lines' => 10,
+            'invalid_lines' => 2,
+            'summary_progress' => 12,
+            'summary_stage' => 'Gagal',
+            'summary_data' => ['partial' => true],
+        ]);
+        DB::table('traffic_logs')->insert([
+            'analysis_batch_id' => $batch->id,
+            'srcip' => '10.0.0.2',
+            'raw_log' => 'partial',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+        DB::table('analysis_client_summaries')->insert([
+            'analysis_batch_id' => $batch->id,
+            'srcip' => '10.0.0.2',
+            'risk_level' => 'low',
+            'risk_label' => 'Rendah',
+            'risk_reason' => 'Partial',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        $this->get(route('analysis.show', $batch))
+            ->assertOk()
+            ->assertSee('Proses ulang file ini');
+
+        $this->post(route('analysis.retry', $batch))
+            ->assertRedirect(route('analysis.show', ['batch' => $batch, 'progress' => 1]));
+
+        $batch->refresh();
+        $this->assertSame('uploaded', $batch->status);
+        $this->assertNull($batch->failure_message);
+        $this->assertNull($batch->summary_data);
+        $this->assertSame(0, $batch->processed_bytes);
+        $this->assertSame(0, $batch->processed_lines);
+        $this->assertDatabaseMissing('traffic_logs', ['analysis_batch_id' => $batch->id]);
+        $this->assertDatabaseMissing('analysis_client_summaries', ['analysis_batch_id' => $batch->id]);
+        Queue::assertPushed(ParseFortiGateLog::class, fn (ParseFortiGateLog $job): bool => $job->batchId === $batch->id);
+    }
+
     public function test_dashboard_displays_real_batch_totals(): void
     {
         $batch = AnalysisBatch::create([

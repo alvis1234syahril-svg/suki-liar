@@ -34,6 +34,16 @@ class OrganizationalUnit extends Model
             );
     }
 
+    public function networkAssets(): HasMany
+    {
+        return $this->hasMany(NetworkAsset::class);
+    }
+
+    public function topologyDatasets(): HasMany
+    {
+        return $this->hasMany(TopologyDataset::class);
+    }
+
     public function getRouteKeyName(): string
     {
         return 'slug';

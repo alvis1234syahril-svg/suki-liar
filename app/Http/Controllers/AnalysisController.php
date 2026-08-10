@@ -765,6 +765,46 @@ class AnalysisController extends Controller
             ->with('success', 'Hasil analisis berhasil dihapus.');
     }
 
+    public function retry(AnalysisBatch $batch)
+    {
+        abort_unless($batch->status === 'failed', 409, 'Hanya analisis yang gagal yang dapat diproses ulang.');
+        abort_unless(Storage::exists($batch->stored_path), 410, 'File sumber sudah tidak tersedia. Unggah kembali file log.');
+
+        DB::transaction(function () use ($batch): void {
+            $claimed = AnalysisBatch::query()
+                ->whereKey($batch->id)
+                ->where('status', 'failed')
+                ->update([
+                    'status' => 'uploaded',
+                    'failure_message' => null,
+                    'processed_bytes' => 0,
+                    'summary_progress' => 0,
+                    'summary_stage' => null,
+                    'total_lines' => 0,
+                    'processed_lines' => 0,
+                    'invalid_lines' => 0,
+                    'started_at' => null,
+                    'completed_at' => null,
+                    'published_at' => null,
+                    'raw_purged_at' => null,
+                    'expires_at' => null,
+                    'summary_data' => null,
+                    'updated_at' => now(),
+                ]);
+
+            abort_unless($claimed === 1, 409, 'Analisis ini sudah masuk antrean proses ulang.');
+
+            DB::table('traffic_logs')->where('analysis_batch_id', $batch->id)->delete();
+            DB::table('analysis_client_summaries')->where('analysis_batch_id', $batch->id)->delete();
+
+            ParseFortiGateLog::dispatch($batch->id);
+        });
+
+        return redirect()
+            ->route('analysis.show', ['batch' => $batch, 'progress' => 1])
+            ->with('success', 'File lama berhasil dimasukkan kembali ke antrean analisis.');
+    }
+
     public function update(Request $request, AnalysisBatch $batch)
     {
         $validated = $request->validate([

@@ -96,6 +96,9 @@
                         <div class="mt-2 flex items-end gap-2"><span class="text-2xl font-extrabold {{ $assessment['level'] === 'low' ? 'text-emerald-300' : $tone }}">{{ strtoupper($assessment['label']) }}</span><span class="mb-1 text-xs text-slate-400">{{ number_format($assessment['score'], 1) }}/100</span></div>
                     </div>
                 @endforeach
+                @if($batch->organizationalUnit?->slug)
+                    <a href="{{ route('topology.index', ['location' => $batch->organizationalUnit->slug]) }}" class="rounded-2xl border border-blue-300/30 bg-blue-400/10 px-5 py-3 text-sm font-extrabold text-blue-100">Lihat di Topologi Aset</a>
+                @endif
                 <a href="{{ route('analysis.create') }}" class="rounded-2xl bg-white px-5 py-3 text-sm font-extrabold text-slate-900">+ Analisis baru</a>
             </div>
         </div>

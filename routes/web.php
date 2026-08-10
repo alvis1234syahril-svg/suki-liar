@@ -2,10 +2,16 @@
 
 use App\Http\Controllers\AnalysisController;
 use App\Http\Controllers\ComparisonController;
+use App\Http\Controllers\TopologyController;
 use App\Http\Controllers\UnitController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [AnalysisController::class, 'create'])
+    ->name('analysis.legacy-create');
+
+// A dedicated URL avoids stale browser cache from the previous static app
+// that used the origin root (/) for "PLN Asset Map".
+Route::get('/analysis/new', [AnalysisController::class, 'create'])
     ->name('analysis.create');
 
 Route::get('/dashboard', [UnitController::class, 'index'])
@@ -52,6 +58,9 @@ Route::get('/analysis/{batch}/client/{ip}', [AnalysisController::class, 'showCli
 Route::patch('/analysis/{batch}', [AnalysisController::class, 'update'])
     ->name('analysis.update');
 
+Route::post('/analysis/{batch}/retry', [AnalysisController::class, 'retry'])
+    ->name('analysis.retry');
+
 Route::delete('/analysis/{batch}', [AnalysisController::class, 'destroy'])
     ->name('analysis.destroy');
 
@@ -60,3 +69,13 @@ Route::get('/comparisons', [ComparisonController::class, 'index'])
 
 Route::get('/comparisons/units/{unit}/clients', [ComparisonController::class, 'clients'])
     ->name('comparisons.clients');
+
+Route::prefix('asset-topology')->name('topology.')->group(function (): void {
+    Route::get('/', [TopologyController::class, 'index'])->name('index');
+    Route::get('/data', [TopologyController::class, 'data'])->name('data');
+    Route::post('/locations', [TopologyController::class, 'storeLocation'])->name('locations.store');
+    Route::post('/import', [TopologyController::class, 'importWorkbook'])->name('import');
+    Route::post('/ports/assign', [TopologyController::class, 'assignAccessPoint'])->name('ports.assign');
+    Route::patch('/assets/{asset}', [TopologyController::class, 'updateAsset'])->name('assets.update');
+    Route::get('/export', [TopologyController::class, 'export'])->name('export');
+});

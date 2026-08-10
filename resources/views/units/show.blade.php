@@ -43,6 +43,7 @@
             <div class="flex flex-wrap gap-2">
                 @if($running)<a href="{{ route('analysis.show', $running) }}" class="rounded-xl border border-blue-400/30 bg-blue-400/10 px-4 py-2.5 text-sm font-bold text-blue-200">Lihat progres</a>@endif
                 @if($latest)<a href="{{ route('analysis.show', $latest) }}" class="rounded-xl bg-white px-4 py-2.5 text-sm font-extrabold text-slate-900">Buka hasil terbaru</a>@endif
+                <a href="{{ route('topology.index', ['location' => $unit->slug]) }}" class="rounded-xl border border-blue-400/30 bg-blue-400/10 px-4 py-2.5 text-sm font-bold text-blue-100">Topologi Aset</a>
                 <a href="{{ route('analysis.create', ['unit' => $unit->id]) }}" class="rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-extrabold">+ Upload log</a>
             </div>
         </div>

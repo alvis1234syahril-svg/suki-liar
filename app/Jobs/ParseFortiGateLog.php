@@ -15,6 +15,13 @@ class ParseFortiGateLog implements ShouldQueue
 {
     use Queueable;
 
+    /**
+     * Keep one insert below SQLite's bound-parameter limit. A parsed traffic
+     * row currently contains roughly 35 columns, so 1,000 rows can exceed the
+     * default SQLite limit and leave an upload stuck or failed at zero percent.
+     */
+    private const INSERT_BATCH_SIZE = 500;
+
     public int $timeout = 3600;
 
     public int $tries = 1;
@@ -60,7 +67,7 @@ class ParseFortiGateLog implements ShouldQueue
                 $rows[] = $parser->toDatabaseRow($batch->id, $data, $line);
                 $processed++;
 
-                if (count($rows) >= 1000) {
+                if (count($rows) >= self::INSERT_BATCH_SIZE) {
                     DB::table('traffic_logs')->insert($rows);
                     $rows = [];
 

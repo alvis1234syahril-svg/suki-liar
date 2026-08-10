@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @stack('styles')
 </head>
 <body class="theme-electric font-sans text-slate-200 antialiased">
 <div class="electric-shell min-h-screen lg:flex">
@@ -22,6 +23,7 @@
             <a href="{{ route('analysis.dashboard') }}" class="electric-nav-link flex shrink-0 items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition {{ request()->routeIs('analysis.show', 'analysis.dashboard', 'analysis.client.*', 'units.*') ? 'is-active' : '' }}"><svg class="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg><span>Dashboard</span></a>
             <a href="{{ route('analysis.create') }}" class="electric-nav-link flex shrink-0 items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition {{ request()->routeIs('analysis.create') ? 'is-active' : '' }}"><svg class="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Analisis Baru</span></a>
             <a href="{{ route('comparisons.index') }}" class="electric-nav-link flex shrink-0 items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition {{ request()->routeIs('comparisons.*') ? 'is-active' : '' }}"><svg class="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 18V9m6 9V5m6 13v-7m4 7H2"/></svg><span>Bandingkan Unit</span></a>
+            <a href="{{ route('topology.index') }}" class="electric-nav-link flex shrink-0 items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition {{ request()->routeIs('topology.*') ? 'is-active' : '' }}"><svg class="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="9" y="3" width="6" height="5" rx="1.5"/><rect x="3" y="16" width="6" height="5" rx="1.5"/><rect x="15" y="16" width="6" height="5" rx="1.5"/><path d="M12 8v4M6 16v-4h12v4"/></svg><span>Topologi Aset</span></a>
         </nav>
     </aside>
 
@@ -43,5 +45,6 @@
         <section class="mx-auto max-w-[1440px] p-4 sm:p-6 lg:p-7">@yield('content')</section>
     </main>
 </div>
+@stack('scripts')
 </body>
 </html>
