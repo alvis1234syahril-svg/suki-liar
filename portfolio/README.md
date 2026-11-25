@@ -5,9 +5,12 @@ Situs portofolio satu halaman bertema Yunani kuno. Halaman bercerita dari senja 
 Situs statis murni (HTML, CSS, JavaScript tanpa build) dan tidak bergantung pada aplikasi Laravel di repo ini.
 
 - Desain Figma: https://www.figma.com/design/GHARUTXrcZveHbmxf3K1JN
-  - `🏛 Desain Halaman`: mockup desktop 1440 px
-  - `🏺 Aset Parallax`: semua lapisan dan ikon (sumber file di `assets/figma/`)
+  - `🖼 Sampul`: sampul file
+  - `🏛 Desain Halaman`: mockup desktop 1440 px, mockup ponsel 390 px, dan overlay menu ponsel
+  - `🧩 Komponen`: Tombol, Pilar keahlian, Kartu karya, Kartu lainnya, Singgah lini masa, Baris fakta, Tag teknologi, Pita meander, dan ikon
+  - `🏺 Aset Parallax`: semua lapisan dan ilustrasi (sumber file di `assets/figma/`)
   - `📜 Panduan Gaya`: palet, tipografi, peta kecepatan parallax, motif
+- Prototipe: buka halaman `🏛 Desain Halaman`, tekan Present, lalu pilih flow `Desktop · 1440` atau `Ponsel · 390`. Navigasi tetap di atas saat menggulir, tautan menggulir ke bagiannya, tombol GitHub membuka profil, dan tombol Menu di ponsel membuka overlay.
 
 ## Menjalankan
 
