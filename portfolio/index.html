@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Alvis Syahril · Portofolio</title>
+  <meta name="description" content="Portofolio Alvis Syahril, web developer Laravel dan JavaScript.">
+  <meta name="theme-color" content="#1B2F4E">
+  <link rel="icon" href="assets/figma/mahkota-laurel.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=GFS+Didot&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+  <script>document.documentElement.classList.add("js");</script>
+</head>
+<body>
+  <a class="skip-link" href="#tentang">Lewati ke isi</a>
+
+  <header class="nav" data-nav>
+    <a class="nav__brand" href="#awal">
+      <img src="assets/figma/mahkota-laurel.svg" alt="" width="30" height="30">
+      <span data-bind="nama">Alvis Syahril</span>
+    </a>
+    <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="menu-utama">
+      <span class="nav__toggle-bars" aria-hidden="true"></span>
+      <span class="nav__toggle-label">Menu</span>
+    </button>
+    <nav class="nav__menu" id="menu-utama" aria-label="Navigasi utama">
+      <ul>
+        <li><a href="#tentang">Tentang</a></li>
+        <li><a href="#keahlian">Keahlian</a></li>
+        <li><a href="#karya">Karya</a></li>
+        <li><a href="#perjalanan">Perjalanan</a></li>
+        <li><a href="#kontak">Kontak</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <div class="load-error" role="alert" hidden data-load-error>
+      Konten portofolio tidak termuat. Periksa file <code>js/data.js</code>: kemungkinan ada tanda kutip atau koma yang hilang.
+    </div>
+
+    <!-- Hero: pemandangan senja dari serambi kuil. Setiap lapisan bergerak dengan kecepatan sendiri. -->
+    <section class="hero" id="awal" aria-labelledby="judul-hero">
+      <div class="hero__stage" aria-hidden="true" data-stage>
+        <div class="layer layer--sky" data-speed="0.05"></div>
+        <div class="layer" data-speed="0.1" data-mx="4">
+          <div class="sun-glow"></div>
+          <div class="sun"></div>
+        </div>
+        <div class="layer" data-speed="0.12" data-mx="6"><img class="clouds" src="assets/figma/awan-garis.svg" alt=""></div>
+        <div class="layer" data-speed="0.18" data-mx="8"><img class="isle-far" src="assets/figma/pulau-jauh.svg" alt=""></div>
+        <div class="layer" data-speed="0.2" data-mx="9">
+          <div class="sea"></div>
+          <img class="glints" src="assets/figma/kilau-laut.svg" alt="">
+        </div>
+        <div class="layer" data-speed="0.25" data-mx="14"><img class="birds" src="assets/figma/burung-camar.svg" alt=""></div>
+        <div class="layer" data-speed="0.3" data-mx="14"><div class="isle-near"><img src="assets/figma/pulau-dekat.svg" alt=""></div></div>
+        <div class="layer" data-speed="0.42" data-mx="20"><div class="acropolis"><img src="assets/figma/akropolis.svg" alt=""></div></div>
+        <div class="layer" data-speed="0.62" data-mx="28"><div class="trees"><img src="assets/figma/pepohonan.svg" alt=""></div></div>
+        <div class="layer" data-speed="1" data-mx="36"><div class="ruins"><img src="assets/figma/reruntuhan.svg" alt=""></div></div>
+        <div class="layer" data-speed="1.12" data-mx="48">
+          <img class="column column--left" src="assets/figma/kolom-siluet.svg" alt="">
+          <img class="column column--right" src="assets/figma/kolom-siluet.svg" alt="">
+        </div>
+      </div>
+
+      <div class="hero__content" data-hero-content>
+        <p class="overline overline--light" data-bind="hero.sapaan">Χαίρετε · salam kenal, saya</p>
+        <h1 class="hero__name" id="judul-hero" data-hero-name><span>Alvis</span> <span>Syahril</span></h1>
+        <p class="hero__lead" data-bind="hero.peran"></p>
+        <div class="hero__actions">
+          <a class="btn btn--gold" href="#karya">Lihat karya saya</a>
+          <a class="btn btn--ghost" href="#kontak">Kirim pesan</a>
+        </div>
+      </div>
+      <a class="hero__cue" href="#tentang">Gulir ke bawah</a>
+    </section>
+
+    <div class="band" aria-hidden="true"></div>
+
+    <!-- Α · Tentang -->
+    <section class="about section" id="tentang" aria-labelledby="judul-tentang">
+      <div class="about__niche" data-reveal>
+        <div class="about__niche-art" data-depth="-0.08" data-about-art>
+          <img src="assets/figma/patung-dada.svg" alt="" width="600" height="720">
+        </div>
+      </div>
+      <div class="about__text">
+        <p class="overline">Α · Tentang</p>
+        <h2 class="h2" id="judul-tentang" data-bind="tentang.judul" data-reveal>Pembangun di balik kolom-kolom ini</h2>
+        <div class="about__body" data-about-body></div>
+        <dl class="facts" data-facts></dl>
+      </div>
+    </section>
+
+    <!-- Β · Keahlian: empat pilar kuil -->
+    <section class="skills section" id="keahlian" aria-labelledby="judul-keahlian">
+      <header class="section-head section-head--center">
+        <p class="overline">Β · Keahlian</p>
+        <h2 class="h2" id="judul-keahlian" data-reveal>Empat pilar yang saya pegang</h2>
+      </header>
+      <div class="temple">
+        <div class="temple__pediment" aria-hidden="true" data-reveal="drop">
+          <img src="assets/figma/mahkota-laurel.svg" alt="">
+        </div>
+        <div class="temple__architrave" aria-hidden="true"></div>
+        <ul class="temple__pillars" data-pillars></ul>
+        <div class="temple__steps" aria-hidden="true"><span></span><span></span><span></span></div>
+      </div>
+    </section>
+
+    <div class="band band--ink" aria-hidden="true"></div>
+
+    <!-- Γ · Karya: galeri yang bergeser ke samping saat digulir (desktop) -->
+    <section class="works" id="karya" aria-labelledby="judul-karya" data-works>
+      <div class="works__sticky" data-works-sticky>
+        <header class="works__head">
+          <div>
+            <p class="overline overline--light">Γ · Karya</p>
+            <h2 class="h2 h2--light" id="judul-karya">Galeri karya</h2>
+          </div>
+          <p class="works__hint" data-works-hint>Gulir untuk menggeser galeri</p>
+        </header>
+        <ol class="works__track" data-works-track></ol>
+      </div>
+    </section>
+
+    <!-- Δ · Perjalanan -->
+    <section class="journey section" id="perjalanan" aria-labelledby="judul-perjalanan">
+      <div class="journey__aside">
+        <p class="overline">Δ · Perjalanan</p>
+        <h2 class="h2" id="judul-perjalanan" data-reveal>Odisei saya</h2>
+        <p class="lead">Persinggahan yang membentuk cara saya bekerja.</p>
+        <div class="journey__olive" data-depth="0.12" aria-hidden="true">
+          <img src="assets/figma/ranting-zaitun.svg" alt="">
+        </div>
+      </div>
+      <ol class="timeline" data-timeline></ol>
+    </section>
+
+    <div class="band band--night" aria-hidden="true"></div>
+
+    <!-- Ε · Kontak: malam di Akropolis -->
+    <section class="contact" id="kontak" aria-labelledby="judul-kontak">
+      <div class="contact__stars" aria-hidden="true" data-stars data-depth="0.25"></div>
+      <div class="contact__inner">
+        <img class="contact__laurel" src="assets/figma/mahkota-laurel.svg" alt="" width="84" height="84">
+        <p class="overline overline--light">Ε · Kontak</p>
+        <h2 class="h2 h2--light" id="judul-kontak" data-bind="kontak.judul" data-reveal>Ada proyek yang perlu dibangun?</h2>
+        <p class="contact__lead" data-bind="kontak.ajakan"></p>
+        <div class="contact__actions" data-contact-actions></div>
+      </div>
+      <div class="contact__acropolis" aria-hidden="true">
+        <div data-depth="-0.18"><img src="assets/figma/akropolis-malam.svg" alt=""></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>© <span data-year>2026</span> <span data-bind="nama">Alvis Syahril</span></p>
+    <p>Ilustrasi dibuat bersama Figma AI</p>
+    <a href="#awal">Kembali ke atas</a>
+  </footer>
+
+  <noscript>
+    <p class="noscript">Halaman ini memerlukan JavaScript untuk menampilkan isi portofolio.</p>
+  </noscript>
+
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
