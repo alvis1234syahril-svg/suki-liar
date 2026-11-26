@@ -39,6 +39,133 @@
   };
   var newTab = '<span class="visually-hidden"> (tab baru)</span>';
   var ICON_DEPTH = [0.05, -0.04, 0.07, -0.05]; // ikon pilar melayang dengan kedalaman berbeda
+  var LOG_LABEL = { terlihat: "terlihat di log", ambigu: "ambigu, IP dipakai beberapa aset", belum: "belum terlihat di log" };
+  var PORT_LABEL = { normal: "normal (admin up, link up)", periksa: "perlu diperiksa (admin up, link down)", nonaktif: "dinonaktifkan (admin down)" };
+
+  /* ---------------- Gambar karya + demo topologi di atas ukiran ---------------- */
+  function mediaHTML(w) {
+    var img = '<img class="work__shot" src="' + esc(w.gambar) + '" alt="' + esc(w.gambarAlt || "Tangkapan layar " + w.judul) + '" loading="lazy">';
+    var t = w.topologi;
+    if (!t || !(t.simpul || []).length) return '<div class="work__media">' + img + "</div>";
+    var byId = {};
+    t.simpul.forEach(function (n) { byId[n.id] = n; });
+    var edges = (t.tautan || []).filter(function (e) { return byId[e[0]] && byId[e[1]]; }).map(function (e) {
+      var a = byId[e[0]], b = byId[e[1]];
+      var tree = a.induk === b.id || b.induk === a.id;
+      return '<line class="topo__edge ' + (tree ? "is-tree" : "is-backup") + '" data-a="' + esc(a.id) + '" data-b="' + esc(b.id) +
+        '" x1="' + a.x + '" y1="' + a.y + '" x2="' + b.x + '" y2="' + b.y + '"/>';
+    }).join("");
+    var nodes = t.simpul.map(function (n) {
+      return '<g class="topo__node is-' + esc(n.log) + '" data-id="' + esc(n.id) + '" data-traffic="' + esc(n.traffic) +
+        '" tabindex="0" role="button" aria-pressed="false" aria-label="' + esc(n.nama + ", " + n.tipe + ", " + (LOG_LABEL[n.log] || n.log)) + '">' +
+        '<circle class="topo__hit" cx="' + n.x + '" cy="' + n.y + '" r="46"/>' +
+        '<circle class="topo__ring" cx="' + n.x + '" cy="' + n.y + '" r="22"/>' +
+        (n.port && n.port !== "normal" ? '<g class="topo__warn"><circle cx="' + (n.x + 24) + '" cy="' + (n.y - 24) + '" r="16"/><text x="' + (n.x + 24) + '" y="' + (n.y - 16) + '">!</text></g>' : "") +
+        "</g>";
+    }).join("");
+    return '<div class="topo__bar"><span class="topo__badge">Demo interaktif · data contoh</span>' +
+      '<button class="topo__btn" type="button" aria-pressed="false" data-topo-sim>Simulasikan traffic</button></div>' +
+      '<div class="work__media">' + img +
+      '<svg class="topo__svg" viewBox="0 0 ' + t.lebar + " " + t.tinggi + '" preserveAspectRatio="xMidYMid slice" role="group" aria-label="Diagram topologi interaktif, ' + t.simpul.length + ' simpul">' +
+      '<defs><filter id="topo-glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>' +
+      '<g class="topo__edges">' + edges + '</g><g data-topo-packets></g><g class="topo__nodes">' + nodes + "</g></svg></div>" +
+      '<div class="topo__tip" data-topo-tip hidden></div>';
+  }
+
+  function initTopo() {
+    $$("[data-topo]").forEach(function (art) {
+      var t = ((D.karya || [])[+art.getAttribute("data-topo")] || {}).topologi;
+      if (!t) return;
+      var card = art.closest(".work");
+      var byId = {};
+      t.simpul.forEach(function (n) { byId[n.id] = n; });
+      var svg = $(".topo__svg", art), tip = $("[data-topo-tip]", art), btn = $("[data-topo-sim]", art);
+      var packets = $("[data-topo-packets]", art), panel = $("[data-topo-panel]", card);
+      var nodes = $$(".topo__node", art), edges = $$(".topo__edge", art);
+      var selected = null;
+      var NS = "http://www.w3.org/2000/svg";
+      var row = function (k, v) { return "<dt>" + k + "</dt><dd>" + esc(v) + "</dd>"; };
+      var chain = function (id) { var out = [], guard = 0; while (id && byId[id] && guard++ < 50) { out.push(id); id = byId[id].induk; } return out; };
+      var hint = '<p class="topo__hint">Klik simpul pada ukiran, atau tekan Tab, untuk melihat detail aset dan jalurnya ke firewall.</p>' +
+        '<p class="topo__legend"><span class="lg"></span>terlihat di log <span class="lg lg--dash"></span>ambigu <span class="lg lg--dim"></span>belum terlihat <span class="lg--warn">!</span> port perlu diperiksa</p>';
+
+      // Pilih simpul: sorot jalurnya sampai akar (induk demi induk) dan tampilkan detail aset.
+      var select = function (id) {
+        selected = id;
+        var path = id ? chain(id) : [];
+        nodes.forEach(function (g) {
+          var nid = g.getAttribute("data-id");
+          g.classList.toggle("is-selected", nid === id);
+          g.classList.toggle("is-chain", path.indexOf(nid) > 0);
+          g.setAttribute("aria-pressed", String(nid === id));
+        });
+        edges.forEach(function (e) {
+          var a = e.getAttribute("data-a"), b = e.getAttribute("data-b");
+          var tree = byId[a].induk === b || byId[b].induk === a;
+          e.classList.toggle("is-path", tree && path.indexOf(a) > -1 && path.indexOf(b) > -1);
+          e.classList.toggle("is-child", !!id && ((a === id && byId[b].induk === id) || (b === id && byId[a].induk === id)));
+        });
+        art.classList.toggle("has-selection", !!id);
+        if (!id) { panel.innerHTML = hint; return; }
+        var n = byId[id], parent = n.induk ? byId[n.induk] : null;
+        panel.innerHTML = '<p class="topo__name">' + esc(n.nama) + "</p><dl>" +
+          row("Tipe", n.tipe + " · " + n.ip) + row("Induk", parent ? parent.nama : "akar topologi") +
+          row("Di log", LOG_LABEL[n.log] || n.log) + row("Port", PORT_LABEL[n.port] || n.port) +
+          (art.classList.contains("is-sim") ? row("Traffic", n.traffic) : "") + "</dl>";
+      };
+      var tipFor = function (g) {
+        if (!g) { tip.hidden = true; return; }
+        var r = $(".topo__ring", g).getBoundingClientRect(), ar = art.getBoundingClientRect();
+        tip.textContent = byId[g.getAttribute("data-id")].nama;
+        tip.style.left = (r.left + r.width / 2 - ar.left).toFixed(0) + "px";
+        tip.style.top = (r.top - ar.top).toFixed(0) + "px";
+        tip.hidden = false;
+      };
+      var nodeOf = function (e) { return e.target.closest && e.target.closest(".topo__node"); };
+
+      svg.addEventListener("click", function (e) { var g = nodeOf(e); if (g) select(selected === g.getAttribute("data-id") ? null : g.getAttribute("data-id")); });
+      svg.addEventListener("keydown", function (e) {
+        var g = nodeOf(e);
+        if (g && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); select(selected === g.getAttribute("data-id") ? null : g.getAttribute("data-id")); }
+      });
+      art.addEventListener("keydown", function (e) { if (e.key === "Escape" && selected) { select(null); } });
+      svg.addEventListener("pointerover", function (e) { tipFor(nodeOf(e)); });
+      svg.addEventListener("pointerout", function (e) { if (!e.relatedTarget || !nodeOf({ target: e.relatedTarget })) tipFor(null); });
+      svg.addEventListener("focusin", function (e) { tipFor(nodeOf(e)); });
+      svg.addEventListener("focusout", function () { tipFor(null); });
+
+      // Simulasi traffic: paket cahaya mengalir dari setiap aset ke induknya, sebanyak tingkat traffic-nya.
+      var COUNT = { tinggi: 3, sedang: 2, rendah: 1 };
+      var setSim = function (on) {
+        art.classList.toggle("is-sim", on);
+        btn.setAttribute("aria-pressed", String(on));
+        btn.textContent = on ? "Hentikan simulasi" : "Simulasikan traffic";
+        packets.innerHTML = "";
+        if (selected) select(selected);
+        if (!on || reduceMotion.matches) return; // gerak dikurangi: jalur aktif tetap disorot, tanpa paket bergerak
+        t.simpul.forEach(function (n) {
+          var p = n.induk && byId[n.induk], count = COUNT[n.traffic] || 0;
+          if (!p || !count) return;
+          var dur = Math.max(0.9, Math.hypot(p.x - n.x, p.y - n.y) / 150);
+          for (var k = 0; k < count; k++) {
+            var c = doc.createElementNS(NS, "circle");
+            c.setAttribute("r", "7"); c.setAttribute("class", "topo__packet");
+            var am = doc.createElementNS(NS, "animateMotion");
+            am.setAttribute("dur", dur.toFixed(2) + "s"); am.setAttribute("repeatCount", "indefinite");
+            am.setAttribute("begin", (-(k / count) * dur).toFixed(2) + "s");
+            am.setAttribute("path", "M" + n.x + " " + n.y + " L" + p.x + " " + p.y);
+            c.appendChild(am); packets.appendChild(c);
+          }
+        });
+      };
+      btn.addEventListener("click", function () { setSim(btn.getAttribute("aria-pressed") !== "true"); });
+      // Hemat daya: animasi berhenti saat kartu tidak terlihat.
+      if ("IntersectionObserver" in window && svg.pauseAnimations) {
+        new IntersectionObserver(function (en) { if (en[0].isIntersecting) svg.unpauseAnimations(); else svg.pauseAnimations(); }).observe(art);
+      }
+      select(null);
+    });
+  }
 
   /* ---------------- Pemecah teks untuk animasi ---------------- */
   // Bungkus setiap kata dalam <span class="w"><span class="w__i">, tanpa merusak <mark> di dalamnya.
@@ -147,10 +274,11 @@
     var html = works.map(function (w, i) {
       var links = (w.tautan || []).filter(hasUrl);
       var art = w.gambar && w.gambar.trim()
-        ? '<img class="work__shot" src="' + esc(w.gambar) + '" alt="' + esc(w.gambarAlt || "Tangkapan layar " + w.judul) + '" loading="lazy">'
+        ? mediaHTML(w)
         : '<img class="work__amphora" src="assets/foto/amfora.webp" alt="" loading="lazy"><span class="work__caption">Tangkapan layar <mark class="ganti">[GANTI]</mark></span>';
       return '<li class="work' + (i === 0 ? " work--lead" : "") + (w.gambar && w.gambar.trim() ? " work--shot" : "") + '">' +
-        '<div class="work__art"><span class="work__num" aria-hidden="true">' + (NUMERALS[i] || i + 1) + "</span>" + art + "</div>" +
+        '<div class="work__art' + (w.topologi ? ' topo" data-topo="' + i : "") + '"><span class="work__num" aria-hidden="true">' + (NUMERALS[i] || i + 1) + "</span>" + art + "</div>" +
+        (w.topologi ? '<div class="topo__panel" data-topo-panel aria-live="polite"></div>' : "") +
         '<div class="work__body"><h3>' + rich(w.judul) + "</h3><p>" + rich(w.deskripsi) + "</p>" +
         ((w.teknologi || []).length ? '<ul class="tags" aria-label="Teknologi">' + w.teknologi.map(function (x) { return "<li>" + rich(x) + "</li>"; }).join("") + "</ul>" : "") +
         (links.length
@@ -244,7 +372,7 @@
     if (hint) hint.hidden = !state.pinned || state.dist === 0;
     state.worksTop = worksEl.getBoundingClientRect().top + window.scrollY;
     state.docH = doc.documentElement.scrollHeight;
-    fx.amphorae = $$(".work__amphora, .work__shot");
+    fx.amphorae = $$(".work__amphora, .work__media");
   }
 
   // Elemen efek gulir tambahan (diisi saat initMotion).
@@ -336,8 +464,8 @@
         var r = a.parentElement.getBoundingClientRect();
         if (r.right < -100 || r.left > vw + 100 || r.bottom < -100 || r.top > vh + 100) return;
         // Gambar karya (bukan amfora) digeser lebih halus dan dibatasi agar tepinya tidak terlihat.
-        var shot = a.classList.contains("work__shot");
-        var lim = shot ? 34 : 1e4;
+        var shot = a.classList.contains("work__media");
+        var lim = shot ? (a.parentElement.classList.contains("topo") ? 10 : 20) : 1e4;
         var clamp = function (v) { return Math.max(-lim, Math.min(lim, v)); };
         var ox = state.pinned ? clamp(-((r.left + r.width / 2) - vw / 2) * (shot ? 0.07 : 0.14)) : 0;
         var oy = state.pinned ? 0 : clamp(-((r.top + r.height / 2) - vh / 2) * (shot ? 0.06 : 0.1));
@@ -475,6 +603,7 @@
   stars();
   initNav();
   initReveal();
+  initTopo();
   initMotion();
   heroIntro();
 })();

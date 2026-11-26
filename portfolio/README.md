@@ -35,6 +35,18 @@ Semua teks ada di **`js/data.js`**.
 
 Kalau `data.js` rusak (misalnya kurang koma), halaman menampilkan pesan galat di bagian atas.
 
+### Demo topologi di prasasti
+
+Karya pertama memakai `topologi` di `data.js`: prasasti terakota tetap menjadi tampilannya, dan lapisan SVG interaktif menempel tepat di atas 10 lubang dan 15 alur ukirannya (`viewBox` seukuran gambar asli 1881 × 836 + `preserveAspectRatio="xMidYMid slice"`, sama dengan `object-fit: cover`). Cara kerjanya mengikuti modul Topologi Aset di aplikasi Laravel:
+
+- **Pohon parent–child:** setiap simpul punya `induk`. Memilih simpul menyalakan jalurnya sampai akar (FortiGate) mengikuti alur ukiran. Alur yang bukan induk–anak dianggap jalur cadangan.
+- **Korelasi log:** cincin penuh = terlihat di log, putus-putus = ambigu (IP dipakai beberapa aset), redup = belum terlihat.
+- **Status port:** tanda "!" untuk port "perlu diperiksa" (admin up, link down) atau "dinonaktifkan".
+- **Simulasi traffic:** paket cahaya mengalir dari setiap aset ke induknya, banyaknya sesuai tingkat traffic. Animasi berhenti saat kartu tidak terlihat. Bila gerak dikurangi, jalurnya cukup disorot tanpa paket bergerak.
+- **Keyboard:** Tab ke simpul, Enter atau Spasi untuk memilih, Escape untuk melepas.
+
+Semua isinya data contoh dan diberi label "Demo interaktif · data contoh". Ubah nama, IP, dan status sesuka Anda. Koordinat `x`/`y` hanya perlu diubah bila gambarnya diganti.
+
 ## Struktur
 
 ```

@@ -646,14 +646,14 @@ main > :not(.hero), .footer { position: relative; z-index: 1; }
 .works.is-pinned .work--lead { width: min(760px, 58vw); }
 .works.is-pinned .work--more { width: min(380px, 30vw); }
 
+.work { --art-h: 300px; position: relative; }
+.work--lead { --art-h: 360px; }
 .work__art {
-  --art-h: 300px;
   position: relative;
   height: var(--art-h);
   overflow: hidden;
   background: var(--terakota-500);
 }
-.work--lead .work__art { --art-h: 360px; }
 .works.is-pinned .work__art { height: min(var(--art-h), 34vh); }
 .work__art::before { top: 10px; background: var(--tinta-900); z-index: 1; }
 .work__num {
@@ -669,7 +669,97 @@ main > :not(.hero), .footer { position: relative; z-index: 1; }
 .work--lead .work__num { font-size: clamp(5.5rem, 10vw, 8.75rem); }
 .work__amphora { right: clamp(16px, 3vw, 40px); bottom: 16px; height: calc(100% - 64px); width: auto; position: absolute; }
 /* Gambar karya mengisi seluruh panel; diperbesar sedikit supaya ada ruang untuk parallax di dalam bingkai. */
-.work__shot { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; scale: 1.1; will-change: translate; }
+.work__media { position: absolute; inset: 0; scale: 1.1; will-change: translate; }
+.work__shot { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+/* ---------- Demo topologi di atas ukiran prasasti ----------
+   SVG memakai viewBox seukuran gambar asli + preserveAspectRatio "slice",
+   jadi simpul dan jalur selalu menempel tepat di lubang dan alur ukiran. */
+.topo .work__media { scale: 1.25; } /* diagram ukiran lebih besar, simpul lebih mudah diklik */
+.topo__svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.topo__edge { stroke: transparent; stroke-width: 6; stroke-linecap: round; transition: stroke .3s ease; }
+.topo.is-sim .topo__edge.is-tree { stroke: rgba(255, 231, 176, .4); }
+.topo__edge.is-child { stroke: rgba(255, 231, 176, .6); stroke-dasharray: 10 10; }
+.topo__edge.is-path, .topo.is-sim .topo__edge.is-path { stroke: #FFE7B0; filter: url(#topo-glow); }
+.topo__node { cursor: pointer; outline: none; }
+.topo__hit { fill: transparent; }
+.topo__ring { fill: none; stroke: rgba(251, 248, 242, .66); stroke-width: 3.5; transition: stroke .25s ease, stroke-width .25s ease; }
+.topo__node.is-ambigu .topo__ring { stroke-dasharray: 7 6; }
+.topo__node.is-belum .topo__ring { stroke: rgba(251, 248, 242, .32); }
+.topo__node:hover .topo__ring, .topo__node.is-chain .topo__ring { stroke: #FFE7B0; stroke-width: 5; }
+.topo.is-sim .topo__node[data-traffic="tinggi"] .topo__ring { stroke: #FFE7B0; stroke-width: 7; }
+.topo__node.is-selected .topo__ring { stroke: #FFF4D6; stroke-width: 7; filter: url(#topo-glow); }
+/* Fokus keyboard: cincin tebal bergaris, berbeda dari keadaan terpilih. */
+.topo__node:focus-visible .topo__ring { stroke: #FFF4D6; stroke-width: 9; stroke-dasharray: none; }
+.topo__warn circle { fill: var(--tinta-900); stroke: #FFE7B0; stroke-width: 3; }
+.topo__warn text { fill: #FFE7B0; font: 700 26px var(--font-display); text-anchor: middle; }
+.topo__packet { fill: #FFF1CF; filter: url(#topo-glow); }
+
+.topo__bar {
+  position: absolute;
+  z-index: 2;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  max-width: calc(100% - 24px);
+}
+.topo__badge { padding: 3px 10px; background: rgba(28, 26, 23, .84); color: var(--marmer-100); font-size: .875rem; }
+.topo__btn {
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1.5px solid var(--emas-300);
+  border-radius: 2px;
+  background: rgba(28, 26, 23, .84);
+  color: var(--emas-300);
+  font: 700 .75rem/1 var(--font-display);
+  letter-spacing: .12em;
+  cursor: pointer;
+}
+.topo__btn:hover { background: rgba(28, 26, 23, .96); }
+.topo__btn[aria-pressed="true"] { background: var(--emas-500); color: var(--tinta-900); border-color: var(--emas-500); }
+.topo__tip {
+  position: absolute;
+  z-index: 3;
+  padding: 3px 10px;
+  background: var(--tinta-900);
+  color: var(--marmer-50);
+  font-size: .875rem;
+  white-space: nowrap;
+  transform: translate(-50%, calc(-100% - 8px));
+  pointer-events: none;
+}
+/* Panel detail: di bawah gambar (ponsel), mengambang di pojok kanan bawah gambar (galeri dipin). */
+.topo__panel {
+  padding: 14px clamp(22px, 2.6vw, 36px);
+  background: #241A14;
+  color: var(--marmer-100);
+  font-size: .9375rem;
+  line-height: 1.45;
+}
+.topo__panel p { margin: 0; color: var(--marmer-100); }
+.topo__name { margin-bottom: 6px !important; font-family: var(--font-display); font-weight: 700; color: var(--marmer-50) !important; }
+.topo__panel dl { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 2px 12px; margin: 0; }
+.topo__panel dt { color: var(--emas-300); }
+.topo__panel dd { margin: 0; }
+.topo__legend { margin-top: 8px !important; font-size: .8125rem; color: var(--marmer-300) !important; }
+.lg { display: inline-block; width: 12px; height: 12px; margin: 0 4px 0 6px; border: 2px solid rgba(251, 248, 242, .8); border-radius: 50%; vertical-align: -2px; }
+.lg--dash { border-style: dashed; }
+.lg--dim { border-color: rgba(251, 248, 242, .38); }
+.lg--warn { margin-left: 6px; font-weight: 700; color: #FFE7B0; }
+.works.is-pinned .topo__panel {
+  position: absolute;
+  z-index: 2;
+  right: 12px;
+  top: calc(min(var(--art-h), 34vh) - 12px);
+  width: 240px;
+  padding: 12px 14px;
+  background: rgba(20, 15, 11, .88);
+  transform: translateY(-100%);
+}
 .work--shot .work__art { background: #6E2B22; }
 .work--shot .work__art::before { display: none; } /* prasasti sudah berbingkai meander sendiri */
 .work--shot .work__num { z-index: 1; color: var(--marmer-50); text-shadow: 0 2px 18px rgba(28, 10, 6, .7); }
