@@ -865,11 +865,16 @@ main > :not(.hero), .footer { position: relative; z-index: 1; }
 }
 .work__links a, .work--more a { color: var(--emas-300); text-underline-offset: 5px; }
 .work__pending { color: var(--marmer-300); }
-.work--more {
-  justify-content: center;
+/* Kartu GitHub tetap bergaris tepi tanpa isi warna (tautan sekunder, bukan proyek),
+   dengan relief kode yang lebih pendek dari panel karya. */
+.work--more { --art-h: 200px; border: 1px solid var(--tinta-500); }
+.work__more-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   gap: 12px;
-  padding: 40px clamp(24px, 3vw, 40px);
-  border: 1px solid var(--tinta-500);
+  padding: 30px clamp(24px, 3vw, 40px) 34px;
 }
 .work--empty { padding: 40px; border: 1px dashed var(--tinta-500); color: var(--marmer-200); }
 
@@ -883,8 +888,6 @@ main > :not(.hero), .footer { position: relative; z-index: 1; }
   margin: 0 auto;
 }
 .journey__aside { position: sticky; top: 120px; }
-.journey__olive { margin-top: 36px; }
-.journey__olive img { width: min(414px, 100%); }
 .timeline { margin: 0; padding: 0; list-style: none; }
 .timeline li {
   position: relative;
@@ -925,7 +928,6 @@ main > :not(.hero), .footer { position: relative; z-index: 1; }
 @media (max-width: 860px) {
   .journey { grid-template-columns: minmax(0, 1fr); }
   .journey__aside { position: static; }
-  .journey__olive img { width: min(300px, 80%); }
 }
 
 /* ---------- Ε · Kontak: malam ---------- */
@@ -1053,6 +1055,75 @@ main > :not(.hero), .footer { position: relative; z-index: 1; }
   will-change: transform;
 }
 .work__amphora { will-change: translate; }
+
+/* ---------- Ornamen parallax ----------
+   Setiap ornamen menempel pada satu bagian dan tidak pernah berada di depan teks atau tombol.
+   Gerak dari main.js: data-depth positif tertinggal (terasa jauh), negatif mendahului (terasa dekat),
+   sehingga urutan tumpukan dan arah gerak selalu sepakat. Bila gerak dikurangi, semuanya diam di posisi ini. */
+.decor { position: absolute; inset: 0; pointer-events: none; }
+.decor > img { position: absolute; max-width: none; will-change: transform; }
+
+/* Hero: layang-layang mengisi langit kiri di antara awan dan pulau jauh; dahan zaitun adalah lapisan
+   terdekat (kecepatan 1.24), masuk dari tepi kanan bingkai sehingga tidak pernah tampak melayang. */
+.swallows { left: 128px; top: 401px; width: 158px; opacity: .9; }
+.olive-front { right: -132px; bottom: 120px; width: 428px; transform: scaleX(-1) rotate(-6deg); }
+/* Layar tegak: teks menutupi hampir seluruh langit, jadi layang-layang disembunyikan (seperti camar dan awan),
+   dan dahan zaitun pindah ke langit kanan atas yang kosong. Pangkalnya selalu menempel di tepi kanan layar
+   (--vis-r dari main.js), dan saat digulir ia naik lebih cepat daripada teks sehingga tidak pernah melintasinya. */
+@media (max-aspect-ratio: 1/1) {
+  .swallows { display: none; }
+  .olive-front { left: calc(var(--vis-r, 928px) - 150px); right: auto; top: 70px; bottom: auto; width: 260px; }
+}
+
+/* Α · Tentang: diorama di ceruk. Koin di dinding belakang, fragmen kapitel di depan alas patung,
+   terpotong tepi ceruk supaya terbaca sebagai benda di latar depan. */
+.decor__coin { width: 17%; top: 22%; right: 9%; }
+.decor__ionic { width: 50%; left: -5%; bottom: -3%; }
+
+/* Β · Keahlian: jangka dan tablet geometri di margin kiri dan kanan judul. */
+.decor--skills { bottom: auto; height: 280px; overflow: hidden; }
+.decor__compass, .decor__tablet { top: clamp(74px, 10vw, 138px); }
+.decor__compass { left: clamp(22px, 6vw, 112px); width: clamp(56px, 9vw, 136px); }
+.decor__tablet { right: clamp(22px, 6vw, 112px); width: clamp(62px, 9vw, 128px); }
+@media (max-width: 760px) {
+  .skills > .section-head { padding-top: 50px; }
+  .decor__compass, .decor__tablet { top: 64px; }
+}
+
+/* Γ · Karya: pecahan tembikar dan pelita di sisi kanan judul galeri. */
+.works__head { position: relative; }
+.works__head > :not(.decor) { position: relative; z-index: 1; }
+.decor--works { inset: -60px var(--gutter) -24px auto; width: clamp(138px, 25vw, 350px); }
+.decor__shard { width: 46%; top: 12%; left: 2%; }
+.decor__lamp { width: 43%; top: 34%; right: 0; }
+/* Galeri dipin: keduanya berdiri di atas petunjuk gulir seperti di rak, tidak di belakang teksnya,
+   dan sedikit diredupkan supaya kartu galeri tetap menjadi pusat perhatian. */
+.works.is-pinned .decor--works { top: auto; bottom: 38px; height: 92px; width: 236px; opacity: .85; }
+.works.is-pinned .decor__shard { top: auto; bottom: 0; left: 0; width: 54%; }
+.works.is-pinned .decor__lamp { top: auto; bottom: 4px; width: 48%; }
+@media (max-width: 760px) {
+  .works__head { padding-top: 58px; }
+  .decor--works { top: -44px; bottom: auto; height: 120px; }
+}
+
+/* Δ · Perjalanan: peta pesisir di belakang, kapal di atas lautnya, ranting zaitun paling depan. */
+.journey__scene { position: relative; inset: auto; margin-top: 28px; height: clamp(220px, 24vw, 292px); }
+.decor__map { width: 76%; right: 0; top: 21%; }
+.decor__boat { width: 41%; left: 27%; top: 17%; }
+.decor__olive { width: 48%; left: 1%; bottom: 8%; }
+@media (max-width: 860px) {
+  .journey__scene { width: min(100%, 380px); }
+}
+
+/* Ε · Kontak: bulan sabit di kiri atas, awan malam hanyut di kanan bawah judul,
+   di ruang kosong sebelah ajakan sehingga tidak pernah berada di belakang teks. */
+.decor--night { bottom: 25%; }
+.decor__moon { width: clamp(38px, 7vw, 94px); top: 15%; left: 13%; opacity: .9; }
+.decor__cloud { width: min(40%, 560px); top: 46%; right: -12%; opacity: .68; }
+/* Ponsel: teks memenuhi lebar layar, jadi bulan dan awan mengapit mahkota laurel di atas judul. */
+@media (max-width: 760px) {
+  .decor__cloud { width: 56%; top: 17%; right: -20%; }
+}
 
 /* ---------- Judul raksasa di panggung (layar lebar) ---------- */
 .stage-title {

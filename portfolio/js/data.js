@@ -97,7 +97,8 @@ window.PORTOFOLIO = {
         // Semua alur yang terukir di prasasti. Alur yang bukan induk–anak tampil sebagai jalur cadangan.
         tautan: [["B", "C"], ["C", "A"], ["A", "E"], ["A", "F"], ["B", "D"], ["B", "G"], ["C", "G"], ["D", "G"], ["G", "E"], ["H", "G"], ["E", "F"], ["E", "J"], ["E", "I"], ["F", "I"], ["G", "J"]]
       },
-      tautan: [] // misalnya [{ label: "Lihat demo", url: "https://..." }]
+      // Tangkapan layar aplikasi aslinya, pelengkap demo yang memakai data contoh.
+      tautan: [{ label: "Lihat tangkapan layar aplikasi", url: "assets/karya/topologi-aset.webp" }]
     },
     {
       judul: "[GANTI] Nama proyek kedua",

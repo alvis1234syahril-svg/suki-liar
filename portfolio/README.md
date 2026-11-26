@@ -58,10 +58,11 @@ portfolio/
 ├── css/style.css      token warna = variabel Figma "Yunani / Warna"
 ├── js/data.js         konten
 ├── js/main.js         render, parallax, galeri geser, menu, kemunculan
-└── assets/foto/       aset fotorealistik WebP (latar transparan) + favicon.png
+├── assets/foto/       aset fotorealistik WebP (latar transparan) + favicon.png
+└── assets/karya/      relief kode dan tangkapan layar aplikasi Topologi Aset
 ```
 
-Aset di `assets/foto/` diturunkan dari paket "Senja di Akropolis, aset parallax fotorealistik" (versi 4K): area transparan kosong di sekelilingnya dipotong, lalu ukurannya disesuaikan dengan tampilan di web (ikon 168 px, lapisan lanskap 2400 sampai 2800 px). Totalnya sekitar 1,7 MB. Untuk mengganti salah satunya, simpan file baru dengan nama yang sama; bila proporsi isinya berbeda, sesuaikan posisi lapisan di `css/style.css` bagian "Hero".
+Aset di `assets/foto/` diturunkan dari paket "Senja di Akropolis, aset parallax fotorealistik" (versi 4K): area transparan kosong di sekelilingnya dipotong, lalu ukurannya disesuaikan dengan tampilan di web (ikon 168 px, lapisan lanskap 2400 sampai 2800 px). Totalnya sekitar 1,7 MB, ditambah 12 ornamen (sekitar 450 KB) yang dimuat saat bagiannya mendekati layar. Untuk mengganti salah satunya, simpan file baru dengan nama yang sama; bila proporsi isinya berbeda, sesuaikan posisi lapisan di `css/style.css` bagian "Hero".
 
 ## Parallax
 
@@ -80,6 +81,8 @@ Hero adalah panggung 1440 × 900 (sama dengan frame Figma) yang diskalakan seper
 | Pepohonan | 0.62 |
 | Reruntuhan | 1.00 (menyambung ke pita meander) |
 | Kolom serambi | 1.06 |
+
+Dua ornamen ikut menjadi lapisan hero: burung layang-layang (0.16) di langit kiri di antara awan dan pulau jauh, dan dahan zaitun (1.24) sebagai lapisan paling depan yang masuk dari tepi kanan bingkai.
 
 Nama raksasa (kecepatan 0.25) diletakkan di antara lapisan, sehingga Parthenon berdiri di depan kaki hurufnya. Saat digulir, nama itu makin kabur dan pudar, panggung membesar pelan, dan hero tetap di tempat (`position: sticky`) sementara bagian Tentang naik menutupinya seperti tirai. Di layar tegak, nama tampil sebagai judul biasa di atas Parthenon.
 
@@ -101,6 +104,23 @@ Nama raksasa (kecepatan 0.25) diletakkan di antara lapisan, sehingga Parthenon b
 | Garis terakota di atas | penanda kemajuan baca halaman |
 
 Galeri karya dipin dan bergeser ke samping saat digulir di layar lebar; di ponsel kartunya bertumpuk biasa.
+
+### Ornamen parallax
+
+Setiap bagian punya sepasang ornamen yang bergerak dengan kedalaman berbeda. Aturannya: `data-depth` positif tertinggal dari halaman (terasa jauh), negatif mendahului (terasa dekat). Benda yang ditumpuk di depan selalu bergerak lebih cepat daripada benda di belakangnya, supaya kedalamannya terasa wajar. Ornamen tidak pernah berada di belakang teks atau tombol.
+
+| Bagian | Ornamen | Gerak |
+|---|---|---|
+| Hero | layang-layang · dahan zaitun | lapisan panggung 0.16 dan 1.24, ikut kursor |
+| Α · Tentang | koin Athena · fragmen kapitel Ionia | koin di dinding ceruk 0.14; fragmen di depan alas patung -0.16, naik ke tempatnya lalu diam (`data-settle`) |
+| Β · Keahlian | jangka perunggu · tablet geometri | -0.12 dan 0.16, mengapit judul |
+| Γ · Karya | pecahan palmet · pelita terakota | 0.18 dan -0.1; saat galeri dipin keduanya berdiri di atas petunjuk gulir dan bergeser berlawanan arah mengikuti galeri (`data-pan-x`) |
+| Δ · Perjalanan | peta pesisir · kapal · ranting zaitun | peta 0.1, ranting -0.14, kapal berlayar melintasi peta seiring lini masa digulir |
+| Ε · Kontak | bulan sabit · awan malam | bulan 0.34 (paling lambat), awan 0.14 sambil hanyut ke samping |
+
+Semua ornamen memakai `alt=""` di dalam pembungkus `aria-hidden="true"`, tidak bisa diklik (`pointer-events: none`), dan dimuat malas (`loading="lazy"`) kecuali dua lapisan hero. Bila gerak dikurangi, ornamen diam di posisinya. Bila `tentang.foto` diisi, koin dan fragmen kapitel ikut hilang supaya tidak menutupi foto Anda.
+
+Kartu "Lebih banyak kode" memakai `assets/karya/relief-kode.webp` dengan parallax halus di dalam bingkainya. Karya pertama punya tautan "Lihat tangkapan layar aplikasi" ke `assets/karya/topologi-aset.webp`, tangkapan layar aplikasi aslinya, sebagai pelengkap demo yang memakai data contoh.
 
 Pengguna yang mengaktifkan *reduce motion* di sistem operasinya mendapat halaman tanpa parallax, tanpa pin, dan semua konten langsung terlihat.
 

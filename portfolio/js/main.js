@@ -352,6 +352,8 @@
       var art = $("[data-about-art]");
       art.removeAttribute("data-depth");
       art.outerHTML = '<img class="about__photo" src="' + esc(t.foto) + '" alt="Foto ' + esc(nama) + '">';
+      // Koin dan fragmen kapitel hanya hiasan untuk patung; jangan menutupi foto asli.
+      $$("[data-niche-decor]").forEach(function (d) { d.remove(); });
     }
 
     // Keahlian
@@ -386,8 +388,10 @@
     if (!works.length) {
       html = '<li class="work work--empty"><p>Karya sedang disiapkan.' + (gh ? ' Sementara itu, kode saya ada di <a href="' + esc(gh.url) + '" target="_blank" rel="noopener">GitHub' + newTab + "</a>." : "") + "</p></li>";
     } else if (gh) {
-      html += '<li class="work work--more"><h3>Lebih banyak kode</h3><p>Repositori lain dan riwayat kontribusi ada di GitHub.</p>' +
-        '<a href="' + esc(gh.url) + '" target="_blank" rel="noopener">Buka profil GitHub' + newTab + "</a></li>";
+      html += '<li class="work work--more work--shot"><div class="work__art" aria-hidden="true"><div class="work__media">' +
+        '<img class="work__shot" src="assets/karya/relief-kode.webp" alt="" width="960" height="427" loading="lazy" decoding="async"></div></div>' +
+        '<div class="work__more-body"><h3>Lebih banyak kode</h3><p>Repositori lain dan riwayat kontribusi ada di GitHub.</p>' +
+        '<a href="' + esc(gh.url) + '" target="_blank" rel="noopener">Buka profil GitHub' + newTab + "</a></div></li>";
     }
     $("[data-works-track]").innerHTML = html;
 
@@ -453,6 +457,9 @@
     state.heroH = hero.offsetHeight;
     state.scale = Math.max(w / 1440, state.heroH / 900);
     stage.style.setProperty("--s", state.scale.toFixed(4));
+    // Tepi kanan yang terlihat, dalam satuan panggung: lapisan bisa ditambatkan ke tepi layar
+    // berapa pun rasio layarnya (dipakai dahan zaitun di layar tegak).
+    stage.style.setProperty("--vis-r", (720 + w / state.scale / 2).toFixed(1) + "px");
 
     state.pinned = wide.matches && !reduceMotion.matches && track.children.length > 1;
     worksEl.classList.toggle("is-pinned", state.pinned);
@@ -470,11 +477,26 @@
     state.worksTop = worksEl.getBoundingClientRect().top + window.scrollY;
     state.docH = doc.documentElement.scrollHeight;
     fx.amphorae = $$(".work__amphora, .work__media");
+    // Elemen berkedalaman dicatat sekali di sini, bukan dicari ulang setiap frame.
+    // rest = titik di layar tempat elemen berada tepat di posisi CSS-nya (biasanya tengah layar).
+    // Saat galeri dipin, header karya diam di atas layar, jadi titik diamnya adalah posisi pin itu.
+    var stickyBox = $("[data-works-sticky]").getBoundingClientRect();
+    fx.depth = $$("[data-depth]").map(function (el) {
+      var inWorks = !!el.closest("[data-works]"), pr = el.parentElement.getBoundingClientRect();
+      return {
+        el: el,
+        d: parseFloat(el.getAttribute("data-depth")) || 0,
+        pan: parseFloat(el.getAttribute("data-pan-x")) || 0,
+        settle: el.hasAttribute("data-settle"),
+        inWorks: inWorks,
+        rest: inWorks && state.pinned ? pr.top - stickyBox.top + pr.height / 2 : null
+      };
+    });
     doc.dispatchEvent(new CustomEvent("layoutchange")); // mis. demo topologi menata ulang panelnya
   }
 
   // Elemen efek gulir tambahan (diisi saat initMotion).
-  var fx = { bar: null, frieze: null, rows: [], journey: null, birds: null, amphorae: [] };
+  var fx = { bar: null, frieze: null, rows: [], journey: null, birds: null, amphorae: [], depth: [] };
   var progressIn = function (r, vh) { return Math.min(1, Math.max(0, (vh - r.top) / (vh + r.height))); };
 
   function frame() {
@@ -509,20 +531,27 @@
       if (Math.abs(state.tx - state.px) > 0.001 || Math.abs(state.ty - state.py) > 0.001) request();
     }
 
-    // Elemen dengan kedalaman di luar hero.
+    var galleryOn = state.pinned && state.dist > 0;
+    var prog = galleryOn ? Math.min(1, Math.max(0, (y - state.worksTop) / state.dist)) : 0;
+
+    // Elemen dengan kedalaman di luar hero, diukur terhadap induknya:
+    // depth positif tertinggal (terasa jauh), negatif mendahului (terasa dekat).
+    // data-settle: hanya naik ke posisinya lalu diam, jadi benda yang "berdiri" tidak melayang.
+    // data-pan-x: ikut bergeser ke samping sepanjang induknya melintasi layar (atau sepanjang galeri saat dipin).
     if (motion) {
-      $$("[data-depth]").forEach(function (el) {
-        var r = el.parentElement.getBoundingClientRect();
+      fx.depth.forEach(function (D) {
+        var r = D.el.parentElement.getBoundingClientRect();
         if (r.bottom < -200 || r.top > vh + 200) return;
-        var off = -((r.top + r.height / 2) - vh / 2) * parseFloat(el.getAttribute("data-depth"));
-        if (el.hasAttribute("data-about-art")) off = Math.max(0, off);
-        el.style.transform = "translate3d(0," + off.toFixed(1) + "px,0)";
+        var off = -((r.top + r.height / 2) - (D.rest === null ? vh / 2 : D.rest)) * D.d;
+        if (D.settle) off = Math.max(0, off);
+        var x = 0;
+        if (D.pan) x = ((D.inWorks && galleryOn ? prog : progressIn(r, vh)) - 0.5) * D.pan;
+        D.el.style.transform = "translate3d(" + x.toFixed(1) + "px," + off.toFixed(1) + "px,0)";
       });
     }
 
     // Galeri: gulir vertikal diterjemahkan menjadi geser horizontal.
-    if (state.pinned && state.dist > 0) {
-      var prog = Math.min(1, Math.max(0, (y - state.worksTop) / state.dist));
+    if (galleryOn) {
       track.style.transform = "translate3d(" + (-prog * state.dist).toFixed(1) + "px,0,0)";
     }
 
@@ -574,7 +603,7 @@
 
   function resetMotion() {
     layers.forEach(function (L) { L.el.style.transform = ""; });
-    $$("[data-depth]").forEach(function (el) { el.style.transform = ""; });
+    fx.depth.forEach(function (D) { D.el.style.transform = ""; });
     heroContent.style.transform = "";
     heroContent.style.opacity = "";
     stage.style.removeProperty("--zoom");

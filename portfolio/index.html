@@ -50,6 +50,7 @@
           <div class="sun-glow"></div>
         </div>
         <div class="layer" data-speed="0.12" data-mx="6"><img class="clouds" src="assets/foto/awan-garis.webp" alt=""></div>
+        <div class="layer" data-speed="0.16" data-mx="8"><img class="swallows" src="assets/foto/layang-layang-senja.webp" alt="" width="420" height="140" decoding="async"></div>
         <div class="layer" data-speed="0.18" data-mx="8"><img class="isle-far" src="assets/foto/pulau-jauh.webp" alt=""></div>
         <div class="layer" data-speed="0.2" data-mx="9">
           <div class="sea"></div>
@@ -66,6 +67,8 @@
           <img class="column column--left" src="assets/foto/kolom-siluet.webp" alt="">
           <img class="column column--right" src="assets/foto/kolom-siluet.webp" alt="">
         </div>
+        <!-- Lapisan paling depan: dahan zaitun melintas lebih cepat dari semua lapisan lain. -->
+        <div class="layer" data-speed="1.24" data-mx="58"><img class="olive-front" src="assets/foto/dahan-zaitun-hero.webp" alt="" width="880" height="587" decoding="async"></div>
       </div>
 
       <div class="hero__content" data-hero-content>
@@ -89,8 +92,15 @@
     <!-- Α · Tentang -->
     <section class="about section" id="tentang" aria-labelledby="judul-tentang">
       <div class="about__niche" data-reveal="curtain">
-        <div class="about__niche-art" data-depth="-0.08" data-about-art>
+        <!-- Diorama di ceruk: koin di dinding belakang, patung, lalu fragmen kapitel paling depan. -->
+        <div class="decor" aria-hidden="true" data-niche-decor>
+          <img class="decor__coin" src="assets/foto/koin-athena.webp" alt="" width="192" height="185" loading="lazy" decoding="async" data-depth="0.14">
+        </div>
+        <div class="about__niche-art" data-depth="-0.08" data-settle data-about-art>
           <img src="assets/foto/patung-dada.webp" alt="" width="820" height="942">
+        </div>
+        <div class="decor" aria-hidden="true" data-niche-decor>
+          <img class="decor__ionic" src="assets/foto/fragmen-ionik.webp" alt="" width="440" height="293" loading="lazy" decoding="async" data-depth="-0.16" data-settle>
         </div>
       </div>
       <div class="about__text">
@@ -113,6 +123,11 @@
         <img class="skills__col skills__col--left" src="assets/foto/kolom-siluet.webp" alt="" data-depth="0.22">
         <img class="skills__col skills__col--right" src="assets/foto/kolom-siluet.webp" alt="" data-depth="0.34">
       </div>
+      <!-- Alat seorang pembangun mengapit judul: jangka perunggu dan tablet geometri. -->
+      <div class="decor decor--skills" aria-hidden="true">
+        <img class="decor__compass" src="assets/foto/jangka-perunggu.webp" alt="" width="250" height="167" loading="lazy" decoding="async" data-depth="0.08">
+        <img class="decor__tablet" src="assets/foto/tablet-geometri.webp" alt="" width="290" height="213" loading="lazy" decoding="async" data-depth="0.16">
+      </div>
       <header class="section-head section-head--center">
         <p class="overline" data-carve>Β · Keahlian</p>
         <h2 class="h2" id="judul-keahlian" data-split>Empat pilar yang saya pegang</h2>
@@ -133,6 +148,11 @@
     <section class="works" id="karya" aria-labelledby="judul-karya" data-works>
       <div class="works__sticky" data-works-sticky>
         <header class="works__head">
+          <!-- Benda temuan di bengkel tembikar; bergeser pelan mengikuti galeri saat dipin. -->
+          <div class="decor decor--works" aria-hidden="true">
+            <img class="decor__shard" src="assets/foto/fragmen-palmet.webp" alt="" width="340" height="227" loading="lazy" decoding="async" data-depth="0.16" data-pan-x="-70">
+            <img class="decor__lamp" src="assets/foto/pelita-terakota.webp" alt="" width="320" height="214" loading="lazy" decoding="async" data-depth="0.07" data-pan-x="40">
+          </div>
           <div>
             <p class="overline overline--light" data-carve>Γ · Karya</p>
             <h2 class="h2 h2--light" id="judul-karya" data-split>Yang sudah saya bangun</h2>
@@ -150,8 +170,11 @@
         <p class="overline" data-carve>Δ · Perjalanan</p>
         <h2 class="h2" id="judul-perjalanan" data-split>Odisei saya</h2>
         <p class="lead">Persinggahan yang membentuk cara saya bekerja.</p>
-        <div class="journey__olive" data-depth="0.12" aria-hidden="true">
-          <img src="assets/foto/ranting-zaitun.webp" alt="">
+        <!-- Odisei: kapal berlayar melintasi peta pesisir seiring lini masa digulir. -->
+        <div class="journey__scene decor" aria-hidden="true">
+          <img class="decor__map" src="assets/foto/peta-pesisir.webp" alt="" width="620" height="310" loading="lazy" decoding="async" data-depth="0.1">
+          <img class="decor__boat" src="assets/foto/kapal-aegea.webp" alt="" width="360" height="245" loading="lazy" decoding="async" data-depth="0.02" data-pan-x="110">
+          <img class="decor__olive" src="assets/foto/ranting-zaitun.webp" alt="" width="860" height="530" loading="lazy" decoding="async" data-depth="-0.14">
         </div>
       </div>
       <ol class="timeline" data-timeline></ol>
@@ -162,6 +185,11 @@
     <!-- Ε · Kontak: malam di Akropolis -->
     <section class="contact" id="kontak" aria-labelledby="judul-kontak">
       <div class="contact__stars" aria-hidden="true" data-stars data-depth="0.25"></div>
+      <!-- Langit malam: bulan paling jauh (paling lambat), awan di depannya hanyut ke samping. -->
+      <div class="decor decor--night" aria-hidden="true">
+        <img class="decor__moon" src="assets/foto/bulan-sabit.webp" alt="" width="126" height="210" loading="lazy" decoding="async" data-depth="0.34">
+        <img class="decor__cloud" src="assets/foto/awan-malam.webp" alt="" width="1150" height="362" loading="lazy" decoding="async" data-depth="0.14" data-pan-x="-90">
+      </div>
       <div class="contact__inner">
         <img class="contact__laurel" src="assets/foto/mahkota-laurel.webp" alt="" width="84" height="84" data-reveal>
         <p class="overline overline--light" data-carve>Ε · Kontak</p>
