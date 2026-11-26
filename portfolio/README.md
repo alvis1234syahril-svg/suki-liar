@@ -31,7 +31,7 @@ Semua teks ada di **`js/data.js`**.
 3. `kontak.email`: selama kosong, tombol utama mengarah ke GitHub. Setelah diisi, muncul tombol "Tulis email".
 4. URL yang kosong (`""`) otomatis disembunyikan, jadi tidak ada tautan mati.
 5. Foto: isi `tentang.foto` (misalnya `"assets/foto-saya.jpg"`). Selama kosong, ceruk menampilkan patung dada sebagai hiasan, bukan sebagai foto Anda.
-6. Tangkapan layar proyek: isi `gambar` pada tiap karya. Selama kosong, panel menampilkan amfora dan label "Tangkapan layar [GANTI]".
+6. Gambar proyek: isi `gambar` pada tiap karya, dan `gambarAlt` untuk deskripsi gambar bagi pembaca layar. Gambar mengisi seluruh panel (sebaiknya rasio sekitar 2:1) dan ikut bergeser halus di dalam bingkai. Selama `gambar` kosong, panel menampilkan amfora dan label "Tangkapan layar [GANTI]". Karya pertama memakai `assets/foto/karya-topologi.webp` (prasasti terakota dengan diagram topologi).
 
 Kalau `data.js` rusak (misalnya kurang koma), halaman menampilkan pesan galat di bagian atas.
 

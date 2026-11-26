@@ -668,7 +668,11 @@ main > :not(.hero), .footer { position: relative; z-index: 1; }
 }
 .work--lead .work__num { font-size: clamp(5.5rem, 10vw, 8.75rem); }
 .work__amphora { right: clamp(16px, 3vw, 40px); bottom: 16px; height: calc(100% - 64px); width: auto; position: absolute; }
-.work__shot { position: absolute; inset: 44px 0 0; width: 100%; height: calc(100% - 44px); object-fit: cover; }
+/* Gambar karya mengisi seluruh panel; diperbesar sedikit supaya ada ruang untuk parallax di dalam bingkai. */
+.work__shot { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; scale: 1.1; will-change: translate; }
+.work--shot .work__art { background: #6E2B22; }
+.work--shot .work__art::before { display: none; } /* prasasti sudah berbingkai meander sendiri */
+.work--shot .work__num { z-index: 1; color: var(--marmer-50); text-shadow: 0 2px 18px rgba(28, 10, 6, .7); }
 .work__caption {
   position: absolute;
   left: clamp(20px, 3vw, 40px);

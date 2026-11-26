@@ -72,7 +72,8 @@ window.PORTOFOLIO = {
       judul: "Analisis Traffic & Topologi Aset",
       deskripsi: "Aplikasi Laravel untuk mengunggah log traffic, meringkas pemakaian per klien, dan memetakan aset jaringan dalam pohon topologi dengan zoom, riwayat aset, dan ekspor Excel.",
       teknologi: ["Laravel", "Tailwind CSS", "Vite", "PhpSpreadsheet", "SNMP"],
-      gambar: "", // misalnya "assets/karya-1.webp"
+      gambar: "assets/foto/karya-topologi.webp",
+      gambarAlt: "Prasasti terakota berukir kurung kurawal kode dan diagram topologi jaringan, dibingkai pola meander",
       tautan: [] // misalnya [{ label: "Lihat demo", url: "https://..." }]
     },
     {

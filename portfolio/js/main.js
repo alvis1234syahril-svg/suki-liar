@@ -147,9 +147,9 @@
     var html = works.map(function (w, i) {
       var links = (w.tautan || []).filter(hasUrl);
       var art = w.gambar && w.gambar.trim()
-        ? '<img class="work__shot" src="' + esc(w.gambar) + '" alt="Tangkapan layar ' + esc(w.judul) + '" loading="lazy">'
+        ? '<img class="work__shot" src="' + esc(w.gambar) + '" alt="' + esc(w.gambarAlt || "Tangkapan layar " + w.judul) + '" loading="lazy">'
         : '<img class="work__amphora" src="assets/foto/amfora.webp" alt="" loading="lazy"><span class="work__caption">Tangkapan layar <mark class="ganti">[GANTI]</mark></span>';
-      return '<li class="work' + (i === 0 ? " work--lead" : "") + '">' +
+      return '<li class="work' + (i === 0 ? " work--lead" : "") + (w.gambar && w.gambar.trim() ? " work--shot" : "") + '">' +
         '<div class="work__art"><span class="work__num" aria-hidden="true">' + (NUMERALS[i] || i + 1) + "</span>" + art + "</div>" +
         '<div class="work__body"><h3>' + rich(w.judul) + "</h3><p>" + rich(w.deskripsi) + "</p>" +
         ((w.teknologi || []).length ? '<ul class="tags" aria-label="Teknologi">' + w.teknologi.map(function (x) { return "<li>" + rich(x) + "</li>"; }).join("") + "</ul>" : "") +
@@ -244,7 +244,7 @@
     if (hint) hint.hidden = !state.pinned || state.dist === 0;
     state.worksTop = worksEl.getBoundingClientRect().top + window.scrollY;
     state.docH = doc.documentElement.scrollHeight;
-    fx.amphorae = $$(".work__amphora");
+    fx.amphorae = $$(".work__amphora, .work__shot");
   }
 
   // Elemen efek gulir tambahan (diisi saat initMotion).
@@ -335,8 +335,12 @@
       fx.amphorae.forEach(function (a) {
         var r = a.parentElement.getBoundingClientRect();
         if (r.right < -100 || r.left > vw + 100 || r.bottom < -100 || r.top > vh + 100) return;
-        var ox = state.pinned ? -((r.left + r.width / 2) - vw / 2) * 0.14 : 0;
-        var oy = state.pinned ? 0 : -((r.top + r.height / 2) - vh / 2) * 0.1;
+        // Gambar karya (bukan amfora) digeser lebih halus dan dibatasi agar tepinya tidak terlihat.
+        var shot = a.classList.contains("work__shot");
+        var lim = shot ? 34 : 1e4;
+        var clamp = function (v) { return Math.max(-lim, Math.min(lim, v)); };
+        var ox = state.pinned ? clamp(-((r.left + r.width / 2) - vw / 2) * (shot ? 0.07 : 0.14)) : 0;
+        var oy = state.pinned ? 0 : clamp(-((r.top + r.height / 2) - vh / 2) * (shot ? 0.06 : 0.1));
         a.style.translate = ox.toFixed(1) + "px " + oy.toFixed(1) + "px";
       });
     }
