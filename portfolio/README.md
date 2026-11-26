@@ -8,7 +8,7 @@ Situs statis murni (HTML, CSS, JavaScript tanpa build) dan tidak bergantung pada
   - `🖼 Sampul`: sampul file
   - `🏛 Desain Halaman`: mockup desktop 1440 px, mockup ponsel 390 px, dan overlay menu ponsel
   - `🧩 Komponen`: Tombol, Pilar keahlian, Kartu karya, Kartu lainnya, Singgah lini masa, Baris fakta, Tag teknologi, Pita meander, dan ikon
-  - `🏺 Aset Parallax`: semua lapisan dan ilustrasi (sumber file di `assets/figma/`)
+  - `🏺 Aset Parallax`: versi vektor (flat) dari semua lapisan dan ilustrasi
   - `📜 Panduan Gaya`: palet, tipografi, peta kecepatan parallax, motif
 - Prototipe: buka halaman `🏛 Desain Halaman`, tekan Present, lalu pilih flow `Desktop · 1440` atau `Ponsel · 390`. Navigasi tetap di atas saat menggulir, tautan menggulir ke bagiannya, tombol GitHub membuka profil, dan tombol Menu di ponsel membuka overlay.
 
@@ -43,8 +43,10 @@ portfolio/
 ├── css/style.css      token warna = variabel Figma "Yunani / Warna"
 ├── js/data.js         konten
 ├── js/main.js         render, parallax, galeri geser, menu, kemunculan
-└── assets/figma/      SVG hasil ekspor Figma (latar transparan)
+└── assets/foto/       aset fotorealistik WebP (latar transparan) + favicon.png
 ```
+
+Aset di `assets/foto/` diturunkan dari paket "Senja di Akropolis, aset parallax fotorealistik" (versi 4K): area transparan kosong di sekelilingnya dipotong, lalu ukurannya disesuaikan dengan tampilan di web (ikon 168 px, lapisan lanskap 2400 sampai 2800 px). Totalnya sekitar 1,7 MB. Untuk mengganti salah satunya, simpan file baru dengan nama yang sama; bila proporsi isinya berbeda, sesuaikan posisi lapisan di `css/style.css` bagian "Hero".
 
 ## Parallax
 
@@ -53,7 +55,7 @@ Hero adalah panggung 1440 × 900 (sama dengan frame Figma) yang diskalakan seper
 | Lapisan | Kecepatan |
 |---|---|
 | Langit | 0.05 |
-| Matahari | 0.10 (tenggelam ke laut saat digulir) |
+| Cahaya matahari | 0.10 (tenggelam ke laut saat digulir) |
 | Garis awan | 0.12 |
 | Pulau jauh | 0.18 |
 | Laut + kilau | 0.20 |
@@ -62,7 +64,7 @@ Hero adalah panggung 1440 × 900 (sama dengan frame Figma) yang diskalakan seper
 | Akropolis | 0.42 |
 | Pepohonan | 0.62 |
 | Reruntuhan | 1.00 (menyambung ke pita meander) |
-| Kolom serambi | 1.12 |
+| Kolom serambi | 1.06 |
 
 Di luar hero: patung dada, ranting zaitun, bintang, dan Parthenon malam memakai `data-depth`. Galeri karya dipin dan bergeser ke samping saat digulir di layar lebar; di ponsel kartunya bertumpuk biasa.
 
@@ -90,5 +92,6 @@ Folder ini bisa diunggah apa adanya ke hosting statis mana pun, misalnya Netlify
 
 ## Kredit
 
-- Ilustrasi parallax, patung, amfora, ranting zaitun, mahkota laurel, dan ikon dibuat dengan Figma AI di file Figma di atas; pulau, kilau laut, burung, garis awan, dan pita meander digambar langsung sebagai vektor.
+- Aset fotorealistik (lapisan lanskap, kolom, patung, amfora, ranting zaitun, mahkota laurel, ikon) berasal dari gambar generatif yang di-upscale, disediakan pemilik situs.
+- Versi vektor awal dibuat dengan Figma AI dan masih tersimpan di file Figma di atas. Pita meander digambar langsung sebagai pola CSS.
 - Font: Cinzel, EB Garamond, GFS Didot dari Google Fonts (SIL Open Font License).

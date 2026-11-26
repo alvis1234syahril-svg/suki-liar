@@ -32,10 +32,10 @@
   var hasUrl = function (l) { return l && typeof l.url === "string" && l.url.trim() !== ""; };
   var NUMERALS = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
   var ICONS = {
-    "helm": "assets/figma/ikon-helm.svg",
-    "burung-hantu": "assets/figma/ikon-burung-hantu.svg",
-    "lira": "assets/figma/ikon-lira.svg",
-    "gulungan": "assets/figma/ikon-gulungan.svg"
+    "helm": "assets/foto/ikon-helm.webp",
+    "burung-hantu": "assets/foto/ikon-burung-hantu.webp",
+    "lira": "assets/foto/ikon-lira.webp",
+    "gulungan": "assets/foto/ikon-gulungan.webp"
   };
   var newTab = '<span class="visually-hidden"> (tab baru)</span>';
 
@@ -84,7 +84,7 @@
       var links = (w.tautan || []).filter(hasUrl);
       var art = w.gambar && w.gambar.trim()
         ? '<img class="work__shot" src="' + esc(w.gambar) + '" alt="Tangkapan layar ' + esc(w.judul) + '" loading="lazy">'
-        : '<img class="work__amphora" src="assets/figma/amfora.svg" alt="" loading="lazy"><span class="work__caption">Tangkapan layar <mark class="ganti">[GANTI]</mark></span>';
+        : '<img class="work__amphora" src="assets/foto/amfora.webp" alt="" loading="lazy"><span class="work__caption">Tangkapan layar <mark class="ganti">[GANTI]</mark></span>';
       return '<li class="work' + (i === 0 ? " work--lead" : "") + '">' +
         '<div class="work__art"><span class="work__num" aria-hidden="true">' + (NUMERALS[i] || i + 1) + "</span>" + art + "</div>" +
         '<div class="work__body"><h3>' + rich(w.judul) + "</h3><p>" + rich(w.deskripsi) + "</p>" +
@@ -261,7 +261,7 @@
       var x = card.getBoundingClientRect().left - track.getBoundingClientRect().left - gutter;
       track.style.transform = prev;
       var prog = Math.min(1, Math.max(0, x / state.dist));
-      window.scrollTo({ top: state.worksTop + prog * state.dist, behavior: "auto" });
+      window.scrollTo({ top: state.worksTop + prog * state.dist, behavior: "instant" });
     });
     request();
   }
