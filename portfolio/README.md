@@ -89,17 +89,16 @@ Nama raksasa (kecepatan 0.25) diletakkan di antara lapisan, sehingga Parthenon b
 |---|---|
 | Nama di hero | huruf naik dari kabur ke tajam satu per satu saat halaman dibuka |
 | Teks peran | kata muncul bergiliran setelah nama |
-| Judul bagian (`data-split`) | kata naik dari balik garis dengan blur saat masuk layar |
+| Judul bagian (`data-split`) | kata naik dari balik garis saat masuk layar (blur hanya di hero) |
 | Label bagian (`data-carve`) | jarak huruf merapat seperti pahatan prasasti |
 | Ceruk patung | terbuka dari bawah seperti tirai |
-| Pilar keahlian | berdiri bergantian; ikonnya melayang dengan kedalaman berbeda |
+| Pilar keahlian | berdiri bergantian, seperti kuil yang sedang dibangun |
 | Kolom batu di Keahlian | parallax di kedua sisi (layar ≥ 1200 px) |
 | Frieze prasasti | dua baris pepatah Delphi bergeser berlawanan arah |
-| Pita meander | berjalan ke samping mengikuti guliran |
 | Amfora di galeri | bergeser lebih lambat daripada panelnya |
 | Burung camar | melintasi bagian Perjalanan |
 | Parthenon malam & bintang | naik dan tertinggal dengan kedalaman berbeda |
-| Garis emas di atas | penanda kemajuan baca halaman |
+| Garis terakota di atas | penanda kemajuan baca halaman |
 
 Galeri karya dipin dan bergeser ke samping saat digulir di layar lebar; di ponsel kartunya bertumpuk biasa.
 
@@ -107,7 +106,8 @@ Pengguna yang mengaktifkan *reduce motion* di sistem operasinya mendapat halaman
 
 ## Keputusan desain
 
-- **Warna**: dua warna inti (biru Aegea untuk langit dan malam, terakota untuk tembikar), satu aksen emas (tombol utama, mahkota laurel, penanda lini masa), netral marmer dan tinta. Teks terakota memakai `#9A4322` agar kontrasnya 5.7:1 di atas marmer.
+- **Warna**: dua warna inti (biru Aegea untuk langit dan malam, terakota untuk tembikar), netral marmer dan tinta, dan satu aksen emas yang **hanya** dipakai untuk aksi (tombol utama, tautan, tombol simulasi) serta keadaan aktif atau fokus (simpul terpilih, cincin fokus). Hiasan seperti pita meander, penanda lini masa, label bagian, dan garis kemajuan memakai terakota atau marmer, supaya emas tetap berarti "bisa diklik". Teks terakota memakai `#9A4322` agar kontrasnya 5.7:1 di atas marmer.
+- **Jarak huruf**: label berhuruf kapital Cinzel memakai jarak 0.06 sampai 0.12em, cukup untuk kesan pahatan tanpa terlihat seperti label template yang direnggangkan.
 - **Tema tetap, tanpa mode gelap**: halaman memang bergerak dari senja ke malam, jadi terang dan gelap sudah menjadi bagian cerita.
 - **Tipografi**: Cinzel berbentuk huruf pahatan prasasti untuk judul; EB Garamond nyaman dibaca untuk paragraf; GFS Didot menangani huruf Yunani (Α Β Γ Δ Ε, Χαίρετε).
 - **Motif identitas**: pita meander di setiap peralihan, penomoran bagian dengan huruf Yunani, panel karya bergaya tembikar black-figure, keahlian sebagai empat pilar kuil.

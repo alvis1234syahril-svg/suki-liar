@@ -107,10 +107,12 @@ mark.ganti {
   margin: 0 0 18px;
   font-family: var(--font-display);
   font-size: .875rem;
-  letter-spacing: .24em;
+  letter-spacing: .12em; /* cukup untuk kesan pahatan, tidak melebar seperti label template */
   color: var(--terakota-700);
 }
-.overline--light { color: var(--emas-300); }
+/* Aturan aksen: emas hanya untuk aksi (tombol utama, tautan) dan keadaan aktif/fokus.
+   Hiasan memakai terakota atau marmer, supaya emas tetap berarti "bisa diklik". */
+.overline--light { color: var(--marmer-300); }
 
 .h2 {
   margin: 0 0 28px;
@@ -142,7 +144,7 @@ mark.ganti {
   font-family: var(--font-display);
   font-weight: 700;
   font-size: .8125rem;
-  letter-spacing: .14em;
+  letter-spacing: .08em;
   text-decoration: none;
   transition: background-color .2s ease, transform .2s ease;
 }
@@ -152,7 +154,7 @@ mark.ganti {
 .btn--ghost {
   background: rgba(28, 26, 23, .45);
   color: var(--marmer-50);
-  box-shadow: inset 0 0 0 1.5px var(--emas-300);
+  box-shadow: inset 0 0 0 1.5px var(--marmer-300); /* aksi kedua tidak memakai aksen */
 }
 .btn--ghost:hover { background: rgba(28, 26, 23, .72); }
 
@@ -164,12 +166,9 @@ mark.ganti {
   left: 0;
   right: 0;
   height: 24px;
-  background: var(--emas-500);
+  background: var(--terakota-300); /* warna tembikar: motif, bukan aksen */
   -webkit-mask: var(--meander) repeat-x 0 0 / 24px 24px;
   mask: var(--meander) repeat-x 0 0 / 24px 24px;
-  /* --band-x diisi JS: pita meander berjalan ke samping mengikuti guliran. */
-  -webkit-mask-position: var(--band-x, 0) 0;
-  mask-position: var(--band-x, 0) 0;
 }
 
 /* ---------- Navigasi ---------- */
@@ -217,7 +216,7 @@ mark.ganti {
   font-family: var(--font-display);
   font-weight: 700;
   font-size: .8125rem;
-  letter-spacing: .16em;
+  letter-spacing: .08em;
   text-decoration: none;
 }
 .nav__menu a::after {
@@ -227,7 +226,7 @@ mark.ganti {
   right: 0;
   bottom: 8px;
   height: 2px;
-  background: var(--emas-300);
+  background: currentColor;
   transform: scaleX(0);
   transform-origin: left;
   transition: transform .25s ease;
@@ -242,12 +241,12 @@ mark.ganti {
   min-width: 44px;
   min-height: 44px;
   padding: 0 12px;
-  border: 1.5px solid rgba(230, 203, 133, .7);
+  border: 1.5px solid rgba(216, 201, 172, .7);
   border-radius: 2px;
   background: transparent;
   color: inherit;
   font: 700 .8125rem/1 var(--font-display);
-  letter-spacing: .14em;
+  letter-spacing: .08em;
   cursor: pointer;
 }
 .nav__toggle-bars,
@@ -383,7 +382,7 @@ mark.ganti {
 }
 @media (max-width: 480px) {
   .hero__actions { gap: 12px; }
-  .hero__actions .btn { padding: 0 16px; letter-spacing: .1em; }
+  .hero__actions .btn { padding: 0 16px; letter-spacing: .05em; }
 }
 
 .hero__content {
@@ -432,7 +431,7 @@ mark.ganti {
   content: "";
   width: 1.5px;
   height: 26px;
-  background: linear-gradient(var(--emas-300), transparent);
+  background: linear-gradient(var(--marmer-200), transparent);
 }
 
 /* Bayangan lembut di belakang blok teks: menjaga kontras teks di atas cahaya senja. */
@@ -508,7 +507,7 @@ main > :not(.hero), .footer { position: relative; z-index: 1; }
 .facts dt {
   font-family: var(--font-display);
   font-size: .875rem;
-  letter-spacing: .2em;
+  letter-spacing: .1em;
   color: var(--terakota-700);
   padding-top: 3px;
 }
@@ -716,7 +715,7 @@ main > :not(.hero), .footer { position: relative; z-index: 1; }
   background: rgba(28, 26, 23, .84);
   color: var(--emas-300);
   font: 700 .75rem/1 var(--font-display);
-  letter-spacing: .12em;
+  letter-spacing: .06em;
   cursor: pointer;
 }
 .topo__btn:hover { background: rgba(28, 26, 23, .96); }
@@ -862,7 +861,7 @@ main > :not(.hero), .footer { position: relative; z-index: 1; }
   font-family: var(--font-display);
   font-weight: 700;
   font-size: .8125rem;
-  letter-spacing: .14em;
+  letter-spacing: .06em;
 }
 .work__links a, .work--more a { color: var(--emas-300); text-underline-offset: 5px; }
 .work__pending { color: var(--marmer-300); }
@@ -905,12 +904,12 @@ main > :not(.hero), .footer { position: relative; z-index: 1; }
 }
 .timeline li:last-child { padding-bottom: 0; }
 .timeline li:last-child::before { bottom: -24px; }
-.timeline__mark { width: 14px; height: 14px; margin-top: 7px; background: var(--emas-500); transform: rotate(45deg); }
+.timeline__mark { width: 14px; height: 14px; margin-top: 7px; background: var(--terakota-500); transform: rotate(45deg); }
 .timeline__year {
   margin: 0;
   font-family: var(--font-display);
   font-size: .875rem;
-  letter-spacing: .2em;
+  letter-spacing: .1em;
   color: var(--terakota-700);
 }
 .timeline h3 {
@@ -963,7 +962,7 @@ main > :not(.hero), .footer { position: relative; z-index: 1; }
   font-family: var(--font-display);
   font-weight: 700;
   font-size: .8125rem;
-  letter-spacing: .14em;
+  letter-spacing: .06em;
   text-underline-offset: 5px;
 }
 .contact__note { flex-basis: 100%; margin: 6px 0 0; font-size: .9375rem; color: var(--marmer-300); }
@@ -1013,7 +1012,7 @@ main > :not(.hero), .footer { position: relative; z-index: 1; }
 .scroll-progress span {
   display: block;
   height: 100%;
-  background: linear-gradient(90deg, var(--emas-500), var(--emas-300));
+  background: var(--terakota-300); /* penanda posisi, bukan aksi: tidak memakai aksen emas */
   transform: scaleX(0);
   transform-origin: 0 50%;
 }
@@ -1125,7 +1124,7 @@ main > :not(.hero), .footer { position: relative; z-index: 1; }
     transition: transform 1.3s cubic-bezier(.16, .84, .3, 1) calc(.3s + var(--ci) * 70ms), opacity .9s ease calc(.3s + var(--ci) * 70ms), filter 1.1s ease calc(.3s + var(--ci) * 70ms);
   }
   .hero.is-ready .hero__lead .w__i { opacity: 0; transform: translateY(.55em); }
-  .hero.is-ready .overline--light { opacity: 0; letter-spacing: .7em; }
+  .hero.is-ready .overline--light { opacity: 0; letter-spacing: .36em; }
   .hero.is-ready .hero__actions, .hero.is-ready .hero__cue { opacity: 0; translate: 0 18px; }
   .hero.is-ready .hero__stage { --intro: 1.1; }
   .hero.is-ready.is-intro .ch__i { transform: none; transition: transform 1.1s cubic-bezier(.16, .84, .3, 1) calc(.2s + var(--ci) * 55ms); }
@@ -1136,7 +1135,7 @@ main > :not(.hero), .footer { position: relative; z-index: 1; }
   }
   .hero.is-ready.is-intro .overline--light {
     opacity: 1;
-    letter-spacing: .24em;
+    letter-spacing: .12em;
     transition: opacity 1s ease .1s, letter-spacing 1.6s cubic-bezier(.16, .84, .3, 1) .1s;
   }
   .hero.is-ready.is-intro .hero__actions, .hero.is-ready.is-intro .hero__cue {
@@ -1147,21 +1146,19 @@ main > :not(.hero), .footer { position: relative; z-index: 1; }
   .hero.is-ready.is-intro .hero__stage { --intro: 1; transition: --intro 2.8s cubic-bezier(.2, .7, .2, 1); }
   .hero.is-intro-done .split-line { overflow: visible; }
 
-  /* Judul bagian: kata naik dari balik garis saat masuk layar. */
+  /* Judul bagian: kata naik dari balik garis saat masuk layar. Blur hanya dipakai di hero
+     (efek dari referensi); di sini cukup gerak naik supaya tidak menumpuk efek. */
   .js [data-split] .w__i {
     transform: translateY(112%);
-    filter: blur(8px);
-    transition: transform .95s cubic-bezier(.16, .84, .3, 1) calc(var(--wi) * 70ms), filter .9s ease calc(var(--wi) * 70ms);
+    transition: transform .95s cubic-bezier(.16, .84, .3, 1) calc(var(--wi) * 70ms);
   }
-  .js [data-split].is-visible .w__i { transform: none; filter: blur(0); }
+  .js [data-split].is-visible .w__i { transform: none; }
   /* Label bagian: jarak huruf merapat seperti pahatan prasasti. */
-  .js [data-carve] { opacity: 0; letter-spacing: .7em; transition: opacity .9s ease, letter-spacing 1.4s cubic-bezier(.16, .84, .3, 1); }
-  .js [data-carve].is-visible { opacity: 1; letter-spacing: .24em; }
+  .js [data-carve] { opacity: 0; letter-spacing: .36em; transition: opacity .9s ease, letter-spacing 1.4s cubic-bezier(.16, .84, .3, 1); }
+  .js [data-carve].is-visible { opacity: 1; letter-spacing: .12em; }
   /* Ceruk patung terbuka dari bawah seperti tirai. */
   .js [data-reveal="curtain"] { opacity: 1; transform: none; clip-path: inset(100% 0 0 0); transition: clip-path 1.5s cubic-bezier(.16, .84, .3, 1); }
   .js [data-reveal="curtain"].is-visible { clip-path: inset(0 0 0 0); }
-  .js [data-reveal="scale"] { transform: scale(.55) rotate(-10deg); transition: opacity .8s ease, transform 1.2s cubic-bezier(.16, .84, .3, 1); }
-  .js [data-reveal="scale"].is-visible { transform: none; }
 }
 @property --intro { syntax: "<number>"; inherits: true; initial-value: 1; }
 

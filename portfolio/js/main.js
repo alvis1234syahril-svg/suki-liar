@@ -38,7 +38,6 @@
     "gulungan": "assets/foto/ikon-gulungan.webp"
   };
   var newTab = '<span class="visually-hidden"> (tab baru)</span>';
-  var ICON_DEPTH = [0.05, -0.04, 0.07, -0.05]; // ikon pilar melayang dengan kedalaman berbeda
   var LOG_LABEL = { terlihat: "terlihat di log", ambigu: "ambigu, IP dipakai beberapa aset", belum: "belum terlihat di log" };
   var PORT_LABEL = { normal: "normal (admin up, link up)", periksa: "perlu diperiksa (admin up, link down)", nonaktif: "dinonaktifkan (admin down)" };
 
@@ -358,7 +357,7 @@
     // Keahlian
     var skills = D.keahlian || [];
     $("[data-pillars]").innerHTML = skills.length ? skills.map(function (k, i) {
-      var icon = ICONS[k.ikon] ? '<img class="pillar__icon" src="' + ICONS[k.ikon] + '" alt="" width="56" height="56" data-depth="' + ICON_DEPTH[i % 4] + '">' : "";
+      var icon = ICONS[k.ikon] ? '<img class="pillar__icon" src="' + ICONS[k.ikon] + '" alt="" width="56" height="56">' : "";
       return '<li class="pillar" data-reveal style="--i:' + i + '"><div class="pillar__shaft">' + icon +
         "<h3>" + rich(k.judul) + "</h3>" +
         (k.moto ? '<p class="pillar__motto">' + rich(k.moto) + "</p>" : "") +
@@ -475,7 +474,7 @@
   }
 
   // Elemen efek gulir tambahan (diisi saat initMotion).
-  var fx = { bar: null, bands: [], frieze: null, rows: [], journey: null, birds: null, amphorae: [] };
+  var fx = { bar: null, frieze: null, rows: [], journey: null, birds: null, amphorae: [] };
   var progressIn = function (r, vh) { return Math.min(1, Math.max(0, (vh - r.top) / (vh + r.height))); };
 
   function frame() {
@@ -532,12 +531,6 @@
 
     if (motion) {
       var vw = window.innerWidth;
-      // Pita meander berjalan ke samping, arah bergantian.
-      fx.bands.forEach(function (b, i) {
-        var r = b.getBoundingClientRect();
-        if (r.bottom < 0 || r.top > vh) return;
-        b.style.setProperty("--band-x", ((i % 2 ? 1 : -1) * y * 0.25 % 24).toFixed(1) + "px");
-      });
       // Frieze prasasti: dua baris bergeser berlawanan arah.
       if (fx.frieze) {
         var fr = fx.frieze.getBoundingClientRect();
@@ -586,7 +579,6 @@
     heroContent.style.opacity = "";
     stage.style.removeProperty("--zoom");
     if (titleLayer) { titleLayer.style.filter = ""; titleLayer.style.opacity = ""; }
-    fx.bands.forEach(function (b) { b.style.removeProperty("--band-x"); });
     fx.rows.forEach(function (r) { r.style.transform = ""; });
     if (fx.birds) fx.birds.style.transform = "";
     fx.amphorae.forEach(function (a) { a.style.translate = ""; });
@@ -594,7 +586,6 @@
 
   function initMotion() {
     fx.bar = $("[data-progress]");
-    fx.bands = $$(".band, .temple__architrave");
     fx.frieze = $("[data-frieze]");
     fx.rows = $$("[data-frieze] .frieze__row").map(function (r) { r.dir = parseFloat(r.getAttribute("data-frieze-dir")) || 1; return r; });
     fx.journey = $(".journey");
