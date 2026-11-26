@@ -387,11 +387,6 @@
     }).join("");
     if (!works.length) {
       html = '<li class="work work--empty"><p>Karya sedang disiapkan.' + (gh ? ' Sementara itu, kode saya ada di <a href="' + esc(gh.url) + '" target="_blank" rel="noopener">GitHub' + newTab + "</a>." : "") + "</p></li>";
-    } else if (gh) {
-      html += '<li class="work work--more work--shot"><div class="work__art" aria-hidden="true"><div class="work__media">' +
-        '<img class="work__shot" src="assets/karya/relief-kode.webp" alt="" width="960" height="427" loading="lazy" decoding="async"></div></div>' +
-        '<div class="work__more-body"><h3>Lebih banyak kode</h3><p>Repositori lain dan riwayat kontribusi ada di GitHub.</p>' +
-        '<a href="' + esc(gh.url) + '" target="_blank" rel="noopener">Buka profil GitHub' + newTab + "</a></div></li>";
     }
     $("[data-works-track]").innerHTML = html;
 

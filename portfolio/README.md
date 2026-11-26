@@ -59,7 +59,7 @@ portfolio/
 ├── js/data.js         konten
 ├── js/main.js         render, parallax, galeri geser, menu, kemunculan
 ├── assets/foto/       aset fotorealistik WebP (latar transparan) + favicon.png
-└── assets/karya/      relief kode dan tangkapan layar aplikasi Topologi Aset
+└── assets/karya/      tangkapan layar aplikasi Topologi Aset
 ```
 
 Aset di `assets/foto/` diturunkan dari paket "Senja di Akropolis, aset parallax fotorealistik" (versi 4K): area transparan kosong di sekelilingnya dipotong, lalu ukurannya disesuaikan dengan tampilan di web (ikon 168 px, lapisan lanskap 2400 sampai 2800 px). Totalnya sekitar 1,7 MB, ditambah 12 ornamen (sekitar 450 KB) yang dimuat saat bagiannya mendekati layar. Untuk mengganti salah satunya, simpan file baru dengan nama yang sama; bila proporsi isinya berbeda, sesuaikan posisi lapisan di `css/style.css` bagian "Hero".
@@ -120,7 +120,7 @@ Setiap bagian punya sepasang ornamen yang bergerak dengan kedalaman berbeda. Atu
 
 Semua ornamen memakai `alt=""` di dalam pembungkus `aria-hidden="true"`, tidak bisa diklik (`pointer-events: none`), dan dimuat malas (`loading="lazy"`) kecuali dua lapisan hero. Bila gerak dikurangi, ornamen diam di posisinya. Bila `tentang.foto` diisi, koin dan fragmen kapitel ikut hilang supaya tidak menutupi foto Anda.
 
-Kartu "Lebih banyak kode" memakai `assets/karya/relief-kode.webp` dengan parallax halus di dalam bingkainya. Karya pertama punya tautan "Lihat tangkapan layar aplikasi" ke `assets/karya/topologi-aset.webp`, tangkapan layar aplikasi aslinya, sebagai pelengkap demo yang memakai data contoh.
+Karya pertama punya tautan "Lihat tangkapan layar aplikasi" ke `assets/karya/topologi-aset.webp`, tangkapan layar aplikasi aslinya, sebagai pelengkap demo yang memakai data contoh.
 
 Pengguna yang mengaktifkan *reduce motion* di sistem operasinya mendapat halaman tanpa parallax, tanpa pin, dan semua konten langsung terlihat.
 

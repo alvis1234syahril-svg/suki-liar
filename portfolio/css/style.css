@@ -643,7 +643,6 @@ main > :not(.hero), .footer { position: relative; z-index: 1; }
 .work { display: flex; flex-direction: column; }
 .works.is-pinned .work { flex: 0 0 auto; width: min(560px, 46vw); }
 .works.is-pinned .work--lead { width: min(760px, 58vw); }
-.works.is-pinned .work--more { width: min(380px, 30vw); }
 
 .work { --art-h: 300px; position: relative; }
 .work--lead { --art-h: 360px; }
@@ -854,7 +853,7 @@ main > :not(.hero), .footer { position: relative; z-index: 1; }
   color: var(--marmer-200);
 }
 .work__links { display: flex; flex-wrap: wrap; gap: 4px 24px; }
-.work__links a, .work__pending, .work--more a {
+.work__links a, .work__pending {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
@@ -863,19 +862,8 @@ main > :not(.hero), .footer { position: relative; z-index: 1; }
   font-size: .8125rem;
   letter-spacing: .06em;
 }
-.work__links a, .work--more a { color: var(--emas-300); text-underline-offset: 5px; }
+.work__links a { color: var(--emas-300); text-underline-offset: 5px; }
 .work__pending { color: var(--marmer-300); }
-/* Kartu GitHub tetap bergaris tepi tanpa isi warna (tautan sekunder, bukan proyek),
-   dengan relief kode yang lebih pendek dari panel karya. */
-.work--more { --art-h: 200px; border: 1px solid var(--tinta-500); }
-.work__more-body {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 12px;
-  padding: 30px clamp(24px, 3vw, 40px) 34px;
-}
 .work--empty { padding: 40px; border: 1px dashed var(--tinta-500); color: var(--marmer-200); }
 
 /* ---------- Δ · Perjalanan ---------- */
