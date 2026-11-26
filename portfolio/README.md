@@ -43,7 +43,10 @@ Karya pertama memakai `topologi` di `data.js`: prasasti terakota tetap menjadi t
 - **Korelasi log:** cincin penuh = terlihat di log, putus-putus = ambigu (IP dipakai beberapa aset), redup = belum terlihat.
 - **Status port:** tanda "!" untuk port "perlu diperiksa" (admin up, link down) atau "dinonaktifkan".
 - **Simulasi traffic:** paket cahaya mengalir dari setiap aset ke induknya, banyaknya sesuai tingkat traffic. Animasi berhenti saat kartu tidak terlihat. Bila gerak dikurangi, jalurnya cukup disorot tanpa paket bergerak.
-- **Keyboard:** Tab ke simpul, Enter atau Spasi untuk memilih, Escape untuk melepas.
+- **Legenda berukir (sisi kiri prasasti):** empat simbol status yang dipahat di batu, masing-masing dengan jumlah asetnya. Klik untuk menyaring simpul: yang cocok menyala, sisanya meredup.
+- **Kolom Doria berukir (sisi kanan prasasti):** meter beban traffic. Alurnya terisi cahaya dari bawah sesuai traffic simpul yang dipilih, atau rata-rata jaringan saat simulasi berjalan.
+- **Panel detail:** di layar lebar muncul sebagai kartu tepat di bawah prasasti dengan panah ke simpul atau legenda yang dipilih, dan bisa ditutup dengan tombol ×. Di ponsel panel berada di bawah gambar.
+- **Keyboard:** Tab ke simpul atau legenda, Enter atau Spasi untuk memilih, Escape untuk melepas.
 
 Semua isinya data contoh dan diberi label "Demo interaktif · data contoh". Ubah nama, IP, dan status sesuka Anda. Koordinat `x`/`y` hanya perlu diubah bila gambarnya diganti.
 

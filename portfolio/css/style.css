@@ -750,16 +750,71 @@ main > :not(.hero), .footer { position: relative; z-index: 1; }
 .lg--dash { border-style: dashed; }
 .lg--dim { border-color: rgba(251, 248, 242, .38); }
 .lg--warn { margin-left: 6px; font-weight: 700; color: #FFE7B0; }
+/* Galeri dipin (desktop): tombol di tengah bawah di atas pita meander,
+   panel menjadi kartu kecil di samping simpul/legenda yang dipilih (diposisikan JS). */
+.works.is-pinned .topo__bar { top: auto; bottom: 10px; left: 50%; right: auto; transform: translateX(-50%); flex-wrap: nowrap; }
 .works.is-pinned .topo__panel {
   position: absolute;
-  z-index: 2;
-  right: 12px;
-  top: calc(min(var(--art-h), 34vh) - 12px);
-  width: 240px;
-  padding: 12px 14px;
-  background: rgba(20, 15, 11, .88);
-  transform: translateY(-100%);
+  z-index: 3;
+  width: 300px;
+  padding: 12px 40px 12px 14px;
+  background: #1A130E;
+  border-top: 2px solid var(--emas-300);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, .45);
 }
+.works.is-pinned .topo__panel::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: calc(var(--caret-x, 50%) - 9px);
+  border: 9px solid transparent;
+  border-top: 0;
+  border-bottom-color: var(--emas-300);
+}
+.topo__panel { position: relative; }
+.topo__panel:has(.topo__close) { padding-right: 48px; }
+.topo__close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  background: transparent;
+  color: var(--marmer-200);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.topo__close:hover { color: var(--emas-300); }
+
+/* Ukiran tambahan di permukaan batu: garis gelap + sorotan terang yang digeser = efek pahatan. */
+.cv-hi *, .cv-lo * { fill: none; }
+.cv-hi { stroke: rgba(255, 210, 168, .45); }
+.cv-lo { stroke: rgba(70, 24, 8, .66); transition: stroke .25s ease; }
+.cv-hi text, .cv-lo text { stroke: none; font-family: var(--font-display); font-weight: 700; text-anchor: middle; }
+.cv-hi text { fill: rgba(255, 210, 168, .5); }
+.cv-lo text { fill: rgba(70, 24, 8, .72); transition: fill .25s ease; }
+.cv-num { font-size: 44px; }
+.cv-mark { font-size: 32px; }
+.topo__lg { cursor: pointer; outline: none; }
+.topo__lg:hover .cv-lo, .topo__lg:focus-visible .cv-lo, .topo__lg[aria-pressed="true"] .cv-lo { stroke: #FFE7B0; }
+.topo__lg:hover .cv-lo text, .topo__lg:focus-visible .cv-lo text, .topo__lg[aria-pressed="true"] .cv-lo text { fill: #FFE7B0; }
+.topo__lg[aria-pressed="true"] .cv-lo, .topo__lg:focus-visible .cv-lo { filter: url(#topo-glow); }
+.topo__lg:focus-visible .topo__hit { stroke: #FFF4D6; stroke-width: 4; stroke-dasharray: 8 6; }
+.topo__meter-fill {
+  fill: url(#topo-fill);
+  opacity: .9;
+  filter: url(#topo-glow);
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  transform: scaleY(0);
+  transition: transform .9s cubic-bezier(.16, .84, .3, 1);
+}
+/* Saring: simpul yang cocok menyala, sisanya meredup. */
+.topo.has-filter .topo__node:not(.is-match) { opacity: .25; }
+.topo.has-filter .topo__node.is-match .topo__ring { stroke: #FFE7B0; stroke-width: 7; filter: url(#topo-glow); }
+@media (prefers-reduced-motion: reduce) { .topo__meter-fill { transition: none; } }
 .work--shot .work__art { background: #6E2B22; }
 .work--shot .work__art::before { display: none; } /* prasasti sudah berbingkai meander sendiri */
 .work--shot .work__num { z-index: 1; color: var(--marmer-50); text-shadow: 0 2px 18px rgba(28, 10, 6, .7); }

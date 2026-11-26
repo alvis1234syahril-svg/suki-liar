@@ -63,12 +63,39 @@
         (n.port && n.port !== "normal" ? '<g class="topo__warn"><circle cx="' + (n.x + 24) + '" cy="' + (n.y - 24) + '" r="16"/><text x="' + (n.x + 24) + '" y="' + (n.y - 16) + '">!</text></g>' : "") +
         "</g>";
     }).join("");
-    return '<div class="topo__bar"><span class="topo__badge">Demo interaktif · data contoh</span>' +
+    // Ukiran tambahan di permukaan batu yang kosong (koordinat gambar asli):
+    // kiri = legenda status yang bisa diklik, kanan = kolom Doria sebagai meter beban traffic.
+    var cv = function (inner) { return '<g class="cv-hi" transform="translate(2.5 2.5)">' + inner + '</g><g class="cv-lo">' + inner + "</g>"; };
+    var count = { terlihat: 0, ambigu: 0, belum: 0, port: 0 };
+    t.simpul.forEach(function (n) { if (count[n.log] != null) count[n.log]++; if (n.port && n.port !== "normal") count.port++; });
+    var LX = 488;
+    var icons = {
+      terlihat: function (y) { return '<circle cx="' + LX + '" cy="' + y + '" r="24" stroke-width="6"/>'; },
+      ambigu: function (y) { return '<circle cx="' + LX + '" cy="' + y + '" r="24" stroke-width="6" stroke-dasharray="8 7"/>'; },
+      belum: function (y) { return '<circle cx="' + LX + '" cy="' + y + '" r="24" stroke-width="2.5"/>'; },
+      port: function (y) { return '<circle cx="' + LX + '" cy="' + y + '" r="23" stroke-width="4"/><text x="' + LX + '" y="' + (y + 12) + '" class="cv-mark">!</text>'; }
+    };
+    var legend = [["terlihat", "terlihat di log"], ["ambigu", "ambigu"], ["belum", "belum terlihat di log"], ["port", "port perlu diperiksa"]].map(function (it, k) {
+      var y = 232 + k * 105;
+      return '<g class="topo__lg" data-filter="' + it[0] + '" tabindex="0" role="button" aria-pressed="false" aria-label="Saring simpul: ' + it[1] + ", " + count[it[0]] + ' aset">' +
+        '<rect class="topo__hit" x="428" y="' + (y - 38) + '" width="120" height="104"/>' +
+        cv(icons[it[0]](y) + '<text class="cv-num" x="' + LX + '" y="' + (y + 66) + '">' + count[it[0]] + "</text>") + "</g>";
+    }).join("");
+    var flutes = [1361, 1372, 1384, 1395].map(function (x) { return '<line x1="' + x + '" y1="238" x2="' + x + '" y2="570" stroke-width="3"/>'; }).join("");
+    var meter = '<g class="topo__meter" role="img" aria-label="Beban traffic: jalankan simulasi atau pilih simpul">' +
+      '<rect class="topo__meter-fill" x="1350" y="228" width="56" height="350"/>' +
+      cv('<rect x="1338" y="200" width="80" height="16" stroke-width="4"/><path d="M1346 216 L1352 228 L1404 228 L1410 216" stroke-width="4"/>' +
+        '<rect x="1350" y="228" width="56" height="350" stroke-width="4"/>' + flutes +
+        '<rect x="1342" y="578" width="72" height="14" stroke-width="4"/><rect x="1334" y="592" width="88" height="14" stroke-width="4"/>') + "</g>";
+    var stone = '<g class="topo__stone">' + legend + meter + "</g>";
+    var defs = '<linearGradient id="topo-fill" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#E6CB85"/><stop offset="1" stop-color="#FFF4D6"/></linearGradient>';
+
+    return '<div class="topo__bar"><span class="topo__badge">Demo · data contoh</span>' +
       '<button class="topo__btn" type="button" aria-pressed="false" data-topo-sim>Simulasikan traffic</button></div>' +
       '<div class="work__media">' + img +
       '<svg class="topo__svg" viewBox="0 0 ' + t.lebar + " " + t.tinggi + '" preserveAspectRatio="xMidYMid slice" role="group" aria-label="Diagram topologi interaktif, ' + t.simpul.length + ' simpul">' +
-      '<defs><filter id="topo-glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>' +
-      '<g class="topo__edges">' + edges + '</g><g data-topo-packets></g><g class="topo__nodes">' + nodes + "</g></svg></div>" +
+      '<defs><filter id="topo-glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>' + defs + "</defs>" +
+      stone + '<g class="topo__edges">' + edges + '</g><g data-topo-packets></g><g class="topo__nodes">' + nodes + "</g></svg></div>" +
       '<div class="topo__tip" data-topo-tip hidden></div>';
   }
 
@@ -81,15 +108,66 @@
       t.simpul.forEach(function (n) { byId[n.id] = n; });
       var svg = $(".topo__svg", art), tip = $("[data-topo-tip]", art), btn = $("[data-topo-sim]", art);
       var packets = $("[data-topo-packets]", art), panel = $("[data-topo-panel]", card);
-      var nodes = $$(".topo__node", art), edges = $$(".topo__edge", art);
-      var selected = null;
+      var nodes = $$(".topo__node", art), edges = $$(".topo__edge", art), legend = $$(".topo__lg", art);
+      var meter = $(".topo__meter", art), meterFill = $(".topo__meter-fill", art);
+      var selected = null, filter = null;
       var NS = "http://www.w3.org/2000/svg";
+      var LEVEL = { tinggi: 1, sedang: 0.6, rendah: 0.3, "tidak ada": 0 };
+      var FILTER_LABEL = { terlihat: "Terlihat di log", ambigu: "Ambigu", belum: "Belum terlihat di log", port: "Port perlu diperiksa" };
+      var avg = t.simpul.reduce(function (s, n) { return s + (LEVEL[n.traffic] || 0); }, 0) / t.simpul.length;
+      var levelWord = function (v) { return v >= 0.8 ? "tinggi" : v >= 0.45 ? "sedang" : v > 0 ? "rendah" : "tidak ada"; };
       var row = function (k, v) { return "<dt>" + k + "</dt><dd>" + esc(v) + "</dd>"; };
       var chain = function (id) { var out = [], guard = 0; while (id && byId[id] && guard++ < 50) { out.push(id); id = byId[id].induk; } return out; };
+      var matches = function (n, f) { return f === "port" ? !!n.port && n.port !== "normal" : n.log === f; };
+      var isPinned = function () { return card.closest(".works").classList.contains("is-pinned"); };
       var hint = '<p class="topo__hint">Klik simpul pada ukiran, atau tekan Tab, untuk melihat detail aset dan jalurnya ke firewall.</p>' +
         '<p class="topo__legend"><span class="lg"></span>terlihat di log <span class="lg lg--dash"></span>ambigu <span class="lg lg--dim"></span>belum terlihat <span class="lg--warn">!</span> port perlu diperiksa</p>';
 
-      // Pilih simpul: sorot jalurnya sampai akar (induk demi induk) dan tampilkan detail aset.
+      // Kolom Doria di sisi kanan: terisi cahaya sesuai beban traffic simpul terpilih / rata-rata jaringan saat simulasi.
+      var updateMeter = function () {
+        var sim = art.classList.contains("is-sim");
+        var v = selected ? (LEVEL[byId[selected].traffic] || 0) : (sim ? avg : 0);
+        meterFill.style.transform = "scaleY(" + v.toFixed(3) + ")";
+        meter.setAttribute("aria-label", selected ? "Beban traffic " + byId[selected].nama + ": " + byId[selected].traffic
+          : sim ? "Beban traffic jaringan: " + levelWord(avg) : "Beban traffic: jalankan simulasi atau pilih simpul");
+      };
+
+      // Panel: di bawah gambar (ponsel); di galeri dipin menjadi kartu tepat di bawah prasasti
+      // dengan panah ke simpul/legenda terpilih, sehingga ukiran tetap terlihat utuh.
+      var place = function () {
+        if (!isPinned()) { panel.hidden = false; panel.style.left = ""; panel.style.top = ""; return; }
+        var anchor = selected ? $('.topo__node[data-id="' + selected + '"] .topo__ring', art)
+          : filter ? $('.topo__lg[data-filter="' + filter + '"]', art) : null;
+        if (!anchor) { panel.hidden = true; return; }
+        panel.hidden = false;
+        var cr = card.getBoundingClientRect(), ar = art.getBoundingClientRect(), r = anchor.getBoundingClientRect();
+        var pw = panel.offsetWidth, cx = r.left + r.width / 2 - cr.left;
+        var left = Math.max(10, Math.min(cx - pw / 2, cr.width - pw - 10));
+        panel.style.left = left.toFixed(0) + "px";
+        panel.style.top = (ar.bottom - cr.top + 12).toFixed(0) + "px";
+        panel.style.setProperty("--caret-x", (cx - left).toFixed(0) + "px");
+      };
+      var closeBtn = '<button class="topo__close" type="button" aria-label="Tutup detail">×</button>';
+
+      var renderPanel = function () {
+        if (selected) {
+          var n = byId[selected], parent = n.induk ? byId[n.induk] : null;
+          panel.innerHTML = closeBtn + '<p class="topo__name">' + esc(n.nama) + "</p><dl>" +
+            row("Tipe", n.tipe + " · " + n.ip) + row("Induk", parent ? parent.nama : "akar topologi") +
+            row("Di log", LOG_LABEL[n.log] || n.log) + row("Port", PORT_LABEL[n.port] || n.port) +
+            (art.classList.contains("is-sim") ? row("Traffic", n.traffic) : "") + "</dl>";
+        } else if (filter) {
+          var list = t.simpul.filter(function (n) { return matches(n, filter); });
+          panel.innerHTML = closeBtn + '<p class="topo__name">' + FILTER_LABEL[filter] + " · " + list.length + " aset</p>" +
+            "<p>" + esc(list.map(function (n) { return n.nama; }).join(", ") || "Tidak ada aset dengan status ini.") + "</p>";
+        } else {
+          panel.innerHTML = hint;
+        }
+        updateMeter();
+        place();
+      };
+
+      // Pilih simpul: sorot jalurnya sampai akar (induk demi induk).
       var select = function (id) {
         selected = id;
         var path = id ? chain(id) : [];
@@ -106,13 +184,19 @@
           e.classList.toggle("is-child", !!id && ((a === id && byId[b].induk === id) || (b === id && byId[a].induk === id)));
         });
         art.classList.toggle("has-selection", !!id);
-        if (!id) { panel.innerHTML = hint; return; }
-        var n = byId[id], parent = n.induk ? byId[n.induk] : null;
-        panel.innerHTML = '<p class="topo__name">' + esc(n.nama) + "</p><dl>" +
-          row("Tipe", n.tipe + " · " + n.ip) + row("Induk", parent ? parent.nama : "akar topologi") +
-          row("Di log", LOG_LABEL[n.log] || n.log) + row("Port", PORT_LABEL[n.port] || n.port) +
-          (art.classList.contains("is-sim") ? row("Traffic", n.traffic) : "") + "</dl>";
+        renderPanel();
       };
+
+      // Legenda berukir di sisi kiri: saring simpul menurut status log/port.
+      var setFilter = function (f) {
+        filter = f;
+        art.classList.toggle("has-filter", !!f);
+        legend.forEach(function (lg) { lg.setAttribute("aria-pressed", String(lg.getAttribute("data-filter") === f)); });
+        nodes.forEach(function (g) { g.classList.toggle("is-match", !!f && matches(byId[g.getAttribute("data-id")], f)); });
+        if (f && selected) { select(null); return; }
+        renderPanel();
+      };
+
       var tipFor = function (g) {
         if (!g) { tip.hidden = true; return; }
         var r = $(".topo__ring", g).getBoundingClientRect(), ar = art.getBoundingClientRect();
@@ -122,17 +206,31 @@
         tip.hidden = false;
       };
       var nodeOf = function (e) { return e.target.closest && e.target.closest(".topo__node"); };
+      var legendOf = function (e) { return e.target.closest && e.target.closest(".topo__lg"); };
+      var activate = function (e) {
+        var g = nodeOf(e), lg = legendOf(e);
+        if (g) { var id = g.getAttribute("data-id"); if (filter) setFilter(null); select(selected === id ? null : id); }
+        else if (lg) { var f = lg.getAttribute("data-filter"); setFilter(filter === f ? null : f); }
+      };
 
-      svg.addEventListener("click", function (e) { var g = nodeOf(e); if (g) select(selected === g.getAttribute("data-id") ? null : g.getAttribute("data-id")); });
+      svg.addEventListener("click", activate);
       svg.addEventListener("keydown", function (e) {
-        var g = nodeOf(e);
-        if (g && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); select(selected === g.getAttribute("data-id") ? null : g.getAttribute("data-id")); }
+        if ((e.key === "Enter" || e.key === " ") && (nodeOf(e) || legendOf(e))) { e.preventDefault(); activate(e); }
       });
-      art.addEventListener("keydown", function (e) { if (e.key === "Escape" && selected) { select(null); } });
+      art.addEventListener("keydown", function (e) {
+        if (e.key === "Escape" && (selected || filter)) { filter = null; setFilter(null); select(null); }
+      });
       svg.addEventListener("pointerover", function (e) { tipFor(nodeOf(e)); });
       svg.addEventListener("pointerout", function (e) { if (!e.relatedTarget || !nodeOf({ target: e.relatedTarget })) tipFor(null); });
       svg.addEventListener("focusin", function (e) { tipFor(nodeOf(e)); });
       svg.addEventListener("focusout", function () { tipFor(null); });
+      doc.addEventListener("layoutchange", place);
+      panel.addEventListener("click", function (e) {
+        if (!e.target.closest(".topo__close")) return;
+        var back = selected ? $('.topo__node[data-id="' + selected + '"]', art) : filter ? $('.topo__lg[data-filter="' + filter + '"]', art) : null;
+        filter = null; setFilter(null); select(null);
+        if (back && back.focus) back.focus({ preventScroll: true }); // fokus kembali ke ukiran yang tadi dipilih
+      });
 
       // Simulasi traffic: paket cahaya mengalir dari setiap aset ke induknya, sebanyak tingkat traffic-nya.
       var COUNT = { tinggi: 3, sedang: 2, rendah: 1 };
@@ -141,20 +239,20 @@
         btn.setAttribute("aria-pressed", String(on));
         btn.textContent = on ? "Hentikan simulasi" : "Simulasikan traffic";
         packets.innerHTML = "";
-        if (selected) select(selected);
+        renderPanel();
         if (!on || reduceMotion.matches) return; // gerak dikurangi: jalur aktif tetap disorot, tanpa paket bergerak
         t.simpul.forEach(function (n) {
-          var p = n.induk && byId[n.induk], count = COUNT[n.traffic] || 0;
-          if (!p || !count) return;
+          var p = n.induk && byId[n.induk], c = COUNT[n.traffic] || 0;
+          if (!p || !c) return;
           var dur = Math.max(0.9, Math.hypot(p.x - n.x, p.y - n.y) / 150);
-          for (var k = 0; k < count; k++) {
-            var c = doc.createElementNS(NS, "circle");
-            c.setAttribute("r", "7"); c.setAttribute("class", "topo__packet");
+          for (var k = 0; k < c; k++) {
+            var dot = doc.createElementNS(NS, "circle");
+            dot.setAttribute("r", "7"); dot.setAttribute("class", "topo__packet");
             var am = doc.createElementNS(NS, "animateMotion");
             am.setAttribute("dur", dur.toFixed(2) + "s"); am.setAttribute("repeatCount", "indefinite");
-            am.setAttribute("begin", (-(k / count) * dur).toFixed(2) + "s");
+            am.setAttribute("begin", (-(k / c) * dur).toFixed(2) + "s");
             am.setAttribute("path", "M" + n.x + " " + n.y + " L" + p.x + " " + p.y);
-            c.appendChild(am); packets.appendChild(c);
+            dot.appendChild(am); packets.appendChild(dot);
           }
         });
       };
@@ -373,6 +471,7 @@
     state.worksTop = worksEl.getBoundingClientRect().top + window.scrollY;
     state.docH = doc.documentElement.scrollHeight;
     fx.amphorae = $$(".work__amphora, .work__media");
+    doc.dispatchEvent(new CustomEvent("layoutchange")); // mis. demo topologi menata ulang panelnya
   }
 
   // Elemen efek gulir tambahan (diisi saat initMotion).
