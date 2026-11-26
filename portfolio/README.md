@@ -66,7 +66,27 @@ Hero adalah panggung 1440 × 900 (sama dengan frame Figma) yang diskalakan seper
 | Reruntuhan | 1.00 (menyambung ke pita meander) |
 | Kolom serambi | 1.06 |
 
-Di luar hero: patung dada, ranting zaitun, bintang, dan Parthenon malam memakai `data-depth`. Galeri karya dipin dan bergeser ke samping saat digulir di layar lebar; di ponsel kartunya bertumpuk biasa.
+Nama raksasa (kecepatan 0.25) diletakkan di antara lapisan, sehingga Parthenon berdiri di depan kaki hurufnya. Saat digulir, nama itu makin kabur dan pudar, panggung membesar pelan, dan hero tetap di tempat (`position: sticky`) sementara bagian Tentang naik menutupinya seperti tirai. Di layar tegak, nama tampil sebagai judul biasa di atas Parthenon.
+
+### Animasi teks dan efek gulir
+
+| Elemen | Efek |
+|---|---|
+| Nama di hero | huruf naik dari kabur ke tajam satu per satu saat halaman dibuka |
+| Teks peran | kata muncul bergiliran setelah nama |
+| Judul bagian (`data-split`) | kata naik dari balik garis dengan blur saat masuk layar |
+| Label bagian (`data-carve`) | jarak huruf merapat seperti pahatan prasasti |
+| Ceruk patung | terbuka dari bawah seperti tirai |
+| Pilar keahlian | berdiri bergantian; ikonnya melayang dengan kedalaman berbeda |
+| Kolom batu di Keahlian | parallax di kedua sisi (layar ≥ 1200 px) |
+| Frieze prasasti | dua baris pepatah Delphi bergeser berlawanan arah |
+| Pita meander | berjalan ke samping mengikuti guliran |
+| Amfora di galeri | bergeser lebih lambat daripada panelnya |
+| Burung camar | melintasi bagian Perjalanan |
+| Parthenon malam & bintang | naik dan tertinggal dengan kedalaman berbeda |
+| Garis emas di atas | penanda kemajuan baca halaman |
+
+Galeri karya dipin dan bergeser ke samping saat digulir di layar lebar; di ponsel kartunya bertumpuk biasa.
 
 Pengguna yang mengaktifkan *reduce motion* di sistem operasinya mendapat halaman tanpa parallax, tanpa pin, dan semua konten langsung terlihat.
 

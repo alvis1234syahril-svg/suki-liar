@@ -38,6 +38,70 @@
     "gulungan": "assets/foto/ikon-gulungan.webp"
   };
   var newTab = '<span class="visually-hidden"> (tab baru)</span>';
+  var ICON_DEPTH = [0.05, -0.04, 0.07, -0.05]; // ikon pilar melayang dengan kedalaman berbeda
+
+  /* ---------------- Pemecah teks untuk animasi ---------------- */
+  // Bungkus setiap kata dalam <span class="w"><span class="w__i">, tanpa merusak <mark> di dalamnya.
+  function splitWords(el) {
+    if (!el || el.hasAttribute("data-split-done")) return;
+    var i = 0;
+    (function walk(node) {
+      Array.prototype.slice.call(node.childNodes).forEach(function (n) {
+        if (n.nodeType === 1) { walk(n); return; }
+        if (n.nodeType !== 3) return;
+        var frag = doc.createDocumentFragment();
+        n.textContent.split(/(\s+)/).forEach(function (part) {
+          if (!part) return;
+          if (/^\s+$/.test(part)) { frag.appendChild(doc.createTextNode(part)); return; }
+          var w = doc.createElement("span"); w.className = "w";
+          var inner = doc.createElement("span"); inner.className = "w__i"; inner.textContent = part;
+          inner.style.setProperty("--wi", i++);
+          w.appendChild(inner); frag.appendChild(w);
+        });
+        n.parentNode.replaceChild(frag, n);
+      });
+    })(el);
+    el.setAttribute("data-split-done", "");
+  }
+
+  // Nama di hero: tiap baris dipotong (overflow), tiap huruf naik bergiliran.
+  function splitHeroName() {
+    var h1 = $("[data-hero-name]");
+    var name = h1.textContent.replace(/\s+/g, " ").trim();
+    var ci = 0;
+    h1.setAttribute("aria-label", name);
+    // Salinan visual nama di panggung (aria-hidden), dipecah per huruf untuk animasi blur.
+    var st = $("[data-stage-title]");
+    if (st) {
+      var si = 0, words = name.split(" "), first = words.shift();
+      st.innerHTML = [first, words.join(" ")].filter(Boolean).map(function (line) {
+        return "<span>" + Array.prototype.map.call(line, function (c) {
+          return c === " " ? " " : '<span class="ch"><span class="ch__i" style="--ci:' + (si++) + '">' + esc(c) + "</span></span>";
+        }).join("") + "</span>";
+      }).join(" ");
+    }
+    Array.prototype.slice.call(h1.children).forEach(function (line) {
+      line.className = "split-line";
+      line.setAttribute("aria-hidden", "true");
+      line.innerHTML = Array.prototype.map.call(line.textContent, function (c) {
+        return c === " " ? " " : '<span class="ch"><span class="ch__i" style="--ci:' + (ci++) + '">' + esc(c) + "</span></span>";
+      }).join("");
+    });
+  }
+
+  function heroIntro() {
+    if (reduceMotion.matches) return;
+    var heroEl = $(".hero");
+    heroEl.classList.add("is-ready");
+    var go = function () {
+      if (heroEl.classList.contains("is-intro")) return;
+      // Dua frame supaya keadaan awal tergambar dulu sebelum transisi dimulai.
+      requestAnimationFrame(function () { requestAnimationFrame(function () { heroEl.classList.add("is-intro"); }); });
+      setTimeout(function () { heroEl.classList.add("is-intro-done"); }, 3200);
+    };
+    if (doc.fonts && doc.fonts.ready) doc.fonts.ready.then(go);
+    setTimeout(go, 900); // jangan menunggu font terlalu lama
+  }
 
   /* ---------------- 1. Render ---------------- */
   function render() {
@@ -69,7 +133,7 @@
     // Keahlian
     var skills = D.keahlian || [];
     $("[data-pillars]").innerHTML = skills.length ? skills.map(function (k, i) {
-      var icon = ICONS[k.ikon] ? '<img class="pillar__icon" src="' + ICONS[k.ikon] + '" alt="" width="56" height="56">' : "";
+      var icon = ICONS[k.ikon] ? '<img class="pillar__icon" src="' + ICONS[k.ikon] + '" alt="" width="56" height="56" data-depth="' + ICON_DEPTH[i % 4] + '">' : "";
       return '<li class="pillar" data-reveal style="--i:' + i + '"><div class="pillar__shaft">' + icon +
         "<h3>" + rich(k.judul) + "</h3>" +
         (k.moto ? '<p class="pillar__motto">' + rich(k.moto) + "</p>" : "") +
@@ -151,6 +215,7 @@
   var layers = $$(".hero [data-speed]").map(function (el) {
     return { el: el, speed: parseFloat(el.getAttribute("data-speed")) || 0, mx: parseFloat(el.getAttribute("data-mx")) || 0 };
   });
+  var titleLayer = $("[data-title-layer]");
   var nav = $("[data-nav]");
   var worksEl = $("[data-works]");
   var track = $("[data-works-track]");
@@ -178,7 +243,13 @@
     }
     if (hint) hint.hidden = !state.pinned || state.dist === 0;
     state.worksTop = worksEl.getBoundingClientRect().top + window.scrollY;
+    state.docH = doc.documentElement.scrollHeight;
+    fx.amphorae = $$(".work__amphora");
   }
+
+  // Elemen efek gulir tambahan (diisi saat initMotion).
+  var fx = { bar: null, bands: [], frieze: null, rows: [], journey: null, birds: null, amphorae: [] };
+  var progressIn = function (r, vh) { return Math.min(1, Math.max(0, (vh - r.top) / (vh + r.height))); };
 
   function frame() {
     state.ticking = false;
@@ -192,14 +263,23 @@
       state.py += (state.ty - state.py) * 0.08;
       for (var i = 0; i < layers.length; i++) {
         var L = layers[i];
-        var ty = (y * (1 - L.speed)) / state.scale;
+        // Hero sticky: setiap lapisan naik sebanding kecepatannya sendiri.
+        var ty = -(y * L.speed) / state.scale;
         var mx = -state.px * L.mx;
         var my = -state.py * L.mx * 0.35;
         L.el.style.transform = "translate3d(" + mx.toFixed(2) + "px," + (ty + my).toFixed(2) + "px,0)";
       }
       var p = Math.min(1, y / (state.heroH * 0.75));
-      heroContent.style.transform = "translate3d(0," + (y * 0.35).toFixed(1) + "px,0)";
+      heroContent.style.transform = "translate3d(0," + (-y * 0.45).toFixed(1) + "px,0)";
       heroContent.style.opacity = String(1 - p);
+      // Zoom pelan ke arah Akropolis saat hero digulir.
+      stage.style.setProperty("--zoom", (1 + Math.min(1, y / state.heroH) * 0.1).toFixed(4));
+      // Nama raksasa makin kabur dan pudar saat tirai bagian berikutnya naik.
+      if (titleLayer) {
+        var tp = Math.min(1, y / (state.heroH * 0.7));
+        titleLayer.style.filter = tp > 0.01 ? "blur(" + (tp * 10).toFixed(1) + "px)" : "";
+        titleLayer.style.opacity = String(Math.max(0, 1 - tp * 1.1));
+      }
       if (Math.abs(state.tx - state.px) > 0.001 || Math.abs(state.ty - state.py) > 0.001) request();
     }
 
@@ -220,6 +300,47 @@
       track.style.transform = "translate3d(" + (-prog * state.dist).toFixed(1) + "px,0,0)";
     }
 
+    // Garis kemajuan halaman (tetap aktif walau gerak dikurangi, karena ini penanda posisi).
+    if (fx.bar) fx.bar.style.transform = "scaleX(" + Math.min(1, y / Math.max(1, state.docH - vh)).toFixed(4) + ")";
+
+    if (motion) {
+      var vw = window.innerWidth;
+      // Pita meander berjalan ke samping, arah bergantian.
+      fx.bands.forEach(function (b, i) {
+        var r = b.getBoundingClientRect();
+        if (r.bottom < 0 || r.top > vh) return;
+        b.style.setProperty("--band-x", ((i % 2 ? 1 : -1) * y * 0.25 % 24).toFixed(1) + "px");
+      });
+      // Frieze prasasti: dua baris bergeser berlawanan arah.
+      if (fx.frieze) {
+        var fr = fx.frieze.getBoundingClientRect();
+        if (fr.bottom > 0 && fr.top < vh) {
+          var fp = progressIn(fr, vh);
+          fx.rows.forEach(function (row) {
+            row.style.transform = "translate3d(" + ((fp - 0.5) * 720 * row.dir).toFixed(1) + "px,0,0)";
+          });
+        }
+      }
+      // Burung camar melintasi bagian Perjalanan.
+      if (fx.birds) {
+        var jr = fx.journey.getBoundingClientRect();
+        if (jr.bottom > 0 && jr.top < vh) {
+          var jp = progressIn(jr, vh);
+          var bx = -340 + jp * (jr.width + 680);
+          var by = -Math.sin(jp * Math.PI) * 46;
+          fx.birds.style.transform = "translate3d(" + bx.toFixed(1) + "px," + by.toFixed(1) + "px,0)";
+        }
+      }
+      // Amfora bergeser lebih lambat daripada panelnya (parallax di dalam bingkai).
+      fx.amphorae.forEach(function (a) {
+        var r = a.parentElement.getBoundingClientRect();
+        if (r.right < -100 || r.left > vw + 100 || r.bottom < -100 || r.top > vh + 100) return;
+        var ox = state.pinned ? -((r.left + r.width / 2) - vw / 2) * 0.14 : 0;
+        var oy = state.pinned ? 0 : -((r.top + r.height / 2) - vh / 2) * 0.1;
+        a.style.translate = ox.toFixed(1) + "px " + oy.toFixed(1) + "px";
+      });
+    }
+
     nav.classList.toggle("is-solid", y > state.heroH - 90);
   }
 
@@ -232,9 +353,21 @@
     $$("[data-depth]").forEach(function (el) { el.style.transform = ""; });
     heroContent.style.transform = "";
     heroContent.style.opacity = "";
+    stage.style.removeProperty("--zoom");
+    if (titleLayer) { titleLayer.style.filter = ""; titleLayer.style.opacity = ""; }
+    fx.bands.forEach(function (b) { b.style.removeProperty("--band-x"); });
+    fx.rows.forEach(function (r) { r.style.transform = ""; });
+    if (fx.birds) fx.birds.style.transform = "";
+    fx.amphorae.forEach(function (a) { a.style.translate = ""; });
   }
 
   function initMotion() {
+    fx.bar = $("[data-progress]");
+    fx.bands = $$(".band, .temple__architrave");
+    fx.frieze = $("[data-frieze]");
+    fx.rows = $$("[data-frieze] .frieze__row").map(function (r) { r.dir = parseFloat(r.getAttribute("data-frieze-dir")) || 1; return r; });
+    fx.journey = $(".journey");
+    fx.birds = $("[data-drift]");
     measure();
     window.addEventListener("scroll", request, { passive: true });
     window.addEventListener("resize", function () { measure(); request(); });
@@ -299,17 +432,26 @@
   }
 
   function initReveal() {
-    var items = $$("[data-reveal]");
+    var items = $$("[data-reveal], [data-split], [data-carve]");
     if (!("IntersectionObserver" in window) || reduceMotion.matches) {
       items.forEach(function (el) { el.classList.add("is-visible"); });
       return;
     }
+    // Elemen bertirai (clip-path 100%) dianggap berukuran nol oleh observer,
+    // jadi yang diamati adalah induknya, lalu kelasnya dipasang ke elemen itu.
+    var targets = new Map();
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) {
-        if (en.isIntersecting) { en.target.classList.add("is-visible"); io.unobserve(en.target); }
+        if (!en.isIntersecting) return;
+        (targets.get(en.target) || [en.target]).forEach(function (el) { el.classList.add("is-visible"); });
+        io.unobserve(en.target);
       });
     }, { threshold: 0.15, rootMargin: "0px 0px -40px 0px" });
-    items.forEach(function (el) { io.observe(el); });
+    items.forEach(function (el) {
+      var watch = el.getAttribute("data-reveal") === "curtain" ? el.parentElement : el;
+      if (watch !== el) targets.set(watch, (targets.get(watch) || []).concat(el));
+      io.observe(watch);
+    });
   }
 
   /* ---------------- Mulai ---------------- */
@@ -323,8 +465,12 @@
     return;
   }
   render();
+  splitHeroName();
+  splitWords($("[data-split-hero]"));
+  $$("[data-split]").forEach(splitWords);
   stars();
   initNav();
   initReveal();
   initMotion();
+  heroIntro();
 })();
