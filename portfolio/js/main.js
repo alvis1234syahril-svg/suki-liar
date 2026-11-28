@@ -408,35 +408,19 @@
     var k = D.kontak || {};
     var links = (k.tautan || []).filter(hasUrl);
     var email = (k.email || "").trim();
+    // Tombol utama emas "Kirim email" (bila email diisi), tautan pertama sebagai tombol "Lihat ...",
+    // sisanya tautan teks. Tanpa email, tautan pertama yang memakai warna emas sebagai aksi utama.
     var actions = "";
-    if (email) {
-      actions += '<a class="btn btn--gold" href="mailto:' + esc(email) + '">Tulis email</a>';
-    } else if (links.length) {
-      var main = links.shift();
-      actions += '<a class="btn btn--gold" href="' + esc(main.url) + '" target="_blank" rel="noopener">Hubungi lewat ' + esc(main.label) + newTab + "</a>";
-    }
-    actions += links.map(function (l) {
-      return '<a class="contact__link" href="' + esc(l.url) + '" target="_blank" rel="noopener">' + esc(l.label) + newTab + "</a>";
+    if (email) actions += '<a class="btn btn--gold" href="mailto:' + esc(email) + '">Kirim email</a>';
+    actions += links.map(function (l, i) {
+      var cls = i > 0 ? "contact__link" : email ? "btn btn--ghost" : "btn btn--gold";
+      return '<a class="' + cls + '" href="' + esc(l.url) + '" target="_blank" rel="noopener">' + (i === 0 ? "Lihat " : "") +
+        esc(l.label) + newTab + "</a>";
     }).join("");
-    if (!email) actions += '<p class="contact__note"><mark class="ganti">[GANTI]</mark> Tambahkan alamat email di js/data.js agar tombol "Tulis email" muncul.</p>';
+    if (!email) actions += '<p class="contact__note"><mark class="ganti">[GANTI]</mark> Tambahkan alamat email di js/data.js agar tombol "Kirim email" muncul.</p>';
     $("[data-contact-actions]").innerHTML = actions;
 
     $$("[data-year]").forEach(function (el) { el.textContent = String(new Date().getFullYear()); });
-  }
-
-  /* ---------------- Bintang (posisi tetap, tanpa kedip berulang) ---------------- */
-  function stars() {
-    var box = $("[data-stars]");
-    if (!box) return;
-    var seed = 11;
-    var rnd = function () { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
-    var out = "";
-    for (var i = 0; i < 90; i++) {
-      var size = (1 + rnd() * 2.2).toFixed(1);
-      out += '<span class="star" style="left:' + (rnd() * 100).toFixed(2) + "%;top:" + (rnd() * 100).toFixed(2) +
-        "%;width:" + size + "px;height:" + size + "px;opacity:" + (0.3 + rnd() * 0.65).toFixed(2) + '"></span>';
-    }
-    box.innerHTML = out;
   }
 
   /* ---------------- 2–4. Gerak ---------------- */
@@ -721,7 +705,7 @@
   splitHeroName();
   splitWords($("[data-split-hero]"));
   $$("[data-split]").forEach(splitWords);
-  stars();
+
   initNav();
   initReveal();
   initTopo();

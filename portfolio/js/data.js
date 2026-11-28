@@ -135,8 +135,8 @@ window.PORTOFOLIO = {
   ],
 
   kontak: {
-    judul: "Ada proyek yang perlu dibangun?",
-    ajakan: "Ceritakan kebutuhannya lewat email, sertakan tenggat dan tautan referensi bila ada.",
+    judul: "Terima kasih telah singgah. Mari bangun sesuatu bersama.",
+    ajakan: "Sedang menyiapkan aplikasi baru, butuh pengembang Laravel & JavaScript, atau sekadar ingin berdiskusi? Kirim pesan kapan saja, saya senang mendengar ide Anda.",
     email: "", // [GANTI] misalnya "nama@domain.com"
     tautan: [
       { label: "GitHub", url: "https://github.com/alvis1234syahril-svg" },

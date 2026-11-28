@@ -28,7 +28,7 @@ Semua teks ada di **`js/data.js`**.
 
 1. Cari `[GANTI]` lalu isi dengan data Anda. Selama masih ada, teks itu tampil dengan garis bawah putus-putus supaya mudah ditemukan.
 2. `[PERIKSA]`: proyek "Analisis Traffic & Topologi Aset" diambil dari aplikasi di repo ini. Hapus dari `karya` dan `perjalanan` bila belum boleh dipublikasikan.
-3. `kontak.email`: selama kosong, tombol utama mengarah ke GitHub. Setelah diisi, muncul tombol "Tulis email".
+3. `kontak.email`: selama kosong, tombol utama mengarah ke GitHub. Setelah diisi, muncul tombol emas "Kirim email" dan GitHub menjadi tombol kedua "Lihat GitHub".
 4. URL yang kosong (`""`) otomatis disembunyikan, jadi tidak ada tautan mati.
 5. Foto: isi `tentang.foto` (misalnya `"assets/foto-saya.jpg"`). Foto akan duduk di dalam relung perpustakaan dan menggantikan patung filosof. Selama kosong, relung menampilkan patung sebagai hiasan, bukan sebagai foto Anda. Foto potret (tegak) paling pas.
 6. Gambar proyek: isi `gambar` pada tiap karya, dan `gambarAlt` untuk deskripsi gambar bagi pembaca layar. Gambar mengisi seluruh panel (sebaiknya rasio sekitar 2:1) dan ikut bergeser halus di dalam bingkai. Selama `gambar` kosong, panel menampilkan amfora dan label "Tangkapan layar [GANTI]". Karya pertama memakai `assets/foto/karya-topologi.webp` (prasasti terakota dengan diagram topologi).
@@ -118,6 +118,17 @@ Bagian Perjalanan memakai paket "Odisei": peta Yunani karya Ortelius (pudar, tep
 
 Judul berada di kiri atas dengan kabut kertas tipis di belakangnya, dan lini masa di tengah kanan. Kelompok ilustrasi selalu berhenti 380 px di bawah tepi atas layar, jadi tidak pernah menutupi teks. Di layar sempit atau tegak, urutannya menjadi judul, ilustrasi selebar layar, lalu lini masa. Kedua tiang disembunyikan (dan tidak diunduh), dan semua lapisan diam.
 
+### Ε · Kontak: malam di Akropolis
+
+| Lapisan | File | Gerak |
+|---|---|---|
+| Langit berbima sakti | `kontak-langit.webp` | 0.12 |
+| Bulan sabit dan cahayanya | `kontak-bulan.webp` | 0.22 (tertinggal paling lambat, terasa paling jauh) |
+| Cincin zodiak di belakang judul | `kontak-zodiak.webp` | 0.06, berputar pelan (`data-spin`) |
+| Akropolis bercahaya | `akropolis-malam.webp` | -0.18 (paling depan) |
+
+Cincin zodiak dari paket aslinya hampir tak terlihat (alfa maksimal 6 dari 255), jadi alfanya diperkuat sembilan kali dan diberi opasitas 75%: terlihat sebagai ukiran samar, tidak bersaing dengan judul. Tombol utama emas adalah "Kirim email" bila `kontak.email` diisi, dan tautan pertama menjadi tombol "Lihat GitHub".
+
 ### Animasi teks dan efek gulir
 
 | Elemen | Efek |
@@ -130,7 +141,7 @@ Judul berada di kiri atas dengan kabut kertas tipis di belakangnya, dan lini mas
 | Latar Keahlian | halaman kuil saat senja diam di tempat (sticky) sementara kartu digulir di atasnya |
 | Frieze prasasti (dasar bagian Tentang) | dua baris pepatah Delphi bergeser berlawanan arah, di atas pita gading tipis |
 | Amfora di galeri | bergeser lebih lambat daripada panelnya |
-| Parthenon malam & bintang | naik dan tertinggal dengan kedalaman berbeda |
+| Langit malam, bulan, cincin zodiak, Parthenon | bergerak dengan kedalaman berbeda; cincin zodiak berputar pelan |
 | Garis terakota di atas | penanda kemajuan baca halaman |
 
 Galeri karya dipin dan bergeser ke samping saat digulir di layar lebar; di ponsel kartunya bertumpuk biasa.
@@ -143,7 +154,6 @@ Setiap bagian punya sepasang ornamen yang bergerak dengan kedalaman berbeda. Atu
 |---|---|---|
 | Β · Keahlian | latar halaman kuil · benda di kartu | latar sticky dan tertinggal 0.08 saat bagian masuk; benda -0.07 lalu diam di alasnya (`data-settle`) |
 | Γ · Karya | pecahan palmet · pelita terakota | 0.18 dan -0.1; saat galeri dipin keduanya berdiri di atas petunjuk gulir dan bergeser berlawanan arah mengikuti galeri (`data-pan-x`) |
-| Ε · Kontak | bulan sabit · awan malam | bulan 0.34 (paling lambat), awan 0.14 sambil hanyut ke samping |
 
 Semua ornamen memakai `alt=""` di dalam pembungkus `aria-hidden="true"`, tidak bisa diklik (`pointer-events: none`), dan dimuat malas (`loading="lazy"`). Bila gerak dikurangi, ornamen diam di posisinya.
 

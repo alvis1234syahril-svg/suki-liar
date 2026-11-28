@@ -1015,26 +1015,58 @@ main > :not(.hero), .footer { position: relative; z-index: 1; }
 .timeline__empty { color: var(--tinta-500); font-style: italic; }
 
 
-/* ---------- Ε · Kontak: malam ---------- */
+/* ---------- Ε · Kontak: malam di Akropolis ----------
+   Langit berbima sakti (paling jauh, 0.12), bulan sabit (0.22, tertinggal paling lambat sehingga terasa paling jauh),
+   cincin zodiak di belakang judul (0.06, berputar pelan), Akropolis bercahaya paling depan (-0.18). */
 .contact {
   --focus: var(--emas-300);
   position: relative;
   overflow: hidden;
-  background: linear-gradient(180deg, var(--aegea-900) 0%, var(--aegea-700) 100%);
+  background: #0E1A33; /* warna langit di tepi atas foto, tampil selama foto dimuat */
   color: var(--marmer-50);
   text-align: center;
 }
-.contact__stars { position: absolute; inset: 0 0 25% 0; }
-.star { position: absolute; border-radius: 50%; background: var(--marmer-50); }
+.contact__scene { position: absolute; inset: 0; pointer-events: none; }
+.contact__sky {
+  position: absolute;
+  left: 0;
+  top: -8%;
+  width: 100%;
+  height: 116%;
+  max-width: none;
+  object-fit: cover;
+  object-position: 50% 80%; /* cahaya cakrawala jatuh di belakang Akropolis */
+  will-change: transform;
+}
+.contact__moon { position: absolute; left: 11.8%; top: clamp(8px, 3vw, 40px); width: clamp(150px, 18vw, 340px); max-width: none; will-change: transform; }
 .contact__inner {
   position: relative;
-  max-width: 860px;
+  isolation: isolate; /* cincin zodiak (z-index -1) tetap di atas langit, di belakang teks */
+  max-width: 1080px;
   margin: 0 auto;
-  padding: clamp(110px, 12vw, 160px) var(--gutter) 0;
+  padding: clamp(110px, 12vw, 150px) clamp(20px, 3vw, 40px) 0; /* judul cukup lebar untuk dua baris */
+}
+.contact__zodiac {
+  position: absolute;
+  left: 50%;
+  top: 46%;
+  z-index: -1;
+  width: clamp(620px, 78vw, 1180px);
+  max-width: none;
+  height: auto;
+  translate: -50% -50%;
+  opacity: .75; /* ukiran samar: terlihat sebagai garis bintang, tidak bersaing dengan judul */
+  pointer-events: none;
+  will-change: transform;
+}
+.contact .h2 { text-wrap: balance; }
+@media (max-width: 760px) {
+  .contact__moon { left: -5%; top: 4px; width: 42vw; }
+  .contact__zodiac { width: 150vw; top: 40%; }
 }
 .contact__laurel { width: 84px; margin: 0 auto 18px; }
 .contact__lead {
-  max-width: 36ch;
+  max-width: 62ch;
   margin: 0 auto 36px;
   font-style: italic;
   font-size: clamp(1.25rem, 1.8vw, 1.5rem);
@@ -1054,7 +1086,7 @@ main > :not(.hero), .footer { position: relative; z-index: 1; }
 }
 .contact__note { flex-basis: 100%; margin: 6px 0 0; font-size: .9375rem; color: var(--marmer-300); }
 .contact__note mark.ganti { background: rgba(230, 203, 133, .18); }
-.contact__acropolis { position: relative; margin-top: clamp(56px, 9vw, 120px); overflow: hidden; }
+.contact__acropolis { position: relative; margin-top: clamp(40px, 6vw, 90px); overflow: hidden; }
 .contact__acropolis > div { position: relative; display: flex; justify-content: center; will-change: transform; }
 .contact__acropolis > div::after {
   content: "";
@@ -1154,17 +1186,6 @@ main > :not(.hero), .footer { position: relative; z-index: 1; }
 @media (max-width: 760px) {
   .works__head { padding-top: 58px; }
   .decor--works { top: -44px; bottom: auto; height: 120px; }
-}
-
-
-/* Ε · Kontak: bulan sabit di kiri atas, awan malam hanyut di kanan bawah judul,
-   di ruang kosong sebelah ajakan sehingga tidak pernah berada di belakang teks. */
-.decor--night { bottom: 25%; }
-.decor__moon { width: clamp(38px, 7vw, 94px); top: 15%; left: 13%; opacity: .9; }
-.decor__cloud { width: min(40%, 560px); top: 46%; right: -12%; opacity: .68; }
-/* Ponsel: teks memenuhi lebar layar, jadi bulan dan awan mengapit mahkota laurel di atas judul. */
-@media (max-width: 760px) {
-  .decor__cloud { width: 56%; top: 17%; right: -20%; }
 }
 
 /* ---------- Judul raksasa di panggung (layar lebar) ---------- */
