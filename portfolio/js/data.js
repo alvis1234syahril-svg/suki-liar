@@ -33,7 +33,7 @@ window.PORTOFOLIO = {
       { label: "Status", nilai: "[GANTI] Terbuka untuk proyek lepas" }
     ],
     // Isi dengan path foto Anda, misalnya "assets/foto-saya.jpg".
-    // Selama kosong, ceruk menampilkan patung dada sebagai hiasan.
+    // Foto duduk di dalam relung perpustakaan. Selama kosong, relung menampilkan patung filosof sebagai hiasan.
     foto: ""
   },
 

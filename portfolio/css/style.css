@@ -437,7 +437,7 @@ mark.ganti {
 /* Semua yang datang setelah hero berada di atasnya dan berlatar penuh, sehingga menutupi hero saat digulir. */
 main > :not(.hero), .footer { position: relative; z-index: 1; }
 .band--curtain { box-shadow: 0 -26px 60px rgba(10, 8, 6, .5); }
-.about, .journey {
+.journey {
   background: var(--marmer-100);
   box-shadow: 0 0 0 100vmax var(--marmer-100);
   clip-path: inset(0 -100vmax);
@@ -447,47 +447,97 @@ main > :not(.hero), .footer { position: relative; z-index: 1; }
 .hero__lead, .contact__lead { text-wrap: balance; }
 .lead, .about__body p, .timeline p, .work p { text-wrap: pretty; }
 
-/* ---------- Α · Tentang ---------- */
+/* ---------- Α · Tentang: Perpustakaan Agung Alexandria ----------
+   Enam lapisan dari satu bingkai 1920 × 1080. Bingkai ditambatkan ke kiri (komposisinya ada di kiri,
+   sisi kanan foto memudar ke gading) dan selebar layar atau 106% tinggi layar dalam rasio 16:9,
+   mana yang lebih besar, supaya lapisan yang bergeser tidak pernah memperlihatkan tepinya.
+   Warna gading #F3F0E8 sama persis dengan sisi kanan foto latar. */
 .about {
-  display: grid;
-  grid-template-columns: minmax(240px, 440px) minmax(0, 1fr);
-  gap: clamp(48px, 6.7vw, 96px);
-  align-items: center;
-  max-width: 1440px;
-  margin: 0 auto;
-}
-.about__niche {
+  --gading: #F3F0E8;
   position: relative;
-  aspect-ratio: 440 / 560;
   overflow: hidden;
-  border-radius: 999px 999px 0 0;
-  background: var(--marmer-200);
-  box-shadow: inset 0 16px 40px rgba(58, 52, 45, .18);
+  background: var(--gading);
+  padding: clamp(72px, 9vw, 120px) var(--gutter) clamp(150px, 19vw, 200px); /* ruang bawah untuk frieze */
 }
-.about__niche-art { position: absolute; left: 11%; right: 11%; bottom: 0; }
-.about__niche-art img { width: 100%; }
-.about__photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.about__scene {
+  position: relative;
+  height: var(--sh);
+  --sh: clamp(340px, 108vw, 600px);
+  margin: calc(clamp(72px, 9vw, 120px) * -1) calc(var(--gutter) * -1) 8px;
+  overflow: hidden;
+  pointer-events: none;
+  /* Tepi atas dan bawah adegan memudar ke gading, seperti tepi kanannya. */
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 7%, #000 88%, transparent 100%);
+  mask-image: linear-gradient(180deg, transparent 0, #000 7%, #000 88%, transparent 100%);
+}
+/* Layar sempit: adegan menjadi ilustrasi di atas teks, berpusat pada relung (27,5% lebar bingkai). */
+.about__frame {
+  position: absolute;
+  top: 0;
+  left: min(0px, calc(50% - var(--sh) * .489));
+  height: 100%;
+  aspect-ratio: 16 / 9;
+}
+.about__layer { position: absolute; max-width: none; height: auto; will-change: transform; }
+.about__layer--hall { left: 0; top: 0; width: 100%; height: 100%; }
+.about__layer--niche { left: 14.062%; top: 9.722%; width: 26.927%; }
+.about__layer--statue { left: 17.865%; top: 22.315%; width: 19.271%; }
+.about__layer--artifacts { left: 11.458%; top: 18.889%; width: 32.552%; }
+.about__layer--light { left: 0; top: 0; width: 61.146%; }
+.about__layer--frame { left: 0; top: 0; width: 24.01%; }
+/* Foto pemilik (bila tentang.foto diisi) duduk di dalam relung, menggantikan patung. */
+.about__photo {
+  position: absolute;
+  left: 18.23%;
+  top: 17.13%;
+  width: 18.54%;
+  height: 60%;
+  object-fit: cover;
+  border-radius: 999px 999px 0 0;
+  will-change: transform;
+}
+
+.about__text { position: relative; z-index: 20; }
+.about .overline { color: #8C5A32; }
+.about .h2 { color: #1E1B18; }
 .about__body p { max-width: 62ch; margin: 0 0 18px; color: var(--tinta-700); }
-.facts { margin: 30px 0 0; }
+.facts { margin: 30px 0 0; border-bottom: 1px solid #D6CBB8; }
 .facts > div {
   display: grid;
   grid-template-columns: 140px minmax(0, 1fr);
   gap: 8px 24px;
   padding: 14px 0;
-  border-top: 1px solid var(--marmer-300);
+  border-top: 1px solid #D6CBB8;
 }
 .facts dt {
   font-family: var(--font-display);
   font-size: .875rem;
   letter-spacing: .1em;
-  color: var(--terakota-700);
+  color: #8C5A32;
   padding-top: 3px;
 }
-.facts dd { margin: 0; }
+.facts dd { margin: 0; color: #1E1B18; }
 
-@media (max-width: 860px) {
-  .about { grid-template-columns: minmax(0, 1fr); }
-  .about__niche { width: min(100%, 340px); margin: 0 auto; }
+/* Layar lebar: adegan memenuhi bagian, teks di separuh kanan, dan lapisan bergerak (lihat main.js). */
+@media (min-width: 768px) and (min-aspect-ratio: 7/5) {
+  .about {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100vh;
+    min-height: 100svh;
+    padding-top: clamp(88px, 11vh, 120px);
+    padding-bottom: clamp(170px, 22vh, 210px);
+  }
+  .about__scene { position: absolute; inset: 0; height: auto; margin: 0; }
+  .about__frame {
+    top: 50%;
+    left: 0;
+    width: max(100%, calc(106vh * 16 / 9));
+    height: auto;
+    translate: -2% -50%;
+  }
+  .about__text { margin-left: 50%; max-width: 640px; }
 }
 @media (max-width: 480px) {
   .facts > div { grid-template-columns: minmax(0, 1fr); }
@@ -998,23 +1048,30 @@ main > :not(.hero), .footer { position: relative; z-index: 1; }
   transform-origin: 0 50%;
 }
 
+/* Frieze di dasar bagian Tentang: dua baris pepatah Delphi. Pita gading tipis di belakangnya menjaga
+   keterbacaan saat melintas di depan tiang dan lantai perpustakaan. */
 .frieze {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: clamp(12px, 2.4vh, 32px);
+  z-index: 20;
   overflow: hidden;
-  padding: clamp(32px, 5vw, 64px) 0 clamp(8px, 2vw, 24px);
-  background: linear-gradient(180deg, var(--marmer-100), var(--marmer-200));
+  padding: 14px 0 10px;
+  background: linear-gradient(180deg, rgba(243, 240, 232, 0) 0, rgba(243, 240, 232, .88) 22%, rgba(243, 240, 232, .88) 80%, rgba(243, 240, 232, 0) 100%);
 }
 .frieze__row {
   margin: 0 0 0 -900px;
   white-space: nowrap;
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(2.5rem, 7vw, 6.25rem);
-  line-height: 1.08;
+  font-size: clamp(1.75rem, 3.4vw, 3.5rem);
+  line-height: 1.12;
   letter-spacing: .04em;
-  color: var(--marmer-300);
+  color: var(--terakota-500);
   will-change: transform;
 }
-.frieze__row--outline { color: transparent; -webkit-text-stroke: 1.4px var(--terakota-500); }
+.frieze__row--faint { color: #CFC5B4; }
 
 
 .journey { position: relative; overflow-x: clip; }
@@ -1035,10 +1092,6 @@ main > :not(.hero), .footer { position: relative; z-index: 1; }
 .decor { position: absolute; inset: 0; pointer-events: none; }
 .decor > img { position: absolute; max-width: none; will-change: transform; }
 
-/* Α · Tentang: diorama di ceruk. Koin di dinding belakang, fragmen kapitel di depan alas patung,
-   terpotong tepi ceruk supaya terbaca sebagai benda di latar depan. */
-.decor__coin { width: 17%; top: 22%; right: 9%; }
-.decor__ionic { width: 50%; left: -5%; bottom: -3%; }
 
 
 /* Γ · Karya: pecahan tembikar dan pelita di sisi kanan judul galeri. */
@@ -1198,9 +1251,6 @@ main > :not(.hero), .footer { position: relative; z-index: 1; }
   /* Label bagian: jarak huruf merapat seperti pahatan prasasti. */
   .js [data-carve] { opacity: 0; letter-spacing: .36em; transition: opacity .9s ease, letter-spacing 1.4s cubic-bezier(.16, .84, .3, 1); }
   .js [data-carve].is-visible { opacity: 1; letter-spacing: .12em; }
-  /* Ceruk patung terbuka dari bawah seperti tirai. */
-  .js [data-reveal="curtain"] { opacity: 1; transform: none; clip-path: inset(100% 0 0 0); transition: clip-path 1.5s cubic-bezier(.16, .84, .3, 1); }
-  .js [data-reveal="curtain"].is-visible { clip-path: inset(0 0 0 0); }
 }
 @property --intro { syntax: "<number>"; inherits: true; initial-value: 1; }
 

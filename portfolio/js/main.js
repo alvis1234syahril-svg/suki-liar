@@ -16,6 +16,8 @@
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   var finePointer = window.matchMedia("(pointer: fine)");
   var wide = window.matchMedia("(min-width: 900px) and (min-height: 600px)");
+  // Tata letak lebar bagian Tentang (sama dengan media query di CSS): hanya di sini lapisannya bergerak.
+  var aboutWide = window.matchMedia("(min-width: 768px) and (min-aspect-ratio: 7/5)");
 
   var esc = function (s) {
     return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
@@ -349,12 +351,12 @@
     $("[data-facts]").innerHTML = (t.fakta || []).map(function (f) {
       return "<div><dt>" + esc(f.label) + "</dt><dd>" + rich(f.nilai) + "</dd></div>";
     }).join("");
+    // Foto pemilik duduk di dalam relung dan bergerak bersama relungnya; patung filosof dilepas.
     if (t.foto && t.foto.trim()) {
-      var art = $("[data-about-art]");
-      art.removeAttribute("data-depth");
-      art.outerHTML = '<img class="about__photo" src="' + esc(t.foto) + '" alt="Foto ' + esc(nama) + '">';
-      // Koin dan fragmen kapitel hanya hiasan untuk patung; jangan menutupi foto asli.
-      $$("[data-niche-decor]").forEach(function (d) { d.remove(); });
+      var statue = $("[data-about-statue]");
+      if (statue) statue.parentNode.removeChild(statue);
+      $("[data-about-niche]").insertAdjacentHTML("afterend", '<img class="about__photo" src="' + esc(t.foto) +
+        '" alt="Foto ' + esc(nama) + '" data-depth="-0.02" data-depth-wide>');
     }
 
     // Keahlian
@@ -502,6 +504,7 @@
         d: parseFloat(el.getAttribute("data-depth")) || 0,
         pan: parseFloat(el.getAttribute("data-pan-x")) || 0,
         settle: el.hasAttribute("data-settle"),
+        wideOnly: el.hasAttribute("data-depth-wide"),
         inWorks: inWorks,
         rest: inWorks && state.pinned ? pr.top - stickyBox.top + pr.height / 2 : null
       };
@@ -554,6 +557,8 @@
     // data-pan-x: ikut bergeser ke samping sepanjang induknya melintasi layar (atau sepanjang galeri saat dipin).
     if (motion) {
       fx.depth.forEach(function (D) {
+        // data-depth-wide: hanya bergerak di tata letak lebar; di layar sempit adegannya ilustrasi diam.
+        if (D.wideOnly && !aboutWide.matches) { if (D.el.style.transform) D.el.style.transform = ""; return; }
         var r = D.el.parentElement.getBoundingClientRect();
         if (r.bottom < -200 || r.top > vh + 200) return;
         var off = -((r.top + r.height / 2) - (D.rest === null ? vh / 2 : D.rest)) * D.d;
@@ -702,21 +707,14 @@
       items.forEach(function (el) { el.classList.add("is-visible"); });
       return;
     }
-    // Elemen bertirai (clip-path 100%) dianggap berukuran nol oleh observer,
-    // jadi yang diamati adalah induknya, lalu kelasnya dipasang ke elemen itu.
-    var targets = new Map();
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) {
         if (!en.isIntersecting) return;
-        (targets.get(en.target) || [en.target]).forEach(function (el) { el.classList.add("is-visible"); });
+        en.target.classList.add("is-visible");
         io.unobserve(en.target);
       });
     }, { threshold: 0.15, rootMargin: "0px 0px -40px 0px" });
-    items.forEach(function (el) {
-      var watch = el.getAttribute("data-reveal") === "curtain" ? el.parentElement : el;
-      if (watch !== el) targets.set(watch, (targets.get(watch) || []).concat(el));
-      io.observe(watch);
-    });
+    items.forEach(function (el) { io.observe(el); });
   }
 
   /* ---------------- Mulai ---------------- */

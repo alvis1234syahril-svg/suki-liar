@@ -76,18 +76,17 @@
 
     <div class="band band--curtain" aria-hidden="true"></div>
 
-    <!-- Α · Tentang -->
-    <section class="about section" id="tentang" aria-labelledby="judul-tentang">
-      <div class="about__niche" data-reveal="curtain">
-        <!-- Diorama di ceruk: koin di dinding belakang, patung, lalu fragmen kapitel paling depan. -->
-        <div class="decor" aria-hidden="true" data-niche-decor>
-          <img class="decor__coin" src="assets/foto/koin-athena.webp" alt="" width="192" height="185" loading="lazy" decoding="async" data-depth="0.14">
-        </div>
-        <div class="about__niche-art" data-depth="-0.08" data-settle data-about-art>
-          <img src="assets/foto/patung-dada.webp" alt="" width="820" height="942">
-        </div>
-        <div class="decor" aria-hidden="true" data-niche-decor>
-          <img class="decor__ionic" src="assets/foto/fragmen-ionik.webp" alt="" width="440" height="293" loading="lazy" decoding="async" data-depth="-0.16" data-settle>
+    <!-- Α · Tentang: Perpustakaan Agung Alexandria. Enam lapisan dari satu bingkai 1920 × 1080,
+         masing-masing bergerak dengan kecepatan sendiri relatif terhadap tengah layar (desktop dan tablet). -->
+    <section class="about" id="tentang" aria-labelledby="judul-tentang">
+      <div class="about__scene">
+        <div class="about__frame">
+          <img class="about__layer about__layer--hall" src="assets/foto/tentang-perpustakaan.webp" alt="" width="1920" height="1080" loading="lazy" decoding="async" data-depth="-0.06" data-depth-wide>
+          <img class="about__layer about__layer--niche" src="assets/foto/tentang-relung.webp" alt="" width="517" height="779" loading="lazy" decoding="async" data-depth="-0.02" data-depth-wide data-about-niche>
+          <img class="about__layer about__layer--statue" src="assets/foto/tentang-filosof.webp" alt="" width="370" height="608" loading="lazy" decoding="async" data-depth="0.05" data-depth-wide data-about-statue>
+          <img class="about__layer about__layer--artifacts" src="assets/foto/tentang-artefak.webp" alt="" width="625" height="574" loading="lazy" decoding="async" data-depth="0.14" data-depth-wide>
+          <img class="about__layer about__layer--light" src="assets/foto/tentang-cahaya.webp" alt="" width="1174" height="1080" loading="lazy" decoding="async" data-depth="0.1" data-depth-wide>
+          <img class="about__layer about__layer--frame" src="assets/foto/tentang-bingkai.webp" alt="" width="461" height="1080" loading="lazy" decoding="async" data-depth="0.22" data-depth-wide>
         </div>
       </div>
       <div class="about__text">
@@ -96,13 +95,12 @@
         <div class="about__body" data-about-body></div>
         <dl class="facts" data-facts></dl>
       </div>
+      <!-- Frieze prasasti di dasar bagian: dua baris pepatah Delphi yang bergeser berlawanan arah saat digulir. -->
+      <div class="frieze" aria-hidden="true" data-frieze>
+        <p class="frieze__row frieze__row--faint" data-frieze-dir="-1">Kenali dirimu · ΜΗΔΕΝ ΑΓΑΝ · Jangan berlebihan · Kenali dirimu · ΜΗΔΕΝ ΑΓΑΝ · Jangan berlebihan · Kenali dirimu · ΜΗΔΕΝ ΑΓΑΝ · Jangan berlebihan · Kenali dirimu · ΜΗΔΕΝ ΑΓΑΝ · Jangan berlebihan ·</p>
+        <p class="frieze__row" data-frieze-dir="1">ΓΝΩΘΙ ΣΕΑΥΤΟΝ · Jangan berlebihan · ΜΗΔΕΝ ΑΓΑΝ · ΓΝΩΘΙ ΣΕΑΥΤΟΝ · Jangan berlebihan · ΜΗΔΕΝ ΑΓΑΝ · ΓΝΩΘΙ ΣΕΑΥΤΟΝ · Jangan berlebihan · ΜΗΔΕΝ ΑΓΑΝ · ΓΝΩΘΙ ΣΕΑΥΤΟΝ · Jangan berlebihan · ΜΗΔΕΝ ΑΓΑΝ ·</p>
+      </div>
     </section>
-
-    <!-- Frieze prasasti: dua baris pepatah Delphi yang bergeser berlawanan arah saat digulir -->
-    <div class="frieze" aria-hidden="true" data-frieze>
-      <p class="frieze__row" data-frieze-dir="-1">ΓΝΩΘΙ ΣΕΑΥΤΟΝ · Kenali dirimu · ΜΗΔΕΝ ΑΓΑΝ · Jangan berlebihan · ΓΝΩΘΙ ΣΕΑΥΤΟΝ · Kenali dirimu · ΜΗΔΕΝ ΑΓΑΝ · Jangan berlebihan · ΓΝΩΘΙ ΣΕΑΥΤΟΝ · Kenali dirimu ·</p>
-      <p class="frieze__row frieze__row--outline" data-frieze-dir="1">Kenali dirimu · ΓΝΩΘΙ ΣΕΑΥΤΟΝ · Jangan berlebihan · ΜΗΔΕΝ ΑΓΑΝ · Kenali dirimu · ΓΝΩΘΙ ΣΕΑΥΤΟΝ · Jangan berlebihan · ΜΗΔΕΝ ΑΓΑΝ · Kenali dirimu · ΓΝΩΘΙ ΣΕΑΥΤΟΝ ·</p>
-    </div>
 
     <!-- Β · Keahlian: empat pilar di halaman kuil saat senja -->
     <section class="skills section" id="keahlian" aria-labelledby="judul-keahlian">

@@ -30,7 +30,7 @@ Semua teks ada di **`js/data.js`**.
 2. `[PERIKSA]`: proyek "Analisis Traffic & Topologi Aset" diambil dari aplikasi di repo ini. Hapus dari `karya` dan `perjalanan` bila belum boleh dipublikasikan.
 3. `kontak.email`: selama kosong, tombol utama mengarah ke GitHub. Setelah diisi, muncul tombol "Tulis email".
 4. URL yang kosong (`""`) otomatis disembunyikan, jadi tidak ada tautan mati.
-5. Foto: isi `tentang.foto` (misalnya `"assets/foto-saya.jpg"`). Selama kosong, ceruk menampilkan patung dada sebagai hiasan, bukan sebagai foto Anda.
+5. Foto: isi `tentang.foto` (misalnya `"assets/foto-saya.jpg"`). Foto akan duduk di dalam relung perpustakaan dan menggantikan patung filosof. Selama kosong, relung menampilkan patung sebagai hiasan, bukan sebagai foto Anda. Foto potret (tegak) paling pas.
 6. Gambar proyek: isi `gambar` pada tiap karya, dan `gambarAlt` untuk deskripsi gambar bagi pembaca layar. Gambar mengisi seluruh panel (sebaiknya rasio sekitar 2:1) dan ikut bergeser halus di dalam bingkai. Selama `gambar` kosong, panel menampilkan amfora dan label "Tangkapan layar [GANTI]". Karya pertama memakai `assets/foto/karya-topologi.webp` (prasasti terakota dengan diagram topologi).
 
 Kalau `data.js` rusak (misalnya kurang koma), halaman menampilkan pesan galat di bagian atas.
@@ -86,6 +86,21 @@ Nama raksasa diletakkan di antara lapisan, sehingga atap istana menutupi kaki hu
 
 Di layar tegak, nama tampil sebagai judul biasa di atas langit gelap. Cakrawala turun 150 px, lalu tiang kiri dan patung kanan mengecil menjadi bingkai di dua sudut bawah, ditambatkan ke tepi layar (`--vis-l` / `--vis-r`). Patung hanya terlihat dari kepala sampai dada.
 
+### Α · Tentang: Perpustakaan Agung Alexandria
+
+Bagian Tentang adalah adegan perpustakaan dari paket "S2" (enam lapisan, satu bingkai 1920 × 1080). Setiap lapisan dipotong ke area isinya lalu diletakkan kembali dalam persen bingkai, jadi posisinya tetap saling pas di ukuran apa pun. Bingkai ditambatkan ke kiri (komposisinya ada di kiri, sisi kanan foto memudar ke gading `#F3F0E8`, warna latar bagian ini) dan selebar layar atau 106% tinggi layar dalam rasio 16:9, mana yang lebih besar.
+
+| Lapisan | File | Kecepatan |
+|---|---|---|
+| Lorong perpustakaan | `tentang-perpustakaan.webp` | -0.06 |
+| Relung marmer | `tentang-relung.webp` | -0.02 |
+| Patung filosof di kapitel Ionia | `tentang-filosof.webp` | 0.05 |
+| Tablet geometri dan koin drachma | `tentang-artefak.webp` | 0.14 |
+| Sinar matahari dan debu emas | `tentang-cahaya.webp` | 0.10 |
+| Pilar dan daun zaitun (tepi kiri) | `tentang-bingkai.webp` | 0.22 |
+
+Geseran dihitung relatif terhadap tengah layar (`(tinggi layar / 2 - tengah bagian) × kecepatan`), sehingga semua lapisan tepat di posisinya saat bagian ini berada di tengah. Teks berada di separuh kanan. Di layar sempit atau tegak (lebar di bawah 768 px atau rasio di bawah 7:5), adegan menjadi ilustrasi diam di atas teks dan parallax dimatikan (`data-depth-wide`), begitu pula saat gerak dikurangi.
+
 ### Animasi teks dan efek gulir
 
 | Elemen | Efek |
@@ -94,10 +109,9 @@ Di layar tegak, nama tampil sebagai judul biasa di atas langit gelap. Cakrawala 
 | Teks peran | kata muncul bergiliran setelah nama |
 | Judul bagian (`data-split`) | kata naik dari balik garis saat masuk layar (blur hanya di hero) |
 | Label bagian (`data-carve`) | jarak huruf merapat seperti pahatan prasasti |
-| Ceruk patung | terbuka dari bawah seperti tirai |
 | Kartu keahlian | naik bergantian; benda di panelnya turun lalu mendarat di alas batu |
 | Latar Keahlian | halaman kuil saat senja diam di tempat (sticky) sementara kartu digulir di atasnya |
-| Frieze prasasti | dua baris pepatah Delphi bergeser berlawanan arah |
+| Frieze prasasti (dasar bagian Tentang) | dua baris pepatah Delphi bergeser berlawanan arah, di atas pita gading tipis |
 | Amfora di galeri | bergeser lebih lambat daripada panelnya |
 | Burung camar | melintasi bagian Perjalanan |
 | Parthenon malam & bintang | naik dan tertinggal dengan kedalaman berbeda |
@@ -111,13 +125,12 @@ Setiap bagian punya sepasang ornamen yang bergerak dengan kedalaman berbeda. Atu
 
 | Bagian | Ornamen | Gerak |
 |---|---|---|
-| Α · Tentang | koin Athena · fragmen kapitel Ionia | koin di dinding ceruk 0.14; fragmen di depan alas patung -0.16, naik ke tempatnya lalu diam (`data-settle`) |
 | Β · Keahlian | latar halaman kuil · benda di kartu | latar sticky dan tertinggal 0.08 saat bagian masuk; benda -0.07 lalu diam di alasnya (`data-settle`) |
 | Γ · Karya | pecahan palmet · pelita terakota | 0.18 dan -0.1; saat galeri dipin keduanya berdiri di atas petunjuk gulir dan bergeser berlawanan arah mengikuti galeri (`data-pan-x`) |
 | Δ · Perjalanan | peta pesisir · kapal · ranting zaitun | peta 0.1, ranting -0.14, kapal berlayar melintasi peta seiring lini masa digulir |
 | Ε · Kontak | bulan sabit · awan malam | bulan 0.34 (paling lambat), awan 0.14 sambil hanyut ke samping |
 
-Semua ornamen memakai `alt=""` di dalam pembungkus `aria-hidden="true"`, tidak bisa diklik (`pointer-events: none`), dan dimuat malas (`loading="lazy"`). Bila gerak dikurangi, ornamen diam di posisinya. Bila `tentang.foto` diisi, koin dan fragmen kapitel ikut hilang supaya tidak menutupi foto Anda.
+Semua ornamen memakai `alt=""` di dalam pembungkus `aria-hidden="true"`, tidak bisa diklik (`pointer-events: none`), dan dimuat malas (`loading="lazy"`). Bila gerak dikurangi, ornamen diam di posisinya.
 
 Karya pertama punya tautan "Lihat tangkapan layar aplikasi" ke `assets/karya/topologi-aset.webp`, tangkapan layar aplikasi aslinya, sebagai pelengkap demo yang memakai data contoh.
 
@@ -146,6 +159,6 @@ Folder ini bisa diunggah apa adanya ke hosting statis mana pun, misalnya Netlify
 
 ## Kredit
 
-- Aset fotorealistik (lapisan lanskap, kolom, patung, amfora, ranting zaitun, mahkota laurel, benda pilar, latar halaman kuil) berasal dari gambar generatif yang di-upscale, disediakan pemilik situs.
+- Aset fotorealistik (lapisan Olympus, perpustakaan Alexandria, amfora, ranting zaitun, mahkota laurel, benda pilar, latar halaman kuil) berasal dari gambar generatif yang di-upscale, disediakan pemilik situs.
 - Versi vektor awal dibuat dengan Figma AI dan masih tersimpan di file Figma di atas. Pita meander digambar langsung sebagai pola CSS.
 - Font: Cinzel, EB Garamond, GFS Didot dari Google Fonts (SIL Open Font License).
