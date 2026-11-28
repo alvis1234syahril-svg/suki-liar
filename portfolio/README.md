@@ -130,6 +130,21 @@ Di layar sempit atau tegak, urutannya menjadi judul, ilustrasi selebar layar (je
 
 Cincin zodiak dari paket aslinya hampir tak terlihat (alfa maksimal 6 dari 255), jadi alfanya diperkuat sembilan kali dan diberi opasitas 75%: terlihat sebagai ukiran samar, tidak bersaing dengan judul. Tombol utama emas adalah "Kirim email" bila `kontak.email` diisi, dan tautan pertama menjadi tombol "Lihat GitHub".
 
+### Animasi masuk per slide
+
+Setiap slide punya animasi masuk sendiri yang lahir dari temanya (`data-enter`, dipicu saat elemennya masuk layar), jadi tiap slide terasa hidup, juga di ponsel tempat parallax dimatikan. Animasinya memakai properti `translate`, `rotate`, `scale`, dan `filter` yang terpisah, sehingga tidak bertabrakan dengan `transform` parallax.
+
+| Slide | Animasi masuk |
+|---|---|
+| Hero | huruf nama naik satu per satu, peran muncul kata demi kata, lalu tombol; panggung zoom-out pelan |
+| Α · Tentang | teras naik ke tempatnya, patung Muse berdiri menyusul, kabut cahaya merekah; paragraf menyusul, garis tabel fakta tergores dari kiri lalu isinya muncul |
+| Β · Keahlian | halaman kuil mendekat pelan (1.12 → 1); kartu berdiri bergantian, lalu daftar keahlian di tiap kartu muncul baris demi baris |
+| Γ · Karya | tiap kartu "dilukis": panel gambarnya terbuka dari kiri ke kanan, lalu teksnya menyusul; di galeri yang dipin kartu terlukis saat bergeser masuk |
+| Δ · Perjalanan | judul ditulis seperti tinta, rute lini masa tergambar; kapal berlayar masuk dari kiri, astrolab berputar ke posisinya, merpati terbang masuk |
+| Ε · Kontak | bulan terbit, cincin zodiak berputar masuk, lampu Akropolis menyala, lalu ajakan dan tombolnya |
+
+Tidak ada animasi yang berulang terus-menerus. Bila gerak dikurangi, semua elemen langsung tampil di posisi akhirnya.
+
 ### Animasi teks dan efek gulir
 
 | Elemen | Efek |

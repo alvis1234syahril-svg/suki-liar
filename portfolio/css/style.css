@@ -1368,6 +1368,88 @@ main > :not(.hero), .footer { position: relative; z-index: 1; }
   .js .timeline[data-route] h3 mark { opacity: 0; transition: opacity .4s ease .2s; }
   .js .timeline[data-route] li.is-reached h3 mark { opacity: 1; }
 }
+/* ---------- Animasi masuk per slide (data-enter) ----------
+   Tiap slide punya koreografi sendiri yang lahir dari temanya, bukan fade-up yang sama di mana-mana.
+   Memakai properti translate / rotate / scale / filter yang terpisah, jadi tidak bertabrakan dengan
+   transform parallax dari main.js, dan tetap berjalan di ponsel walau parallax dimatikan di sana.
+   Bila gerak dikurangi, initReveal langsung menandai semuanya is-visible dan aturan ini tidak berlaku. */
+@media (prefers-reduced-motion: no-preference) {
+  /* Α · Tentang: pagi di Delphi. Teras naik ke tempatnya, Muse berdiri menyusul, kabut cahaya merekah;
+     paragraf menyusul, lalu garis tabel fakta tergores dari kiri seperti pahatan dan isinya muncul. */
+  .js .about__layer[data-enter] { transition: translate 1.4s cubic-bezier(.16, .84, .3, 1), opacity 1.2s ease; }
+  .js .about__layer--terrace[data-enter]:not(.is-visible) { translate: 0 40px; opacity: 0; }
+  .js .about__layer--statue[data-enter] { transition-delay: .25s; }
+  .js .about__layer--statue[data-enter]:not(.is-visible) { translate: 0 70px; opacity: 0; }
+  .js .about__layer--mist[data-enter] { transition: opacity 2.4s ease .5s; }
+  .js .about__layer--mist[data-enter]:not(.is-visible) { opacity: 0; }
+  .js .about__body[data-enter] p { transition: opacity .8s ease, translate .9s cubic-bezier(.16, .84, .3, 1); }
+  .js .about__body[data-enter] p:nth-child(2) { transition-delay: .15s; }
+  .js .about__body[data-enter] p:nth-child(3) { transition-delay: .3s; }
+  .js .about__body[data-enter]:not(.is-visible) p { opacity: 0; translate: 0 16px; }
+  .js .facts[data-enter] { transition: border-color .6s ease 1.1s; }
+  .js .facts[data-enter]:not(.is-visible) { border-bottom-color: transparent; }
+  .js .facts[data-enter] > div { position: relative; border-top-color: transparent; }
+  .js .facts[data-enter] > div::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -1px;
+    height: 1px;
+    background: #D6CBB8;
+    transform-origin: 0 50%;
+    transition: scale .9s cubic-bezier(.65, 0, .35, 1);
+  }
+  .js .facts[data-enter]:not(.is-visible) > div::before { scale: 0 1; }
+  .js .facts[data-enter] > div > * { transition: opacity .7s ease .35s, translate .8s cubic-bezier(.16, .84, .3, 1) .35s; }
+  .js .facts[data-enter]:not(.is-visible) > div > * { opacity: 0; translate: -10px 0; }
+  .js .facts[data-enter] > div:nth-child(2)::before { transition-delay: .15s; }
+  .js .facts[data-enter] > div:nth-child(2) > * { transition-delay: .5s; }
+  .js .facts[data-enter] > div:nth-child(3)::before { transition-delay: .3s; }
+  .js .facts[data-enter] > div:nth-child(3) > * { transition-delay: .65s; }
+  .js .facts[data-enter] > div:nth-child(4)::before { transition-delay: .45s; }
+  .js .facts[data-enter] > div:nth-child(4) > * { transition-delay: .8s; }
+
+  /* Β · Keahlian: halaman kuil mendekat pelan saat bagian ini tiba (1.12 → 1), dan daftar keahlian
+     di tiap kartu muncul baris demi baris setelah kartunya berdiri. */
+  .js .skills__scene img[data-enter] { transition: scale 2.6s cubic-bezier(.2, .7, .2, 1); }
+  .js .skills__scene img[data-enter]:not(.is-visible) { scale: 1.12; }
+  .js .pillar[data-reveal] li { transition: opacity .6s ease, translate .7s cubic-bezier(.16, .84, .3, 1); transition-delay: calc(var(--i, 0) * 110ms + .45s); }
+  .js .pillar[data-reveal] li:nth-child(2) { transition-delay: calc(var(--i, 0) * 110ms + .53s); }
+  .js .pillar[data-reveal] li:nth-child(3) { transition-delay: calc(var(--i, 0) * 110ms + .61s); }
+  .js .pillar[data-reveal] li:nth-child(4) { transition-delay: calc(var(--i, 0) * 110ms + .69s); }
+  .js .pillar[data-reveal] li:nth-child(5) { transition-delay: calc(var(--i, 0) * 110ms + .77s); }
+  .js .pillar[data-reveal]:not(.is-visible) li { opacity: 0; translate: 0 10px; }
+
+  /* Γ · Karya: tiap kartu dilukis seperti tembikar. Panel gambarnya terbuka dari kiri ke kanan,
+     lalu teksnya menyusul. Di galeri yang dipin, kartu terlukis saat bergeser masuk layar. */
+  .js .work[data-enter] .work__art { transition: clip-path 1.1s cubic-bezier(.65, 0, .35, 1); }
+  .js .work[data-enter]:not(.is-visible) .work__art { clip-path: inset(0 100% 0 0); }
+  .js .work[data-enter] .work__body { transition: opacity .7s ease .45s, translate .8s cubic-bezier(.16, .84, .3, 1) .45s; }
+  .js .work[data-enter]:not(.is-visible) .work__body { opacity: 0; translate: 0 18px; }
+
+  /* Δ · Perjalanan: kapal berlayar masuk dari kiri, astrolab berputar ke posisinya, merpati terbang masuk,
+     ombak menyusul (berlaku juga di ponsel, tempat lapisannya tidak ber-parallax). */
+  .js .journey__piece[data-enter] { transition: translate 1.6s cubic-bezier(.16, .84, .3, 1), rotate 1.8s cubic-bezier(.16, .84, .3, 1), opacity 1s ease; }
+  .js .journey__piece--ship[data-enter]:not(.is-visible) { translate: -14% 0; opacity: 0; }
+  .js .journey__piece--astrolabe[data-enter] { transition-delay: .2s; }
+  .js .journey__piece--astrolabe[data-enter]:not(.is-visible) { rotate: -40deg; opacity: 0; }
+  .js .journey__piece--birds[data-enter] { transition-delay: .6s; }
+  .js .journey__piece--birds[data-enter]:not(.is-visible) { translate: -30% 20%; opacity: 0; }
+  .js .journey__piece--waves[data-enter]:not(.is-visible) { translate: 0 12%; opacity: 0; }
+
+  /* Ε · Kontak: bulan terbit, cincin zodiak berputar masuk, lampu Akropolis menyala,
+     lalu ajakan dan tombolnya menyusul. */
+  .js .contact__moon[data-enter] { transition: translate 2s cubic-bezier(.16, .84, .3, 1), opacity 1.4s ease; }
+  .js .contact__moon[data-enter]:not(.is-visible) { translate: 0 80px; opacity: 0; }
+  .js .contact__zodiac[data-enter] { transition: opacity 2s ease .3s, scale 2.4s cubic-bezier(.16, .84, .3, 1) .3s, rotate 2.4s cubic-bezier(.16, .84, .3, 1) .3s; }
+  .js .contact__zodiac[data-enter]:not(.is-visible) { opacity: 0; scale: .86; rotate: -20deg; }
+  .js .contact__acropolis[data-enter] img { transition: filter 2.4s ease .4s; }
+  .js .contact__acropolis[data-enter]:not(.is-visible) img { filter: brightness(.32) saturate(.5); }
+  .js .contact__lead[data-enter], .js .contact__actions[data-enter] { transition: opacity .8s ease .2s, translate .9s cubic-bezier(.16, .84, .3, 1) .2s; }
+  .js .contact__actions[data-enter] { transition-delay: .45s; }
+  .js .contact__lead[data-enter]:not(.is-visible), .js .contact__actions[data-enter]:not(.is-visible) { opacity: 0; translate: 0 16px; }
+}
 @property --intro { syntax: "<number>"; inherits: true; initial-value: 1; }
 
 @media (prefers-reduced-motion: reduce) {

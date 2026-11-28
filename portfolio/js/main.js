@@ -382,7 +382,7 @@
       var art = w.gambar && w.gambar.trim()
         ? mediaHTML(w)
         : '<img class="work__amphora" src="assets/foto/amfora.webp" alt="" loading="lazy"><span class="work__caption">Tangkapan layar <mark class="ganti">[GANTI]</mark></span>';
-      return '<li class="work' + (i === 0 ? " work--lead" : "") + (w.gambar && w.gambar.trim() ? " work--shot" : "") + '">' +
+      return '<li class="work' + (i === 0 ? " work--lead" : "") + (w.gambar && w.gambar.trim() ? " work--shot" : "") + '" data-enter>' +
         '<div class="work__art' + (w.topologi ? ' topo" data-topo="' + i : "") + '"><span class="work__num" aria-hidden="true">' + (NUMERALS[i] || i + 1) + "</span>" + art + "</div>" +
         (w.topologi ? '<div class="topo__panel" data-topo-panel aria-live="polite"></div>' : "") +
         '<div class="work__body"><h3>' + rich(w.judul) + "</h3><p>" + rich(w.deskripsi) + "</p>" +
@@ -703,7 +703,7 @@
   }
 
   function initReveal() {
-    var items = $$("[data-reveal], [data-split], [data-carve], [data-ink]");
+    var items = $$("[data-reveal], [data-split], [data-carve], [data-ink], [data-enter]");
     if (!("IntersectionObserver" in window) || reduceMotion.matches) {
       items.forEach(function (el) { el.classList.add("is-visible"); });
       return;
