@@ -16,7 +16,7 @@
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   var finePointer = window.matchMedia("(pointer: fine)");
   var wide = window.matchMedia("(min-width: 900px) and (min-height: 600px)");
-  // Tata letak lebar bagian Tentang (sama dengan media query di CSS): hanya di sini lapisannya bergerak.
+  // Tata letak lebar bagian Tentang dan Perjalanan (sama dengan media query di CSS): hanya di sini lapisannya bergerak.
   var aboutWide = window.matchMedia("(min-width: 768px) and (min-aspect-ratio: 7/5)");
 
   var esc = function (s) {
@@ -503,6 +503,7 @@
         el: el,
         d: parseFloat(el.getAttribute("data-depth")) || 0,
         pan: parseFloat(el.getAttribute("data-pan-x")) || 0,
+        spin: parseFloat(el.getAttribute("data-spin")) || 0,
         settle: el.hasAttribute("data-settle"),
         wideOnly: el.hasAttribute("data-depth-wide"),
         inWorks: inWorks,
@@ -513,7 +514,7 @@
   }
 
   // Elemen efek gulir tambahan (diisi saat initMotion).
-  var fx = { bar: null, frieze: null, rows: [], journey: null, birds: null, amphorae: [], depth: [] };
+  var fx = { bar: null, frieze: null, rows: [], amphorae: [], depth: [] };
   var progressIn = function (r, vh) { return Math.min(1, Math.max(0, (vh - r.top) / (vh + r.height))); };
 
   function frame() {
@@ -565,7 +566,9 @@
         if (D.settle) off = Math.max(0, off);
         var x = 0;
         if (D.pan) x = ((D.inWorks && galleryOn ? prog : progressIn(r, vh)) - 0.5) * D.pan;
-        D.el.style.transform = "translate3d(" + x.toFixed(1) + "px," + off.toFixed(1) + "px,0)";
+        // data-spin: berputar pelan sepanjang induknya melintasi layar (astrolab di Perjalanan).
+        var spin = D.spin ? " rotate(" + ((progressIn(r, vh) - 0.5) * D.spin).toFixed(2) + "deg)" : "";
+        D.el.style.transform = "translate3d(" + x.toFixed(1) + "px," + off.toFixed(1) + "px,0)" + spin;
       });
     }
 
@@ -587,16 +590,6 @@
           fx.rows.forEach(function (row) {
             row.style.transform = "translate3d(" + ((fp - 0.5) * 720 * row.dir).toFixed(1) + "px,0,0)";
           });
-        }
-      }
-      // Burung camar melintasi bagian Perjalanan.
-      if (fx.birds) {
-        var jr = fx.journey.getBoundingClientRect();
-        if (jr.bottom > 0 && jr.top < vh) {
-          var jp = progressIn(jr, vh);
-          var bx = -340 + jp * (jr.width + 680);
-          var by = -Math.sin(jp * Math.PI) * 46;
-          fx.birds.style.transform = "translate3d(" + bx.toFixed(1) + "px," + by.toFixed(1) + "px,0)";
         }
       }
       // Amfora bergeser lebih lambat daripada panelnya (parallax di dalam bingkai).
@@ -628,7 +621,6 @@
     stage.style.removeProperty("--zoom");
     if (titleLayer) { titleLayer.style.filter = ""; titleLayer.style.opacity = ""; }
     fx.rows.forEach(function (r) { r.style.transform = ""; });
-    if (fx.birds) fx.birds.style.transform = "";
     fx.amphorae.forEach(function (a) { a.style.translate = ""; });
   }
 
@@ -636,8 +628,6 @@
     fx.bar = $("[data-progress]");
     fx.frieze = $("[data-frieze]");
     fx.rows = $$("[data-frieze] .frieze__row").map(function (r) { r.dir = parseFloat(r.getAttribute("data-frieze-dir")) || 1; return r; });
-    fx.journey = $(".journey");
-    fx.birds = $("[data-drift]");
     measure();
     window.addEventListener("scroll", request, { passive: true });
     window.addEventListener("resize", function () { measure(); request(); });

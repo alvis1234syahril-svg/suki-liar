@@ -138,19 +138,26 @@
       </div>
     </section>
 
-    <!-- Δ · Perjalanan -->
-    <section class="journey section" id="perjalanan" aria-labelledby="judul-perjalanan">
-      <img class="journey__birds" src="assets/foto/burung-camar.webp" alt="" aria-hidden="true" data-drift>
+    <!-- Δ · Perjalanan: pelayaran di atas peta Yunani kuno (Ortelius). Peta mengisi bagian; tebing, astrolab, kapal,
+         dan ombak menjadi satu kelompok di kiri bawah; tiang kiri dan kanan menempel di tepinya masing-masing. -->
+    <section class="journey" id="perjalanan" aria-labelledby="judul-perjalanan">
+      <div class="journey__scene">
+        <img class="journey__map" src="assets/foto/odisei-peta.webp" alt="" width="1886" height="1054" loading="lazy" decoding="async" data-depth="0.05" data-depth-wide>
+        <img class="journey__col journey__col--left" src="assets/foto/odisei-tiang-kiri.webp" alt="" width="342" height="1080" loading="lazy" decoding="async" data-depth="-0.08" data-depth-wide>
+        <img class="journey__col journey__col--right" src="assets/foto/odisei-tiang-kanan.webp" alt="" width="259" height="951" loading="lazy" decoding="async" data-depth="-0.1" data-depth-wide>
+      </div>
       <div class="journey__aside">
         <p class="overline" data-carve>Δ · Perjalanan</p>
         <h2 class="h2" id="judul-perjalanan" data-split>Odisei saya</h2>
         <p class="lead">Persinggahan yang membentuk cara saya bekerja.</p>
-        <!-- Odisei: kapal berlayar melintasi peta pesisir seiring lini masa digulir. -->
-        <div class="journey__scene decor" aria-hidden="true">
-          <img class="decor__map" src="assets/foto/peta-pesisir.webp" alt="" width="620" height="310" loading="lazy" decoding="async" data-depth="0.1">
-          <img class="decor__boat" src="assets/foto/kapal-aegea.webp" alt="" width="360" height="245" loading="lazy" decoding="async" data-depth="0.02" data-pan-x="110">
-          <img class="decor__olive" src="assets/foto/ranting-zaitun.webp" alt="" width="860" height="530" loading="lazy" decoding="async" data-depth="-0.14">
-        </div>
+      </div>
+      <!-- Kapal berlayar melintasi tebing seiring lini masa digulir; astrolab berputar pelan seperti alat navigasinya. -->
+      <div class="journey__art">
+        <img class="journey__piece journey__piece--cliff" src="assets/foto/odisei-tebing.webp" alt="" width="664" height="479" loading="lazy" decoding="async" data-depth="0.04" data-depth-wide>
+        <img class="journey__piece journey__piece--astrolabe" src="assets/foto/odisei-astrolab.webp" alt="" width="563" height="620" loading="lazy" decoding="async" data-depth="0.1" data-spin="14" data-depth-wide>
+        <img class="journey__piece journey__piece--ship" src="assets/foto/odisei-kapal.webp" alt="" width="579" height="560" loading="lazy" decoding="async" data-depth="0.02" data-pan-x="90" data-depth-wide>
+        <img class="journey__piece journey__piece--birds" src="assets/foto/odisei-merpati.webp" alt="" width="480" height="210" loading="lazy" decoding="async" data-depth="0.12" data-pan-x="70" data-depth-wide>
+        <img class="journey__piece journey__piece--waves" src="assets/foto/odisei-ombak.webp" alt="" width="954" height="302" loading="lazy" decoding="async" data-depth="-0.05" data-depth-wide>
       </div>
       <ol class="timeline" data-timeline></ol>
     </section>

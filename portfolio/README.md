@@ -101,6 +101,23 @@ Bagian Tentang adalah adegan perpustakaan dari paket "S2" (enam lapisan, satu bi
 
 Geseran dihitung relatif terhadap tengah layar (`(tinggi layar / 2 - tengah bagian) × kecepatan`), sehingga semua lapisan tepat di posisinya saat bagian ini berada di tengah. Teks berada di separuh kanan. Di layar sempit atau tegak (lebar di bawah 768 px atau rasio di bawah 7:5), adegan menjadi ilustrasi diam di atas teks dan parallax dimatikan (`data-depth-wide`), begitu pula saat gerak dikurangi.
 
+### Δ · Perjalanan: pelayaran di atas peta Yunani kuno
+
+Bagian Perjalanan memakai paket "Odisei": peta Yunani karya Ortelius (pudar, tepi abu-abu pindaiannya dipotong) mengisi seluruh bagian, lalu tebing berkuil, astrolab, kapal, ombak, dan merpati disusun ulang sebagai satu kelompok ilustrasi di kiri bawah (posisi dalam persen kelompok, dari bingkai asli 1920 × 1080). Tiang Korintus berdaun zaitun menempel di tepi kiri dan tiang patah di tepi kanan, masing-masing ditambatkan ke tepinya sendiri sehingga tidak terpotong di layar yang lebih sempit dari bingkai.
+
+| Lapisan | File | Gerak |
+|---|---|---|
+| Peta | `odisei-peta.webp` | 0.05 |
+| Tebing dan kuil | `odisei-tebing.webp` | 0.04 |
+| Astrolab | `odisei-astrolab.webp` | 0.10, berputar pelan (`data-spin`) |
+| Kapal | `odisei-kapal.webp` | 0.02, berlayar ke samping seiring lini masa digulir (`data-pan-x`) |
+| Merpati | `odisei-merpati.webp` | 0.12, terbang ke samping |
+| Ombak | `odisei-ombak.webp` | -0.05 |
+| Tiang kiri | `odisei-tiang-kiri.webp` | -0.08 |
+| Tiang kanan | `odisei-tiang-kanan.webp` | -0.10 |
+
+Judul berada di kiri atas dengan kabut kertas tipis di belakangnya, dan lini masa di tengah kanan. Kelompok ilustrasi selalu berhenti 380 px di bawah tepi atas layar, jadi tidak pernah menutupi teks. Di layar sempit atau tegak, urutannya menjadi judul, ilustrasi selebar layar, lalu lini masa. Kedua tiang disembunyikan (dan tidak diunduh), dan semua lapisan diam.
+
 ### Animasi teks dan efek gulir
 
 | Elemen | Efek |
@@ -113,7 +130,6 @@ Geseran dihitung relatif terhadap tengah layar (`(tinggi layar / 2 - tengah bagi
 | Latar Keahlian | halaman kuil saat senja diam di tempat (sticky) sementara kartu digulir di atasnya |
 | Frieze prasasti (dasar bagian Tentang) | dua baris pepatah Delphi bergeser berlawanan arah, di atas pita gading tipis |
 | Amfora di galeri | bergeser lebih lambat daripada panelnya |
-| Burung camar | melintasi bagian Perjalanan |
 | Parthenon malam & bintang | naik dan tertinggal dengan kedalaman berbeda |
 | Garis terakota di atas | penanda kemajuan baca halaman |
 
@@ -127,7 +143,6 @@ Setiap bagian punya sepasang ornamen yang bergerak dengan kedalaman berbeda. Atu
 |---|---|---|
 | Β · Keahlian | latar halaman kuil · benda di kartu | latar sticky dan tertinggal 0.08 saat bagian masuk; benda -0.07 lalu diam di alasnya (`data-settle`) |
 | Γ · Karya | pecahan palmet · pelita terakota | 0.18 dan -0.1; saat galeri dipin keduanya berdiri di atas petunjuk gulir dan bergeser berlawanan arah mengikuti galeri (`data-pan-x`) |
-| Δ · Perjalanan | peta pesisir · kapal · ranting zaitun | peta 0.1, ranting -0.14, kapal berlayar melintasi peta seiring lini masa digulir |
 | Ε · Kontak | bulan sabit · awan malam | bulan 0.34 (paling lambat), awan 0.14 sambil hanyut ke samping |
 
 Semua ornamen memakai `alt=""` di dalam pembungkus `aria-hidden="true"`, tidak bisa diklik (`pointer-events: none`), dan dimuat malas (`loading="lazy"`). Bila gerak dikurangi, ornamen diam di posisinya.
@@ -159,6 +174,6 @@ Folder ini bisa diunggah apa adanya ke hosting statis mana pun, misalnya Netlify
 
 ## Kredit
 
-- Aset fotorealistik (lapisan Olympus, perpustakaan Alexandria, amfora, ranting zaitun, mahkota laurel, benda pilar, latar halaman kuil) berasal dari gambar generatif yang di-upscale, disediakan pemilik situs.
+- Aset fotorealistik (lapisan Olympus, perpustakaan Alexandria, pelayaran Odisei, amfora, mahkota laurel, benda pilar, latar halaman kuil) berasal dari gambar generatif yang di-upscale, disediakan pemilik situs.
 - Versi vektor awal dibuat dengan Figma AI dan masih tersimpan di file Figma di atas. Pita meander digambar langsung sebagai pola CSS.
 - Font: Cinzel, EB Garamond, GFS Didot dari Google Fonts (SIL Open Font License).
