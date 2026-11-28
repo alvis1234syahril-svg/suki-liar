@@ -618,6 +618,8 @@
     }
 
     nav.classList.toggle("is-solid", y > state.heroH - 90);
+    // Hero sticky selalu "di layar" secara geometris; animasi suasananya dijeda begitu tirai Tentang menutupinya.
+    hero.classList.toggle("is-live", y < state.heroH + 20);
   }
 
   function request() {
@@ -718,6 +720,18 @@
     items.forEach(function (el) { io.observe(el); });
   }
 
+  // Animasi suasana (berulang pelan) hanya berjalan saat bagiannya terlihat; di luar layar dijeda (is-live).
+  function initAmbient() {
+    // Hero diatur oleh frame() (sticky), bagian lain oleh observer.
+    var secs = $$("[data-ambient]").filter(function (s) { return s !== hero; });
+    hero.classList.add("is-live");
+    if (!("IntersectionObserver" in window)) { secs.forEach(function (s) { s.classList.add("is-live"); }); return; }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) { en.target.classList.toggle("is-live", en.isIntersecting); });
+    }, { rootMargin: "120px 0px" });
+    secs.forEach(function (s) { io.observe(s); });
+  }
+
   /* ---------------- Mulai ---------------- */
   if (!D) {
     // Status galat: data.js gagal dimuat atau rusak.
@@ -736,6 +750,7 @@
 
   initNav();
   initReveal();
+  initAmbient();
   initTopo();
   initMotion();
   heroIntro();

@@ -143,7 +143,20 @@ Setiap slide punya animasi masuk sendiri yang lahir dari temanya (`data-enter`, 
 | Δ · Perjalanan | judul ditulis seperti tinta, rute lini masa tergambar; kapal berlayar masuk dari kiri, astrolab berputar ke posisinya, merpati terbang masuk |
 | Ε · Kontak | bulan terbit, cincin zodiak berputar masuk, lampu Akropolis menyala, lalu ajakan dan tombolnya |
 
-Tidak ada animasi yang berulang terus-menerus. Bila gerak dikurangi, semua elemen langsung tampil di posisi akhirnya.
+Bila gerak dikurangi, semua elemen langsung tampil di posisi akhirnya.
+
+### Animasi suasana (berulang pelan)
+
+Setelah masuk, tiap adegan tetap hidup walau tidak digulir. Animasi ini hanya berjalan saat slidenya terlihat (`data-ambient` dan `is-live` dari `main.js`; hero dijeda begitu tirai Tentang menutupinya), dan mati bila gerak dikurangi.
+
+| Slide | Animasi suasana |
+|---|---|
+| Hero | awan belakang dan kabut depan hanyut berlawanan arah, merpati melayang |
+| Α · Tentang | cahaya pagi berdenyut di kiri atas, kabut laut hanyut pelan |
+| Β · Keahlian | kilau cahaya menyapu benda perunggu bergiliran, seperti lampu sorot museum |
+| Γ · Karya | api pelita berkedip, pecahan tembikar melayang, kilau glasir menyapu panel tembikar |
+| Δ · Perjalanan | kapal bergoyang di atas ombak, ombak mengembang, merpati melayang |
+| Ε · Kontak | bintang berkelip, bulan berpendar, cincin zodiak berputar pelan (150 detik per putaran), lampu Akropolis bernapas |
 
 ### Animasi teks dan efek gulir
 
@@ -187,7 +200,7 @@ Pengguna yang mengaktifkan *reduce motion* di sistem operasinya mendapat halaman
 - **Tipografi**: Cinzel berbentuk huruf pahatan prasasti untuk judul; EB Garamond nyaman dibaca untuk paragraf; GFS Didot menangani huruf Yunani (Α Β Γ Δ Ε, Χαίρετε).
 - **Motif identitas**: pita meander di setiap peralihan, penomoran bagian dengan huruf Yunani, panel karya bergaya tembikar black-figure, keahlian sebagai empat pilar, masing-masing dengan benda perunggu, kayu, atau papirus di atas alas batu.
 - **Benda pilar**: helm hoplite (backend menjaga sistem), burung hantu Athena (data), lira (harmoni antarmuka), gulungan papirus (dokumentasi).
-- **Gerak**: parallax untuk kedalaman, kartu keahlian yang naik bergantian di atas halaman kuil yang diam, galeri yang bergeser untuk menjelajah karya. Tidak ada animasi yang berulang terus-menerus.
+- **Gerak**: parallax untuk kedalaman, kartu keahlian yang naik bergantian di atas halaman kuil yang diam, galeri yang bergeser untuk menjelajah karya. Animasi suasana yang berulang dibuat pelan dan hanya berjalan saat slidenya terlihat.
 
 ## Aksesibilitas
 
