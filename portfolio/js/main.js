@@ -400,7 +400,7 @@
     // Perjalanan
     var trip = D.perjalanan || [];
     $("[data-timeline]").innerHTML = trip.length ? trip.map(function (j) {
-      return '<li data-reveal><span class="timeline__mark" aria-hidden="true"></span><div>' +
+      return '<li><span class="timeline__mark" aria-hidden="true"></span><div>' +
         '<p class="timeline__year">' + rich(j.tahun) + "</p><h3>" + rich(j.judul) + "</h3><p>" + rich(j.deskripsi) + "</p></div></li>";
     }).join("") : '<li class="timeline__empty">Lini masa belum diisi di js/data.js.</li>';
 
@@ -494,11 +494,29 @@
         rest: inWorks && state.pinned ? pr.top - stickyBox.top + pr.height / 2 : null
       };
     });
+    // Rute lini masa: posisi tengah tiap penanda (relatif ke daftar), dari penanda pertama sampai terakhir.
+    var routeEl = $("[data-route]");
+    var marks = routeEl ? $$(".timeline__mark", routeEl) : [];
+    fx.route = null;
+    if (marks.length) {
+      var rTop = routeEl.getBoundingClientRect().top;
+      var centers = marks.map(function (m) { var b = m.getBoundingClientRect(); return b.top + b.height / 2 - rTop; });
+      fx.route = {
+        el: routeEl,
+        items: marks.map(function (m) { return m.parentElement; }),
+        centers: centers,
+        start: centers[0],
+        len: centers[centers.length - 1] - centers[0]
+      };
+      routeEl.style.setProperty("--route-start", centers[0].toFixed(1) + "px");
+      routeEl.style.setProperty("--route-len", fx.route.len.toFixed(1) + "px");
+    }
     doc.dispatchEvent(new CustomEvent("layoutchange")); // mis. demo topologi menata ulang panelnya
   }
 
   // Elemen efek gulir tambahan (diisi saat initMotion).
-  var fx = { bar: null, frieze: null, rows: [], amphorae: [], depth: [] };
+  // routeTip: ujung rute terjauh yang pernah dicapai (hanya bertambah, jadi teks tidak hilang saat menggulir ke atas).
+  var fx = { bar: null, frieze: null, rows: [], amphorae: [], depth: [], route: null, routeTip: -Infinity };
   var progressIn = function (r, vh) { return Math.min(1, Math.max(0, (vh - r.top) / (vh + r.height))); };
 
   function frame() {
@@ -574,6 +592,15 @@
           fx.rows.forEach(function (row) {
             row.style.transform = "translate3d(" + ((fp - 0.5) * 720 * row.dir).toFixed(1) + "px,0,0)";
           });
+        }
+      }
+      // Rute lini masa mengikuti garis di 86% tinggi layar; persinggahan yang dilewati ditandai is-reached.
+      if (fx.route) {
+        var RT = fx.route, tip = vh * 0.86 - RT.el.getBoundingClientRect().top;
+        if (tip > fx.routeTip) {
+          fx.routeTip = tip;
+          RT.el.style.setProperty("--route", Math.min(1, Math.max(0, (tip - RT.start) / Math.max(1, RT.len))).toFixed(4));
+          RT.items.forEach(function (li, i) { if (tip >= RT.centers[i] - 4) li.classList.add("is-reached"); });
         }
       }
       // Amfora bergeser lebih lambat daripada panelnya (parallax di dalam bingkai).
@@ -676,7 +703,7 @@
   }
 
   function initReveal() {
-    var items = $$("[data-reveal], [data-split], [data-carve]");
+    var items = $$("[data-reveal], [data-split], [data-carve], [data-ink]");
     if (!("IntersectionObserver" in window) || reduceMotion.matches) {
       items.forEach(function (el) { el.classList.add("is-visible"); });
       return;
@@ -705,6 +732,7 @@
   splitHeroName();
   splitWords($("[data-split-hero]"));
   $$("[data-split]").forEach(splitWords);
+  $$("[data-route] h3").forEach(splitWords); // judul persinggahan: kata naik saat rute tiba
 
   initNav();
   initReveal();

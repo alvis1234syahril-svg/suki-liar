@@ -904,9 +904,10 @@ main > :not(.hero), .footer { position: relative; z-index: 1; }
 .work--empty { padding: 40px; border: 1px dashed var(--tinta-500); color: var(--marmer-200); }
 
 /* ---------- Δ · Perjalanan: pelayaran di atas peta Yunani kuno ----------
-   Peta (Ortelius, pudar) mengisi bagian. Tebing, astrolab, kapal, dan ombak berasal dari satu bingkai 1920 × 1080
-   dan disusun ulang sebagai satu kelompok (posisi dalam persen kelompok), sehingga kelompok itu bisa ditambatkan
-   di kiri bawah tanpa ikut terpotong. Tiang kiri dan kanan menempel di tepinya masing-masing. */
+   Peta (Ortelius) mengisi bagian. Tebing, astrolab, kapal, ombak, dan merpati diletakkan pada posisi aslinya
+   di bingkai 1920 × 1080 (.journey__frame, persen bingkai), jadi komposisinya sama dengan rancangan.
+   Di layar lebar bingkai itu menutupi bagian seperti "cover" dan ditambatkan di kiri atas; di layar sempit
+   hanya jendela kelompok ilustrasinya (930 × 741, kiri bawah bingkai) yang tampil di antara judul dan lini masa. */
 .journey {
   position: relative;
   overflow: hidden;
@@ -914,28 +915,30 @@ main > :not(.hero), .footer { position: relative; z-index: 1; }
   padding: clamp(72px, 9vw, 120px) var(--gutter);
 }
 .journey__scene { position: absolute; inset: 0; pointer-events: none; }
-/* Cahaya sore hangat dari kiri atas, di atas semua lapisan. */
+/* Cahaya sore hangat dari kiri atas, di atas peta. */
 .journey__scene::after {
   content: "";
   position: absolute;
   inset: 0;
   background: radial-gradient(ellipse 60% 70% at 0 0, rgba(255, 228, 162, .34), rgba(255, 228, 162, 0) 70%);
 }
-.journey__map, .journey__col, .journey__piece { position: absolute; max-width: none; will-change: transform; }
+.journey__map, .journey__piece { position: absolute; max-width: none; will-change: transform; }
 .journey__map { left: 0; top: -6%; width: 100%; height: 112%; object-fit: cover; }
-.journey__col { display: none; height: auto; }
 .journey__aside, .timeline { position: relative; z-index: 2; }
 .journey__aside .overline { color: #7A3216; } /* terakota lebih gelap: label kecil tetap ≥ 4.5:1 di atas tinta peta */
 .journey__aside .h2 { color: #1E1B18; }
-/* Kabut kertas tipis di belakang judul: tinta peta yang rapat di kiri atas tidak bersaing dengan label kecil. */
+.journey__aside .lead { color: #29241F; } /* lebih pekat dari tinta-700: tetap ≥ 4.5:1 saat melintas di atas astrolab dan tebing */
+/* Kabut kertas tipis di belakang judul: tinta peta, merpati, dan astrolab tidak bersaing dengan teks. */
 .journey__aside::before {
   content: "";
   position: absolute;
-  inset: -36px -48px -28px -40px;
+  inset: -36px -48px -64px -40px;
   z-index: -1;
-  background: radial-gradient(closest-side, rgba(242, 236, 222, .82), rgba(242, 236, 222, .55) 60%, rgba(242, 236, 222, 0));
+  background: radial-gradient(closest-side, rgba(242, 236, 222, .86), rgba(242, 236, 222, .62) 64%, rgba(242, 236, 222, 0));
 }
-/* Kelompok ilustrasi: 930 × 741 dari bingkai asli. */
+
+/* Jendela kelompok ilustrasi (layar sempit): bingkai 1920 × 1080 digeser supaya kotak 930 × 741 di kiri bawahnya
+   (mulai y 311) mengisi jendela ini. */
 .journey__art {
   position: relative;
   z-index: 1;
@@ -943,41 +946,51 @@ main > :not(.hero), .footer { position: relative; z-index: 1; }
   margin: 8px calc(var(--gutter) * -1) 28px;
   pointer-events: none;
 }
+.journey__frame { position: absolute; left: 0; top: -41.97%; width: 206.45%; aspect-ratio: 16 / 9; }
 .journey__piece { height: auto; }
-.journey__piece--cliff { left: 0; top: 19.433%; width: 71.398%; }
-.journey__piece--astrolabe { left: 40.753%; top: 0; width: 40%; opacity: .8; }
-.journey__piece--ship { left: 17.742%; top: 4.588%; width: 62.258%; }
-.journey__piece--waves { left: 0; top: 60.459%; width: 102.581%; }
-/* Merpati terbang rendah di atas laut di depan kapal, bagian dari kelompok ilustrasi (tidak pernah di belakang teks). */
-.journey__piece--birds { left: 70%; top: 58%; width: 30%; }
+.journey__piece--cliff { left: 0; top: 42.13%; width: 34.583%; }
+.journey__piece--astrolabe { left: 19.74%; top: 28.796%; width: 19.375%; }
+.journey__piece--ship { left: 8.594%; top: 31.944%; width: 30.156%; }
+.journey__piece--waves { left: 0; top: 70.278%; width: 49.688%; }
+/* Di jendela sempit merpati terbang di atas laut di depan kapal (posisi aslinya di atas jendela). */
+.journey__piece--birds { left: 33.9%; top: 68.6%; width: 14.5%; }
 
-/* Layar lebar: judul di kiri atas, lini masa di tengah kanan, kelompok ilustrasi di kiri bawah,
-   tiang di kedua tepi. Semua lapisan bergerak (lihat main.js, data-depth-wide). */
+/* Layar lebar: komposisi rancangan. Judul di kiri atas (12% dari kiri), lini masa mulai 46% dan berhenti di 80%. */
 @media (min-width: 768px) and (min-aspect-ratio: 7/5) {
   .journey {
     display: grid;
-    grid-template-columns: minmax(0, .7fr) minmax(0, 1fr);
-    gap: clamp(40px, 5vw, 110px);
+    grid-template-columns: minmax(0, 30vw) minmax(0, 1fr);
+    column-gap: 4vw;
     align-items: start;
     min-height: 100vh;
     min-height: 100svh;
-    padding: clamp(100px, 14vh, 160px) 18vw clamp(60px, 8vh, 100px) 21vw;
+    padding: max(96px, 17vh) 20vw clamp(60px, 10vh, 120px) 12vw;
   }
-  /* Judul satu baris seperti rancangan; boleh melewati kolomnya ke celah kosong sebelum lini masa. */
   .journey__aside .h2 { white-space: nowrap; }
-  .journey__col { display: block; }
-  .journey__col--left { left: 0; top: -6%; height: 112%; width: auto; }
-  .journey__col--right { right: 0; bottom: -6%; height: 94%; width: auto; }
-  /* Kelompok ilustrasi menempati kiri bawah dan berhenti di bawah judul (380 px dari atas layar). */
-  .journey__art {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: min(50%, calc((100vh - 380px) * 1.255));
-    margin: 0;
-  }
+  .journey__aside .h2 { margin-bottom: 18px; }
+  /* Pengantar dua baris seperti rancangan, berhenti di atas astrolab. */
+  .journey__aside .lead { max-width: 17em; font-size: clamp(1.125rem, 1.5vw, 1.5rem); text-wrap: balance; }
+  /* Bingkai menutupi bagian seperti "cover" (unit cq dari .journey__art) dan ditambatkan di kiri atas,
+     sehingga tebing di kiri dan jarak judul ke astrolab tetap sama dengan rancangan. */
+  .journey__art { position: absolute; inset: 0; margin: 0; aspect-ratio: auto; container-type: size; overflow: hidden; }
+  .journey__frame { top: 0; width: max(100cqw, 177.78cqh); }
+  .journey__piece--birds { left: 21.094%; top: 4.167%; width: 25%; }
+  .timeline li { padding-bottom: clamp(36px, 8vh, 96px); }
 }
+
+/* Lini masa sebagai rute pelayaran. Garis pensil tipis = seluruh rute; garis terakota (::after) = rute yang sudah
+   ditempuh, digambar dari penanda pertama ke terakhir sesuai guliran (--route dari main.js). */
 .timeline { margin: 0; padding: 0; list-style: none; }
+.timeline::after {
+  content: "";
+  position: absolute;
+  left: 6px;
+  top: var(--route-start, 14px);
+  width: 2px;
+  height: calc(var(--route-len, 0px) * var(--route, 1));
+  background: var(--terakota-500);
+  pointer-events: none;
+}
 .timeline li {
   position: relative;
   display: grid;
@@ -996,7 +1009,7 @@ main > :not(.hero), .footer { position: relative; z-index: 1; }
 }
 .timeline li:last-child { padding-bottom: 0; }
 .timeline li:last-child::before { bottom: -24px; }
-.timeline__mark { width: 14px; height: 14px; margin-top: 7px; background: var(--terakota-500); transform: rotate(45deg); }
+.timeline__mark { position: relative; z-index: 1; width: 14px; height: 14px; margin-top: 7px; background: var(--terakota-500); transform: rotate(45deg); }
 .timeline__year {
   margin: 0;
   font-family: var(--font-display);
@@ -1310,6 +1323,47 @@ main > :not(.hero), .footer { position: relative; z-index: 1; }
   /* Label bagian: jarak huruf merapat seperti pahatan prasasti. */
   .js [data-carve] { opacity: 0; letter-spacing: .36em; transition: opacity .9s ease, letter-spacing 1.4s cubic-bezier(.16, .84, .3, 1); }
   .js [data-carve].is-visible { opacity: 1; letter-spacing: .12em; }
+}
+/* Teks bertinta (Perjalanan): judul dan pengantar muncul dari kiri ke kanan dengan tepi lembut,
+   seperti tinta yang ditulis di atas peta. Lebar mengikuti teks supaya sapuannya tepat di ujung kata. */
+[data-ink] { width: fit-content; padding-right: .2em; margin-right: -.2em; }
+@media (prefers-reduced-motion: no-preference) {
+  .js [data-ink] {
+    -webkit-mask-image: linear-gradient(90deg, #000 45%, transparent 55%);
+    mask-image: linear-gradient(90deg, #000 45%, transparent 55%);
+    -webkit-mask-size: 260% 100%;
+    mask-size: 260% 100%;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: 100% 0;
+    mask-position: 100% 0;
+    transition: -webkit-mask-position 1.8s cubic-bezier(.5, .1, .25, 1) var(--ink-delay, 0s), mask-position 1.8s cubic-bezier(.5, .1, .25, 1) var(--ink-delay, 0s);
+  }
+  .js [data-ink].is-visible { -webkit-mask-position: 0 0; mask-position: 0 0; }
+
+  /* Rute lini masa: mulai kosong; tiap persinggahan muncul saat ujung rute tiba di penandanya. */
+  .js .timeline[data-route] { --route: 0; }
+  .js .timeline[data-route] .timeline__mark {
+    background: #F2ECDE;
+    box-shadow: inset 0 0 0 2px var(--terakota-500);
+    transform: rotate(45deg) scale(.7);
+    transition: transform .55s cubic-bezier(.34, 1.56, .64, 1), background .3s ease, box-shadow .3s ease;
+  }
+  .js .timeline[data-route] li.is-reached .timeline__mark { background: var(--terakota-500); box-shadow: none; transform: rotate(45deg) scale(1); }
+  .js .timeline[data-route] .timeline__year,
+  .js .timeline[data-route] li p:not(.timeline__year) {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity .6s ease, transform .7s cubic-bezier(.16, .84, .3, 1);
+  }
+  .js .timeline[data-route] li.is-reached .timeline__year { opacity: 1; transform: none; transition-delay: .1s; }
+  .js .timeline[data-route] li.is-reached p:not(.timeline__year) { opacity: 1; transform: none; transition-delay: .55s; }
+  /* Judul persinggahan: kata naik dari balik garis, bergiliran. */
+  .js .timeline[data-route] h3 .w { overflow: hidden; vertical-align: top; padding-bottom: .12em; margin-bottom: -.12em; }
+  .js .timeline[data-route] h3 .w__i { transform: translateY(112%); transition: transform .8s cubic-bezier(.16, .84, .3, 1) calc(.22s + var(--wi) * 60ms); }
+  .js .timeline[data-route] li.is-reached h3 .w__i { transform: none; }
+  .js .timeline[data-route] h3 mark { opacity: 0; transition: opacity .4s ease .2s; }
+  .js .timeline[data-route] li.is-reached h3 mark { opacity: 1; }
 }
 @property --intro { syntax: "<number>"; inherits: true; initial-value: 1; }
 

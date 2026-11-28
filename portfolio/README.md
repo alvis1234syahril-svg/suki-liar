@@ -103,7 +103,7 @@ Geseran dihitung relatif terhadap tengah layar (`(tinggi layar / 2 - tengah bagi
 
 ### Δ · Perjalanan: pelayaran di atas peta Yunani kuno
 
-Bagian Perjalanan memakai paket "Odisei": peta Yunani karya Ortelius (pudar, tepi abu-abu pindaiannya dipotong) mengisi seluruh bagian, lalu tebing berkuil, astrolab, kapal, ombak, dan merpati disusun ulang sebagai satu kelompok ilustrasi di kiri bawah (posisi dalam persen kelompok, dari bingkai asli 1920 × 1080). Tiang Korintus berdaun zaitun menempel di tepi kiri dan tiang patah di tepi kanan, masing-masing ditambatkan ke tepinya sendiri sehingga tidak terpotong di layar yang lebih sempit dari bingkai.
+Bagian Perjalanan memakai paket "Odisei": peta Yunani karya Ortelius (tepi abu-abu pindaiannya dipotong) mengisi seluruh bagian. Tebing berkuil, astrolab, kapal, ombak, dan merpati diletakkan pada posisi aslinya di bingkai 1920 × 1080 (`.journey__frame`, posisi dalam persen bingkai), jadi komposisinya sama dengan rancangan. Di layar lebar bingkai itu menutupi bagian seperti "cover" (memakai unit `cqw`/`cqh`) dan ditambatkan di kiri atas. Judul berada di 12% dari kiri, dan lini masa mulai di 46% lalu berhenti di 80%.
 
 | Lapisan | File | Gerak |
 |---|---|---|
@@ -111,12 +111,15 @@ Bagian Perjalanan memakai paket "Odisei": peta Yunani karya Ortelius (pudar, tep
 | Tebing dan kuil | `odisei-tebing.webp` | 0.04 |
 | Astrolab | `odisei-astrolab.webp` | 0.10, berputar pelan (`data-spin`) |
 | Kapal | `odisei-kapal.webp` | 0.02, berlayar ke samping seiring lini masa digulir (`data-pan-x`) |
-| Merpati | `odisei-merpati.webp` | 0.12, terbang ke samping |
 | Ombak | `odisei-ombak.webp` | -0.05 |
-| Tiang kiri | `odisei-tiang-kiri.webp` | -0.08 |
-| Tiang kanan | `odisei-tiang-kanan.webp` | -0.10 |
+| Merpati | `odisei-merpati.webp` | 0.16, terbang ke samping |
 
-Judul berada di kiri atas dengan kabut kertas tipis di belakangnya, dan lini masa di tengah kanan. Kelompok ilustrasi selalu berhenti 380 px di bawah tepi atas layar, jadi tidak pernah menutupi teks. Di layar sempit atau tegak, urutannya menjadi judul, ilustrasi selebar layar, lalu lini masa. Kedua tiang disembunyikan (dan tidak diunduh), dan semua lapisan diam.
+Efek teks di bagian ini:
+
+- **Tinta** (`data-ink`): judul "Odisei saya" lalu pengantarnya muncul dari kiri ke kanan dengan tepi lembut, seperti ditulis dengan tinta di atas peta.
+- **Rute pelayaran** (`data-route`): garis terakota lini masa tergambar dari persinggahan pertama ke terakhir mengikuti guliran (ujungnya di 86% tinggi layar). Setiap kali rute tiba, penandanya berubah dari belah ketupat kosong menjadi penuh, lalu tahun, judul (kata naik bergiliran), dan keterangannya muncul. Rute hanya bertambah, jadi teks tidak hilang saat menggulir kembali ke atas.
+
+Di layar sempit atau tegak, urutannya menjadi judul, ilustrasi selebar layar (jendela kiri bawah bingkai, merpati pindah ke atas laut), lalu lini masa. Lapisan diam di sana. Bila gerak dikurangi, semua teks dan garis rute langsung tampil penuh tanpa animasi.
 
 ### Ε · Kontak: malam di Akropolis
 
@@ -136,6 +139,8 @@ Cincin zodiak dari paket aslinya hampir tak terlihat (alfa maksimal 6 dari 255),
 | Nama di hero | huruf naik dari kabur ke tajam satu per satu saat halaman dibuka |
 | Teks peran | kata muncul bergiliran setelah nama |
 | Judul bagian (`data-split`) | kata naik dari balik garis saat masuk layar (blur hanya di hero) |
+| Judul dan pengantar Perjalanan (`data-ink`) | ditulis dari kiri ke kanan seperti tinta di atas peta |
+| Lini masa (`data-route`) | rute tergambar saat digulir; tiap persinggahan muncul saat rute tiba |
 | Label bagian (`data-carve`) | jarak huruf merapat seperti pahatan prasasti |
 | Kartu keahlian | naik bergantian; benda di panelnya turun lalu mendarat di alas batu |
 | Latar Keahlian | halaman kuil saat senja diam di tempat (sticky) sementara kartu digulir di atasnya |
