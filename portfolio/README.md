@@ -62,7 +62,7 @@ portfolio/
 └── assets/karya/      tangkapan layar aplikasi Topologi Aset
 ```
 
-Aset di `assets/foto/` diturunkan dari paket "Senja di Akropolis, aset parallax fotorealistik" (versi 4K): area transparan kosong di sekelilingnya dipotong, lalu ukurannya disesuaikan dengan tampilan di web (ikon 168 px, lapisan lanskap 2400 sampai 2800 px). Totalnya sekitar 1,7 MB, ditambah 12 ornamen (sekitar 450 KB) yang dimuat saat bagiannya mendekati layar. Untuk mengganti salah satunya, simpan file baru dengan nama yang sama; bila proporsi isinya berbeda, sesuaikan posisi lapisan di `css/style.css` bagian "Hero".
+Aset di `assets/foto/` diturunkan dari paket "Senja di Akropolis, aset parallax fotorealistik" (versi 4K): area transparan kosong di sekelilingnya dipotong, lalu ukurannya disesuaikan dengan tampilan di web (benda pilar 640 px, lapisan lanskap 2400 sampai 2800 px). Ornamen, latar Keahlian, dan benda pilar dimuat saat bagiannya mendekati layar. Untuk mengganti salah satunya, simpan file baru dengan nama yang sama; bila proporsi isinya berbeda, sesuaikan posisi lapisan di `css/style.css` bagian "Hero".
 
 ## Parallax
 
@@ -95,8 +95,8 @@ Nama raksasa (kecepatan 0.25) diletakkan di antara lapisan, sehingga Parthenon b
 | Judul bagian (`data-split`) | kata naik dari balik garis saat masuk layar (blur hanya di hero) |
 | Label bagian (`data-carve`) | jarak huruf merapat seperti pahatan prasasti |
 | Ceruk patung | terbuka dari bawah seperti tirai |
-| Pilar keahlian | berdiri bergantian, seperti kuil yang sedang dibangun |
-| Kolom batu di Keahlian | parallax di kedua sisi (layar ≥ 1200 px) |
+| Kartu keahlian | naik bergantian; benda di panelnya turun lalu mendarat di alas batu |
+| Latar Keahlian | halaman kuil saat senja diam di tempat (sticky) sementara kartu digulir di atasnya |
 | Frieze prasasti | dua baris pepatah Delphi bergeser berlawanan arah |
 | Amfora di galeri | bergeser lebih lambat daripada panelnya |
 | Burung camar | melintasi bagian Perjalanan |
@@ -113,7 +113,7 @@ Setiap bagian punya sepasang ornamen yang bergerak dengan kedalaman berbeda. Atu
 |---|---|---|
 | Hero | layang-layang · dahan zaitun | lapisan panggung 0.16 dan 1.24, ikut kursor |
 | Α · Tentang | koin Athena · fragmen kapitel Ionia | koin di dinding ceruk 0.14; fragmen di depan alas patung -0.16, naik ke tempatnya lalu diam (`data-settle`) |
-| Β · Keahlian | jangka perunggu · tablet geometri | -0.12 dan 0.16, mengapit judul |
+| Β · Keahlian | latar halaman kuil · benda di kartu | latar sticky dan tertinggal 0.08 saat bagian masuk; benda -0.07 lalu diam di alasnya (`data-settle`) |
 | Γ · Karya | pecahan palmet · pelita terakota | 0.18 dan -0.1; saat galeri dipin keduanya berdiri di atas petunjuk gulir dan bergeser berlawanan arah mengikuti galeri (`data-pan-x`) |
 | Δ · Perjalanan | peta pesisir · kapal · ranting zaitun | peta 0.1, ranting -0.14, kapal berlayar melintasi peta seiring lini masa digulir |
 | Ε · Kontak | bulan sabit · awan malam | bulan 0.34 (paling lambat), awan 0.14 sambil hanyut ke samping |
@@ -130,9 +130,9 @@ Pengguna yang mengaktifkan *reduce motion* di sistem operasinya mendapat halaman
 - **Jarak huruf**: label berhuruf kapital Cinzel memakai jarak 0.06 sampai 0.12em, cukup untuk kesan pahatan tanpa terlihat seperti label template yang direnggangkan.
 - **Tema tetap, tanpa mode gelap**: halaman memang bergerak dari senja ke malam, jadi terang dan gelap sudah menjadi bagian cerita.
 - **Tipografi**: Cinzel berbentuk huruf pahatan prasasti untuk judul; EB Garamond nyaman dibaca untuk paragraf; GFS Didot menangani huruf Yunani (Α Β Γ Δ Ε, Χαίρετε).
-- **Motif identitas**: pita meander di setiap peralihan, penomoran bagian dengan huruf Yunani, panel karya bergaya tembikar black-figure, keahlian sebagai empat pilar kuil.
-- **Ikon**: helm hoplite (backend menjaga sistem), burung hantu Athena (data), lira (harmoni antarmuka), gulungan papirus (dokumentasi).
-- **Gerak**: parallax untuk kedalaman, pilar yang berdiri satu per satu seperti kuil dibangun, galeri yang bergeser untuk menjelajah karya. Tidak ada animasi yang berulang terus-menerus.
+- **Motif identitas**: pita meander di setiap peralihan, penomoran bagian dengan huruf Yunani, panel karya bergaya tembikar black-figure, keahlian sebagai empat pilar, masing-masing dengan benda perunggu, kayu, atau papirus di atas alas batu.
+- **Benda pilar**: helm hoplite (backend menjaga sistem), burung hantu Athena (data), lira (harmoni antarmuka), gulungan papirus (dokumentasi).
+- **Gerak**: parallax untuk kedalaman, kartu keahlian yang naik bergantian di atas halaman kuil yang diam, galeri yang bergeser untuk menjelajah karya. Tidak ada animasi yang berulang terus-menerus.
 
 ## Aksesibilitas
 
@@ -147,6 +147,6 @@ Folder ini bisa diunggah apa adanya ke hosting statis mana pun, misalnya Netlify
 
 ## Kredit
 
-- Aset fotorealistik (lapisan lanskap, kolom, patung, amfora, ranting zaitun, mahkota laurel, ikon) berasal dari gambar generatif yang di-upscale, disediakan pemilik situs.
+- Aset fotorealistik (lapisan lanskap, kolom, patung, amfora, ranting zaitun, mahkota laurel, benda pilar, latar halaman kuil) berasal dari gambar generatif yang di-upscale, disediakan pemilik situs.
 - Versi vektor awal dibuat dengan Figma AI dan masih tersimpan di file Figma di atas. Pita meander digambar langsung sebagai pola CSS.
 - Font: Cinzel, EB Garamond, GFS Didot dari Google Fonts (SIL Open Font License).

@@ -31,11 +31,12 @@
   };
   var hasUrl = function (l) { return l && typeof l.url === "string" && l.url.trim() !== ""; };
   var NUMERALS = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
+  // Benda di atas alas batu untuk tiap pilar keahlian (latar transparan, 640 px).
   var ICONS = {
-    "helm": "assets/foto/ikon-helm.webp",
-    "burung-hantu": "assets/foto/ikon-burung-hantu.webp",
-    "lira": "assets/foto/ikon-lira.webp",
-    "gulungan": "assets/foto/ikon-gulungan.webp"
+    "helm": "assets/foto/pilar-helm.webp",
+    "burung-hantu": "assets/foto/pilar-burung-hantu.webp",
+    "lira": "assets/foto/pilar-lira.webp",
+    "gulungan": "assets/foto/pilar-gulungan.webp"
   };
   var newTab = '<span class="visually-hidden"> (tab baru)</span>';
   var LOG_LABEL = { terlihat: "terlihat di log", ambigu: "ambigu, IP dipakai beberapa aset", belum: "belum terlihat di log" };
@@ -358,14 +359,18 @@
 
     // Keahlian
     var skills = D.keahlian || [];
+    // Benda di panel turun lalu mendarat di tempatnya saat kartu masuk layar (data-settle).
     $("[data-pillars]").innerHTML = skills.length ? skills.map(function (k, i) {
-      var icon = ICONS[k.ikon] ? '<img class="pillar__icon" src="' + ICONS[k.ikon] + '" alt="" width="56" height="56">' : "";
-      return '<li class="pillar" data-reveal style="--i:' + i + '"><div class="pillar__shaft">' + icon +
+      var art = ICONS[k.ikon]
+        ? '<div class="pillar__art" aria-hidden="true"><img class="pillar__img pillar__img--' + esc(k.ikon) + '" src="' + ICONS[k.ikon] +
+          '" alt="" loading="lazy" decoding="async" data-depth="-0.07" data-settle></div>'
+        : "";
+      return '<li class="pillar" data-reveal style="--i:' + i + '">' + art + '<div class="pillar__body">' +
         "<h3>" + rich(k.judul) + "</h3>" +
         (k.moto ? '<p class="pillar__motto">' + rich(k.moto) + "</p>" : "") +
         "<ul>" + (k.daftar || []).map(function (d) { return "<li>" + rich(d) + "</li>"; }).join("") + "</ul>" +
         "</div></li>";
-    }).join("") : '<li class="pillar"><div class="pillar__shaft"><p>Daftar keahlian belum diisi di js/data.js.</p></div></li>';
+    }).join("") : '<li class="pillar"><div class="pillar__body"><p>Daftar keahlian belum diisi di js/data.js.</p></div></li>';
 
     // Karya
     var works = D.karya || [];

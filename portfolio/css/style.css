@@ -159,8 +159,8 @@ mark.ganti {
 .btn--ghost:hover { background: rgba(28, 26, 23, .72); }
 
 /* Pita meander: motif identitas, dipakai sebagai pemisah dan arsitraf. */
-.band, .temple__architrave { position: relative; }
-.band::before, .temple__architrave::before, .work__art::before {
+.band { position: relative; }
+.band::before, .work__art::before {
   content: "";
   position: absolute;
   left: 0;
@@ -521,53 +521,76 @@ main > :not(.hero), .footer { position: relative; z-index: 1; }
   .facts > div { grid-template-columns: minmax(0, 1fr); }
 }
 
-/* ---------- Β · Keahlian: kuil empat pilar ---------- */
-.skills { background: var(--marmer-200); overflow-x: clip; }
-.section-head--center { text-align: center; margin-bottom: clamp(40px, 5vw, 56px); }
-.temple { max-width: 1200px; margin: 0 auto; }
-.temple__pediment {
+/* ---------- Β · Keahlian: empat pilar di halaman kuil saat senja ---------- */
+.skills {
   position: relative;
-  width: 96.7%;
-  min-height: 56px;
-  margin: 0 auto;
-  aspect-ratio: 1160 / 120;
-  background: var(--terakota-500);
-  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  overflow-x: clip;
+  background: #172436; /* warna langit di tepi atas foto, tampil selama foto dimuat */
+  color: var(--marmer-50);
 }
-.temple__pediment img {
+/* Latar: pembungkus absolut selebar bagian, berisi adegan sticky setinggi layar.
+   Adegan diam selama kartu digulir di atasnya; fotonya sedikit lebih tinggi dari bingkai
+   supaya parallax saat bagian ini masuk tidak pernah memperlihatkan tepinya. */
+.skills__backdrop { position: absolute; inset: 0; pointer-events: none; }
+.skills__scene { position: sticky; top: 0; height: min(100vh, 100%); overflow: hidden; }
+.skills__scene img {
   position: absolute;
-  left: 50%;
-  bottom: 10%;
-  width: clamp(30px, 5.5%, 64px);
-  transform: translateX(-50%);
-  filter: brightness(0) invert(1);
+  inset: -9% 0;
+  width: 100%;
+  height: 118%;
+  max-width: none;
+  object-fit: cover;
+  object-position: 50% 100%;
+  will-change: transform;
 }
-.temple__architrave { height: 36px; background: var(--tinta-900); }
-.temple__architrave::before { top: 6px; }
-.temple__pillars {
+/* Langit gelap di atas cakrawala: judul terang tetap kontras; lantai batu di bawah kartu. */
+.skills__scene::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(15, 22, 34, .35) 0, rgba(15, 22, 34, 0) 40%);
+}
+.skills__head, .pillars { position: relative; max-width: 1200px; margin-inline: auto; }
+.skills__head { margin-bottom: clamp(36px, 4.4vw, 56px); }
+.skills__head .h2 { max-width: 20ch; margin: 0; text-wrap: balance; }
+
+.pillars {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: clamp(16px, 2.4vw, 34px);
-  margin: 0;
-  padding: 0 14px;
+  gap: clamp(16px, 1.9vw, 26px);
+  padding: 0;
   list-style: none;
 }
-.pillar { display: flex; flex-direction: column; }
-.pillar::before, .pillar::after {
-  content: "";
-  display: block;
-  margin-inline: -13px;
-  background: var(--marmer-300);
-}
-.pillar::before { height: 18px; }
-.pillar::after { height: 14px; }
-.pillar__shaft {
-  flex: 1;
-  padding: 32px clamp(20px, 2vw, 28px) 36px;
+/* Kartu terangkat dari foto dengan bayangan lembut: penanda bahwa kartu berada di depan adegan. */
+.pillar {
+  display: flex;
+  flex-direction: column;
   background: var(--marmer-50);
-  border-inline: 1px solid var(--marmer-300);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, .5) inset, 0 22px 44px rgba(8, 10, 16, .38);
 }
-.pillar__icon { width: 56px; height: 56px; margin-bottom: 16px; }
+/* Panel benda: latar cokelat berpendar seperti relung pajangan museum. */
+.pillar__art {
+  position: relative;
+  aspect-ratio: 7 / 6;
+  overflow: hidden;
+  pointer-events: none;
+  background: radial-gradient(ellipse 75% 70% at 50% 42%, #7C6652 0, #5E4A3A 55%, #3E3027 100%);
+}
+.pillar__img {
+  position: absolute;
+  left: 11%;
+  right: 11%;
+  bottom: 11%;
+  width: 78%;
+  height: 74%;
+  max-width: none;
+  object-fit: contain;
+  object-position: 50% 100%;
+  filter: drop-shadow(0 16px 14px rgba(20, 12, 6, .5));
+  will-change: transform;
+}
+.pillar__img--gulungan { height: 62%; }
+.pillar__body { flex: 1; padding: 24px clamp(20px, 2vw, 26px) 30px; color: var(--tinta-900); }
 .pillar h3 {
   margin: 0 0 6px;
   font-family: var(--font-display);
@@ -590,16 +613,13 @@ main > :not(.hero), .footer { position: relative; z-index: 1; }
   line-height: 1.45;
   color: var(--tinta-700);
 }
-.temple__steps span { display: block; height: 16px; }
-.temple__steps span:nth-child(1) { background: var(--marmer-100); }
-.temple__steps span:nth-child(2) { background: var(--marmer-300); margin-inline: -10px; }
-.temple__steps span:nth-child(3) { background: var(--marmer-100); margin-inline: -18px; }
-
 @media (max-width: 1024px) {
-  .temple__pillars { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 28px; }
+  .pillars { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 24px; }
 }
 @media (max-width: 560px) {
-  .temple__pillars { grid-template-columns: minmax(0, 1fr); }
+  .pillars { grid-template-columns: minmax(0, 1fr); }
+  .pillar__art { aspect-ratio: 16 / 11; } /* kartu selebar layar: panel lebih pendek agar daftar keahlian cepat terlihat */
+  .skills__scene img { object-position: 92% 100%; } /* layar tegak: tiang kuil di tepi kanan tetap terlihat */
 }
 
 /* ---------- Γ · Karya: galeri tembikar ---------- */
@@ -991,7 +1011,6 @@ main > :not(.hero), .footer { position: relative; z-index: 1; }
   transform: translateY(28px);
   transition: opacity .8s ease, transform .9s cubic-bezier(.2, .7, .2, 1);
 }
-.js [data-reveal="drop"] { transform: translateY(-28px); transition-delay: .45s; }
 .js [data-reveal].is-visible { opacity: 1; transform: none; }
 /* Pilar berdiri satu per satu, seperti kuil yang sedang dibangun. */
 .js .pillar[data-reveal] { transform: translateY(56px); transition-delay: calc(var(--i, 0) * 110ms); }
@@ -1025,13 +1044,6 @@ main > :not(.hero), .footer { position: relative; z-index: 1; }
 }
 .frieze__row--outline { color: transparent; -webkit-text-stroke: 1.4px var(--terakota-500); }
 
-.skills { position: relative; }
-.skills > .section-head, .skills > .temple { position: relative; z-index: 1; }
-.skills__cols { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
-.skills__col { position: absolute; bottom: 40px; height: 640px; width: auto; max-width: none; }
-.skills__col--left { left: -120px; scale: -1 1; }
-.skills__col--right { right: -120px; }
-@media (max-width: 1199px) { .skills__cols { display: none; } }
 
 .journey { position: relative; overflow-x: clip; }
 .journey__birds {
@@ -1068,15 +1080,6 @@ main > :not(.hero), .footer { position: relative; z-index: 1; }
 .decor__coin { width: 17%; top: 22%; right: 9%; }
 .decor__ionic { width: 50%; left: -5%; bottom: -3%; }
 
-/* Β · Keahlian: jangka dan tablet geometri di margin kiri dan kanan judul. */
-.decor--skills { bottom: auto; height: 280px; overflow: hidden; }
-.decor__compass, .decor__tablet { top: clamp(74px, 10vw, 138px); }
-.decor__compass { left: clamp(22px, 6vw, 112px); width: clamp(56px, 9vw, 136px); }
-.decor__tablet { right: clamp(22px, 6vw, 112px); width: clamp(62px, 9vw, 128px); }
-@media (max-width: 760px) {
-  .skills > .section-head { padding-top: 50px; }
-  .decor__compass, .decor__tablet { top: 64px; }
-}
 
 /* Γ · Karya: pecahan tembikar dan pelita di sisi kanan judul galeri. */
 .works__head { position: relative; }
