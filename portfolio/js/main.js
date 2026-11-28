@@ -351,12 +351,12 @@
     $("[data-facts]").innerHTML = (t.fakta || []).map(function (f) {
       return "<div><dt>" + esc(f.label) + "</dt><dd>" + rich(f.nilai) + "</dd></div>";
     }).join("");
-    // Foto pemilik duduk di dalam relung dan bergerak bersama relungnya; patung filosof dilepas.
-    if (t.foto && t.foto.trim()) {
-      var statue = $("[data-about-statue]");
-      if (statue) statue.parentNode.removeChild(statue);
-      $("[data-about-niche]").insertAdjacentHTML("afterend", '<img class="about__photo" src="' + esc(t.foto) +
-        '" alt="Foto ' + esc(nama) + '" data-depth="-0.02" data-depth-wide>');
+    // Foto pemilik berdiri di teras menggantikan patung Muse dan bergerak dengan kecepatan yang sama.
+    var statue = $("[data-about-statue]");
+    if (t.foto && t.foto.trim() && statue) {
+      statue.insertAdjacentHTML("afterend", '<img class="about__photo" src="' + esc(t.foto) +
+        '" alt="Foto ' + esc(nama) + '" data-depth="0.1" data-depth-wide>');
+      statue.parentNode.removeChild(statue);
     }
 
     // Keahlian

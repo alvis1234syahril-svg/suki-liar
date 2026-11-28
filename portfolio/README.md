@@ -30,7 +30,7 @@ Semua teks ada di **`js/data.js`**.
 2. `[PERIKSA]`: proyek "Analisis Traffic & Topologi Aset" diambil dari aplikasi di repo ini. Hapus dari `karya` dan `perjalanan` bila belum boleh dipublikasikan.
 3. `kontak.email`: selama kosong, tombol utama mengarah ke GitHub. Setelah diisi, muncul tombol emas "Kirim email" dan GitHub menjadi tombol kedua "Lihat GitHub".
 4. URL yang kosong (`""`) otomatis disembunyikan, jadi tidak ada tautan mati.
-5. Foto: isi `tentang.foto` (misalnya `"assets/foto-saya.jpg"`). Foto akan duduk di dalam relung perpustakaan dan menggantikan patung filosof. Selama kosong, relung menampilkan patung sebagai hiasan, bukan sebagai foto Anda. Foto potret (tegak) paling pas.
+5. Foto: isi `tentang.foto` (misalnya `"assets/foto-saya.jpg"`). Foto akan berdiri di teras Delphi sebagai potret berpuncak lengkung, menggantikan patung Muse. Selama kosong, teras menampilkan patung sebagai hiasan, bukan sebagai foto Anda. Foto potret (tegak) paling pas.
 6. Gambar proyek: isi `gambar` pada tiap karya, dan `gambarAlt` untuk deskripsi gambar bagi pembaca layar. Gambar mengisi seluruh panel (sebaiknya rasio sekitar 2:1) dan ikut bergeser halus di dalam bingkai. Selama `gambar` kosong, panel menampilkan amfora dan label "Tangkapan layar [GANTI]". Karya pertama memakai `assets/foto/karya-topologi.webp` (prasasti terakota dengan diagram topologi).
 
 Kalau `data.js` rusak (misalnya kurang koma), halaman menampilkan pesan galat di bagian atas.
@@ -86,20 +86,18 @@ Nama raksasa diletakkan di antara lapisan, sehingga atap istana menutupi kaki hu
 
 Di layar tegak, nama tampil sebagai judul biasa di atas langit gelap. Cakrawala turun 150 px, lalu tiang kiri dan patung kanan mengecil menjadi bingkai di dua sudut bawah, ditambatkan ke tepi layar (`--vis-l` / `--vis-r`). Patung hanya terlihat dari kepala sampai dada.
 
-### Α · Tentang: Perpustakaan Agung Alexandria
+### Α · Tentang: teras kuil Delphi menghadap Laut Aegea
 
-Bagian Tentang adalah adegan perpustakaan dari paket "S2" (enam lapisan, satu bingkai 1920 × 1080). Setiap lapisan dipotong ke area isinya lalu diletakkan kembali dalam persen bingkai, jadi posisinya tetap saling pas di ukuran apa pun. Bingkai ditambatkan ke kiri (komposisinya ada di kiri, sisi kanan foto memudar ke gading `#F3F0E8`, warna latar bagian ini) dan selebar layar atau 106% tinggi layar dalam rasio 16:9, mana yang lebih besar.
+Bagian Tentang adalah adegan teras Delphi dari paket "S2" (empat lapisan, satu bingkai 1920 × 1080). Latar laut dan tebingnya semi-transparan (sisi kanannya ±24%), jadi warna gading bagian ini (`#F3EFE6`) ikut membentuk pemandangannya, dan pemandangan tetap samar di belakang teks. Untuk menghemat ukuran, latar itu sudah digabung dengan `#F3EFE6` (hasilnya sama persis). Lapisan lain dipotong ke area isinya lalu diletakkan kembali dalam persen bingkai. Kabut cahayanya disimpan setengah resolusi karena memang lembut.
 
 | Lapisan | File | Kecepatan |
 |---|---|---|
-| Lorong perpustakaan | `tentang-perpustakaan.webp` | -0.06 |
-| Relung marmer | `tentang-relung.webp` | -0.02 |
-| Patung filosof di kapitel Ionia | `tentang-filosof.webp` | 0.05 |
-| Tablet geometri dan koin drachma | `tentang-artefak.webp` | 0.14 |
-| Sinar matahari dan debu emas | `tentang-cahaya.webp` | 0.10 |
-| Pilar dan daun zaitun (tepi kiri) | `tentang-bingkai.webp` | 0.22 |
+| Laut Aegea dan tebing Delphi | `tentang-delphi.webp` | -0.06 |
+| Teras balustrade dan tangga marmer | `tentang-teras.webp` | 0.04 |
+| Patung Muse memegang gulungan naskah | `tentang-muse.webp` | 0.10 |
+| Sinar matahari pagi dan kabut laut | `tentang-kabut.webp` | 0.16 |
 
-Geseran dihitung relatif terhadap tengah layar (`(tinggi layar / 2 - tengah bagian) × kecepatan`), sehingga semua lapisan tepat di posisinya saat bagian ini berada di tengah. Teks berada di separuh kanan. Di layar sempit atau tegak (lebar di bawah 768 px atau rasio di bawah 7:5), adegan menjadi ilustrasi diam di atas teks dan parallax dimatikan (`data-depth-wide`), begitu pula saat gerak dikurangi.
+Geseran dihitung relatif terhadap tengah layar (`(tinggi layar / 2 - tengah bagian) × kecepatan`), sehingga semua lapisan tepat di posisinya saat bagian ini berada di tengah. Bingkai dipusatkan seperti `object-fit: cover`, jadi ujung teras selalu berhenti sebelum kolom teks yang mulai di 49%. Tepi atas dan bawah bingkai memudar ke gading. Di layar sempit atau tegak (lebar di bawah 768 px atau rasio di bawah 7:5), adegan menjadi ilustrasi diam di atas teks, berpusat pada patung, dan parallax dimatikan (`data-depth-wide`). Begitu pula saat gerak dikurangi.
 
 ### Δ · Perjalanan: pelayaran di atas peta Yunani kuno
 
@@ -189,6 +187,6 @@ Folder ini bisa diunggah apa adanya ke hosting statis mana pun, misalnya Netlify
 
 ## Kredit
 
-- Aset fotorealistik (lapisan Olympus, perpustakaan Alexandria, pelayaran Odisei, amfora, mahkota laurel, benda pilar, latar halaman kuil) berasal dari gambar generatif yang di-upscale, disediakan pemilik situs.
+- Aset fotorealistik (lapisan Olympus, teras Delphi, pelayaran Odisei, amfora, mahkota laurel, benda pilar, latar halaman kuil) berasal dari gambar generatif yang di-upscale, disediakan pemilik situs.
 - Versi vektor awal dibuat dengan Figma AI dan masih tersimpan di file Figma di atas. Pita meander digambar langsung sebagai pola CSS.
 - Font: Cinzel, EB Garamond, GFS Didot dari Google Fonts (SIL Open Font License).

@@ -442,13 +442,13 @@ main > :not(.hero), .footer { position: relative; z-index: 1; }
 .hero__lead, .contact__lead { text-wrap: balance; }
 .lead, .about__body p, .timeline p, .work p { text-wrap: pretty; }
 
-/* ---------- Α · Tentang: Perpustakaan Agung Alexandria ----------
-   Enam lapisan dari satu bingkai 1920 × 1080. Bingkai ditambatkan ke kiri (komposisinya ada di kiri,
-   sisi kanan foto memudar ke gading) dan selebar layar atau 106% tinggi layar dalam rasio 16:9,
-   mana yang lebih besar, supaya lapisan yang bergeser tidak pernah memperlihatkan tepinya.
-   Warna gading #F3F0E8 sama persis dengan sisi kanan foto latar. */
+/* ---------- Α · Tentang: teras kuil Delphi menghadap Laut Aegea ----------
+   Empat lapisan dari satu bingkai 1920 × 1080. Latar laut dan tebing semi-transparan (sisi kanannya ±24%),
+   jadi warna gading bagian ini ikut membentuk pemandangannya dan pemandangan tetap samar di belakang teks.
+   Bingkai dipusatkan dan selebar layar atau 106% tinggi layar dalam rasio 16:9, mana yang lebih besar,
+   supaya lapisan yang bergeser tidak pernah memperlihatkan tepinya. */
 .about {
-  --gading: #F3F0E8;
+  --gading: #F3EFE6;
   position: relative;
   overflow: hidden;
   background: var(--gading);
@@ -465,30 +465,30 @@ main > :not(.hero), .footer { position: relative; z-index: 1; }
   -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 7%, #000 88%, transparent 100%);
   mask-image: linear-gradient(180deg, transparent 0, #000 7%, #000 88%, transparent 100%);
 }
-/* Layar sempit: adegan menjadi ilustrasi di atas teks, berpusat pada relung (27,5% lebar bingkai). */
+/* Layar sempit: adegan menjadi ilustrasi di atas teks, berpusat pada patung (23,9% lebar bingkai). */
 .about__frame {
   position: absolute;
   top: 0;
-  left: min(0px, calc(50% - var(--sh) * .489));
+  left: min(0px, calc(50% - var(--sh) * .4254));
   height: 100%;
   aspect-ratio: 16 / 9;
 }
 .about__layer { position: absolute; max-width: none; height: auto; will-change: transform; }
-.about__layer--hall { left: 0; top: 0; width: 100%; height: 100%; }
-.about__layer--niche { left: 14.062%; top: 9.722%; width: 26.927%; }
-.about__layer--statue { left: 17.865%; top: 22.315%; width: 19.271%; }
-.about__layer--artifacts { left: 11.458%; top: 18.889%; width: 32.552%; }
-.about__layer--light { left: 0; top: 0; width: 61.146%; }
-.about__layer--frame { left: 0; top: 0; width: 24.01%; }
-/* Foto pemilik (bila tentang.foto diisi) duduk di dalam relung, menggantikan patung. */
+.about__layer--sea { left: 0; top: 0; width: 100%; height: 100%; }
+.about__layer--terrace { left: 0; top: 52.037%; width: 50.885%; }
+.about__layer--statue { left: 14.688%; top: 19.352%; width: 18.49%; }
+.about__layer--mist { left: 4.323%; top: 0; width: 74.219%; }
+/* Foto pemilik (bila tentang.foto diisi) berdiri di teras menggantikan patung: potret berpuncak lengkung
+   seperti relung, setinggi patungnya. */
 .about__photo {
   position: absolute;
-  left: 18.23%;
-  top: 17.13%;
-  width: 18.54%;
-  height: 60%;
+  left: 16.2%;
+  top: 22%;
+  width: 15.4%;
+  height: 58%;
   object-fit: cover;
   border-radius: 999px 999px 0 0;
+  box-shadow: 0 18px 40px rgba(60, 46, 28, .28);
   will-change: transform;
 }
 
@@ -508,7 +508,7 @@ main > :not(.hero), .footer { position: relative; z-index: 1; }
   font-family: var(--font-display);
   font-size: .875rem;
   letter-spacing: .1em;
-  color: #8C5A32;
+  color: #6F4426; /* lebih pekat dari label atas: baris fakta bisa jatuh di atas tebing yang lebih gelap */
   padding-top: 3px;
 }
 .facts dd { margin: 0; color: #1E1B18; }
@@ -527,12 +527,15 @@ main > :not(.hero), .footer { position: relative; z-index: 1; }
   .about__scene { position: absolute; inset: 0; height: auto; margin: 0; }
   .about__frame {
     top: 50%;
-    left: 0;
+    left: 50%; /* dipusatkan seperti object-fit: cover, jadi ujung teras selalu berhenti sebelum kolom teks (49%) */
     width: max(100%, calc(106vh * 16 / 9));
     height: auto;
-    translate: -2% -50%;
+    translate: -50% -50%;    /* Tepi atas dan bawah bingkai memudar ke gading: bila bagian ini lebih tinggi dari layar (teks panjang di
+       layar pendek), bingkai tidak meninggalkan garis tepi yang tajam. */
+    -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 6%, #000 94%, transparent 100%);
+    mask-image: linear-gradient(180deg, transparent 0, #000 6%, #000 94%, transparent 100%);
   }
-  .about__text { margin-left: 50%; max-width: 640px; }
+  .about__text { margin-left: 49%; max-width: 640px; }
 }
 @media (max-width: 480px) {
   .facts > div { grid-template-columns: minmax(0, 1fr); }
@@ -1158,7 +1161,7 @@ main > :not(.hero), .footer { position: relative; z-index: 1; }
   z-index: 20;
   overflow: hidden;
   padding: 14px 0 10px;
-  background: linear-gradient(180deg, rgba(243, 240, 232, 0) 0, rgba(243, 240, 232, .88) 22%, rgba(243, 240, 232, .88) 80%, rgba(243, 240, 232, 0) 100%);
+  background: linear-gradient(180deg, rgba(243, 239, 230, 0) 0, rgba(243, 239, 230, .88) 22%, rgba(243, 239, 230, .88) 80%, rgba(243, 239, 230, 0) 100%);
 }
 .frieze__row {
   margin: 0 0 0 -900px;
