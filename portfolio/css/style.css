@@ -157,6 +157,9 @@ mark.ganti {
   box-shadow: inset 0 0 0 1.5px var(--marmer-300); /* aksi kedua tidak memakai aksen */
 }
 .btn--ghost:hover { background: rgba(28, 26, 23, .72); }
+/* Di hero tombol kedua bisa jatuh di atas awan terang (ponsel pendek): isiannya dipekatkan agar teks tetap kontras. */
+.hero .btn--ghost { background: rgba(14, 18, 28, .6); }
+.hero .btn--ghost:hover { background: rgba(14, 18, 28, .8); }
 
 /* Pita meander: motif identitas, dipakai sebagai pemisah dan arsitraf. */
 .band { position: relative; }
@@ -295,7 +298,7 @@ mark.ganti {
   min-height: 560px;
   overflow: hidden;
   isolation: isolate;
-  background: #1B2F4E;
+  background: #091F3E;
   color: var(--marmer-50);
 }
 
@@ -315,70 +318,39 @@ mark.ganti {
 .layer { position: absolute; inset: 0; will-change: transform; }
 .layer img { position: absolute; max-width: none; }
 
+/* --hz menurunkan cakrawala (langit, awan, istana, merpati). Di layar lebar nilainya dari main.js (--hz-auto):
+   sejauh bagian atas panggung yang terpotong. Di layar tegak cakrawala turun lebih jauh supaya teks di atas langit gelap. */
+.hero__stage { --hz: var(--hz-auto, 0px); }
+
+/* Langit senja: warna diambil dari pratinjau komposisi Olympus (biru tua di atas, ungu lalu emas di cakrawala).
+   Lapisan ini lebih tinggi dari panggung supaya tetap menutup saat bergeser. */
 .layer--sky {
   inset: -600px -300px -300px;
   background: linear-gradient(180deg,
-    #1B2F4E 0, #1B2F4E 600px,
-    #33496E 915px, #6E6483 1095px, #C98877 1194px, #F3C894 1240px, #F3C894 100%);
+    #091F3E 0, #091F3E 600px,
+    #112547 calc(683px + var(--hz)), #313861 calc(808px + var(--hz)), #5E5274 calc(917px + var(--hz)),
+    #A9806F calc(990px + var(--hz)), #E3B487 calc(1050px + var(--hz)), #E3B487 100%);
 }
-.sun-glow {
-  position: absolute;
-  left: -100px;
-  top: 380px;
-  width: 520px;
-  height: 520px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 224, 170, .9) 0, rgba(255, 214, 160, .38) 34%, rgba(255, 214, 160, 0) 68%);
-}
-/* Awan di kiri atas yang kosong, tidak di belakang huruf nama raksasa. */
-.clouds { left: 40px; top: 150px; width: 420px; opacity: .85; }
-.isle-far { left: -30px; top: 566px; width: 1500px; }
-.sea {
-  position: absolute;
-  left: -300px;
-  right: -300px;
-  top: 640px;
-  height: 1000px;
-  background: linear-gradient(180deg, #EDB98C 0, #B98378 78px, #4E4560 260px, #3B3348 1000px);
-}
-.glints { left: 110px; top: 648px; width: 440px; opacity: .9; }
-.birds { left: 1060px; top: 168px; width: 230px; }
 
-/* Lapisan foto: tanah di bawahnya berupa gradasi dari warna tepi bawah foto itu sendiri,
-   diletakkan di belakang foto supaya celah di tepi yang tidak rata ikut tertutup saat bergeser. */
-.isle-near, .acropolis, .trees, .ruins { position: absolute; z-index: 0; }
-.isle-near img, .acropolis img, .trees img, .ruins img { position: static; width: 100%; }
-.acropolis::before, .trees::before, .ruins::before {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  left: 0;
-  right: 0;
-  height: 800px;
-}
-.isle-near { left: 620px; top: 565px; width: 1700px; }
-.acropolis { left: -75px; top: 505px; width: 1500px; } /* Parthenon di tengah; kaki bukit (y 749) di balik semak */
-/* Kaki bukit berlanjut di belakang pepohonan; tepi kirinya memudar ke laut. */
-.acropolis::before {
-  top: calc(100% - 4px);
-  background: linear-gradient(180deg, #2C281D 0, #221E16 160px);
-  -webkit-mask-image: linear-gradient(90deg, transparent 6%, #000 16%);
-  mask-image: linear-gradient(90deg, transparent 6%, #000 16%);
-}
-.trees { left: -330px; top: 615px; width: 2100px; } /* dasar (y 810) tertutup bebatuan */
-.trees::before { top: 70%; background: linear-gradient(180deg, rgba(46, 42, 26, 0) 0, #2E2A1A 40px, #221D14 160px); }
-.ruins { left: -680px; top: 730px; width: 2800px; } /* dasar (y 920) di bawah batas panggung 900 */
-.ruins::before { top: 70%; background: linear-gradient(180deg, rgba(61, 48, 35, 0) 0, #3D3023 30px, #241C15 120px); }
-.column { top: 120px; height: 840px; width: auto; }
-.column--left { left: -190px; transform: scaleX(-1); }
-.column--right { left: 1250px; }
+/* Lapisan Olympus: semua dipotong dari satu bingkai 1920 × 1080 lalu diletakkan pada posisi aslinya.
+   Bingkai itu diskalakan ke tinggi panggung (900 / 1080) dan dipusatkan, jadi lebarnya 1600 dan mulai di x -80. */
+.oly { height: auto; }
+.oly--peaks { left: -80px; top: calc(416px + var(--hz)); width: 1600px; }
+.oly--clouds-back { left: -80px; top: calc(329px + var(--hz)); width: 1600px; }
+.oly--palace { left: 155px; top: calc(327.5px + var(--hz)); width: 1115px; }
+.oly--birds { left: 479px; top: calc(161px + var(--hz)); width: 869px; }
+.oly--clouds-front { left: -80px; top: calc(425px + var(--hz)); width: 1600px; }
+.oly--left { left: -80px; top: 0; width: 673px; }
+.oly--right { left: 1030px; top: 193px; width: 490px; }
 
-/* Layar tegak: Parthenon digeser ke tengah dan diturunkan agar tidak tertutup teks. */
+/* Layar tegak: hanya bagian tengah panggung yang terlihat dan teks menempati separuh atas.
+   Cakrawala turun, lalu tiang kiri dan patung kanan mengecil menjadi bingkai di dua sudut bawah,
+   ditambatkan ke tepi layar (--vis-l / --vis-r dari main.js). Patung hanya terlihat dari kepala sampai dada. */
 @media (max-aspect-ratio: 1/1) {
-  .acropolis { left: -75px; top: 540px; }
-  .trees { top: 650px; }
-  .glints, .birds, .clouds { display: none; }
-  .sun-glow { left: 400px; top: 300px; }
+  .hero__stage { --hz: 150px; }
+  .oly--birds { left: 430px; top: 470px; width: 560px; }
+  .oly--left { left: calc(var(--vis-l, 512px) - 210px); top: 600px; width: 420px; }
+  .oly--right { left: calc(var(--vis-r, 928px) - 170px); top: 694px; width: 330px; }
 }
 @media (max-width: 480px) {
   .hero__actions { gap: 12px; }
@@ -1063,18 +1035,6 @@ main > :not(.hero), .footer { position: relative; z-index: 1; }
 .decor { position: absolute; inset: 0; pointer-events: none; }
 .decor > img { position: absolute; max-width: none; will-change: transform; }
 
-/* Hero: layang-layang mengisi langit kiri di antara awan dan pulau jauh; dahan zaitun adalah lapisan
-   terdekat (kecepatan 1.24), masuk dari tepi kanan bingkai sehingga tidak pernah tampak melayang. */
-.swallows { left: 128px; top: 401px; width: 158px; opacity: .9; }
-.olive-front { right: -132px; bottom: 120px; width: 428px; transform: scaleX(-1) rotate(-6deg); }
-/* Layar tegak: teks menutupi hampir seluruh langit, jadi layang-layang disembunyikan (seperti camar dan awan),
-   dan dahan zaitun pindah ke langit kanan atas yang kosong. Pangkalnya selalu menempel di tepi kanan layar
-   (--vis-r dari main.js), dan saat digulir ia naik lebih cepat daripada teks sehingga tidak pernah melintasinya. */
-@media (max-aspect-ratio: 1/1) {
-  .swallows { display: none; }
-  .olive-front { left: calc(var(--vis-r, 928px) - 150px); right: auto; top: 70px; bottom: auto; width: 260px; }
-}
-
 /* Α · Tentang: diorama di ceruk. Koin di dinding belakang, fragmen kapitel di depan alas patung,
    terpotong tepi ceruk supaya terbaca sebagai benda di latar depan. */
 .decor__coin { width: 17%; top: 22%; right: 9%; }
@@ -1121,12 +1081,12 @@ main > :not(.hero), .footer { position: relative; z-index: 1; }
   position: absolute;
   left: 0;
   right: 0;
-  top: 240px;
+  top: var(--title-top, 168px); /* dihitung main.js dari posisi sapaan */
   margin: 0;
   text-align: center;
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 180px;
+  font-size: var(--title-size, 140px);
   line-height: .9;
   letter-spacing: .02em;
   text-transform: uppercase;
@@ -1134,6 +1094,19 @@ main > :not(.hero), .footer { position: relative; z-index: 1; }
   text-shadow: 0 2px 8px rgba(15, 26, 43, .45), 0 8px 44px rgba(15, 26, 43, .45);
 }
 .stage-title > span { display: block; }
+/* Kabut senja di belakang nama: menggelapkan lautan awan tepat di balik huruf supaya "SYAHRIL" tetap kontras.
+   Ada di lapisan judul sendiri, jadi ikut bergerak bersama nama dan tetap di belakang istana. */
+.stage-title::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 46%;
+  width: 980px;
+  height: 420px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(closest-side, rgba(14, 18, 44, .78), rgba(14, 18, 44, .5) 55%, rgba(14, 18, 44, 0));
+  z-index: -1;
+}
 .layer--title { will-change: transform, filter, opacity; }
 
 @media (max-aspect-ratio: 1/1), (max-width: 899px) {
@@ -1164,7 +1137,14 @@ main > :not(.hero), .footer { position: relative; z-index: 1; }
   .hero__bottom { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 20px 48px; }
   .hero__lead { margin: 0; max-width: 32ch; }
   .hero__cue { display: none; }
-  .hero::before { background: radial-gradient(ellipse 60% 34% at 50% 6%, rgba(15, 26, 43, .45), rgba(15, 26, 43, 0) 80%); }
+  /* Pita gelap tipis di atas: nama situs dan menu tetap terbaca di depan daun zaitun. */
+  .hero::before {
+    background:
+      linear-gradient(180deg, rgba(9, 15, 28, .72) 0, rgba(9, 15, 28, .4) 70px, rgba(9, 15, 28, 0) 150px),
+      radial-gradient(ellipse 60% 34% at 50% 6%, rgba(15, 26, 43, .45), rgba(15, 26, 43, 0) 80%),
+      /* Teks peran di kiri bawah berada di depan tiang marmer yang terang. */
+      radial-gradient(ellipse 34% 26% at 18% 84%, rgba(12, 12, 18, .55), rgba(12, 12, 18, 0) 100%);
+  }
   .hero::after { height: 36%; background: linear-gradient(0deg, rgba(20, 15, 11, .9) 0, rgba(20, 15, 11, .62) 42%, rgba(20, 15, 11, 0) 100%); }
 }
 

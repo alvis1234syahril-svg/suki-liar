@@ -457,9 +457,23 @@
     state.heroH = hero.offsetHeight;
     state.scale = Math.max(w / 1440, state.heroH / 900);
     stage.style.setProperty("--s", state.scale.toFixed(4));
-    // Tepi kanan yang terlihat, dalam satuan panggung: lapisan bisa ditambatkan ke tepi layar
-    // berapa pun rasio layarnya (dipakai dahan zaitun di layar tegak).
+    // Tepi kiri dan kanan yang terlihat, dalam satuan panggung: lapisan bisa ditambatkan ke tepi layar
+    // berapa pun rasio layarnya (dipakai tiang dan patung di layar tegak).
+    stage.style.setProperty("--vis-l", (720 - w / state.scale / 2).toFixed(1) + "px");
     stage.style.setProperty("--vis-r", (720 + w / state.scale / 2).toFixed(1) + "px");
+    // Nama raksasa selalu di bawah sapaan. Di layar lebar tapi pendek, bagian atas panggung terpotong,
+    // jadi nama diturunkan secukupnya (dan sedikit dikecilkan) agar tidak menimpa sapaan.
+    // Cakrawala (awan, istana, merpati) ikut turun sejauh bagian atas yang terpotong, jadi jarak sapaan, nama,
+    // dan atap istana tetap sama seperti di layar 1440 × 900.
+    var visTop = 900 - state.heroH / state.scale;
+    stage.style.setProperty("--hz-auto", visTop.toFixed(1) + "px");
+    var greet = $(".hero__top .overline");
+    if (titleLayer && greet) {
+      var need = visTop + (greet.offsetTop + greet.offsetHeight + 24) / state.scale;
+      var titleTop = Math.max(168 + visTop, need);
+      stage.style.setProperty("--title-top", titleTop.toFixed(1) + "px");
+      stage.style.setProperty("--title-size", Math.max(100, 140 - (titleTop - 168 - visTop) * 0.5).toFixed(1) + "px");
+    }
 
     state.pinned = wide.matches && !reduceMotion.matches && track.children.length > 1;
     worksEl.classList.toggle("is-pinned", state.pinned);

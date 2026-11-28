@@ -1,6 +1,6 @@
 # Senja di Akropolis · Portofolio Parallax
 
-Situs portofolio satu halaman bertema Yunani kuno. Halaman bercerita dari senja ke malam: hero dibuka saat matahari terbenam di Laut Aegea (dan ikut tenggelam saat digulir), bagian tengah memakai marmer dan tembikar, kontak ditutup di bawah langit malam Akropolis.
+Situs portofolio satu halaman bertema Yunani kuno. Halaman bercerita dari senja ke malam: hero dibuka di istana Olympus di atas lautan awan saat senja, bagian tengah memakai marmer dan tembikar, kontak ditutup di bawah langit malam Akropolis.
 
 Situs statis murni (HTML, CSS, JavaScript tanpa build) dan tidak bergantung pada aplikasi Laravel di repo ini.
 
@@ -62,29 +62,29 @@ portfolio/
 └── assets/karya/      tangkapan layar aplikasi Topologi Aset
 ```
 
-Aset di `assets/foto/` diturunkan dari paket "Senja di Akropolis, aset parallax fotorealistik" (versi 4K): area transparan kosong di sekelilingnya dipotong, lalu ukurannya disesuaikan dengan tampilan di web (benda pilar 640 px, lapisan lanskap 2400 sampai 2800 px). Ornamen, latar Keahlian, dan benda pilar dimuat saat bagiannya mendekati layar. Untuk mengganti salah satunya, simpan file baru dengan nama yang sama; bila proporsi isinya berbeda, sesuaikan posisi lapisan di `css/style.css` bagian "Hero".
+Aset di `assets/foto/` diturunkan dari paket "Senja di Akropolis, aset parallax fotorealistik" (versi 4K): area transparan kosong di sekelilingnya dipotong, lalu ukurannya disesuaikan dengan tampilan di web (benda pilar 640 px, lapisan hero sampai 1920 px). Ornamen, latar Keahlian, dan benda pilar dimuat saat bagiannya mendekati layar. Untuk mengganti salah satunya, simpan file baru dengan nama yang sama; bila proporsi isinya berbeda, sesuaikan posisi lapisan di `css/style.css` bagian "Hero".
 
 ## Parallax
 
-Hero adalah panggung 1440 × 900 (sama dengan frame Figma) yang diskalakan seperti `background-size: cover`. Setiap lapisan bergerak dengan kecepatan berbeda terhadap guliran, ditambah sedikit gerak mengikuti kursor di desktop.
+Hero adalah panggung 1440 × 900 yang diskalakan seperti `background-size: cover`: istana Olympus di atas lautan awan saat senja. Lapisannya berasal dari paket "Olympus Parallax Assets" (semua dari satu bingkai 1920 × 1080). Setiap lapisan dipotong ke area isinya supaya file kecil, lalu diletakkan kembali pada posisi aslinya di bingkai, yang diskalakan ke tinggi panggung (lebar 1600, mulai di x -80). Setiap lapisan bergerak dengan kecepatan berbeda terhadap guliran, ditambah sedikit gerak mengikuti kursor di desktop.
 
-| Lapisan | Kecepatan |
-|---|---|
-| Langit | 0.05 |
-| Cahaya matahari | 0.10 (tenggelam ke laut saat digulir) |
-| Garis awan | 0.12 |
-| Pulau jauh | 0.18 |
-| Laut + kilau | 0.20 |
-| Burung camar | 0.25 |
-| Pulau dekat | 0.30 |
-| Akropolis | 0.42 |
-| Pepohonan | 0.62 |
-| Reruntuhan | 1.00 (menyambung ke pita meander) |
-| Kolom serambi | 1.06 |
+| Lapisan | File | Kecepatan |
+|---|---|---|
+| Langit senja | gradasi CSS (warna dari pratinjau komposisi) | 0.05 |
+| Pegunungan jauh | `olympus-puncak.webp` | 0.15 |
+| Lautan awan belakang | `olympus-awan-belakang.webp` | 0.25 |
+| Nama raksasa | teks HTML | 0.35 |
+| Istana Olympus | `olympus-istana.webp` | 0.45 |
+| Merpati | `olympus-merpati.webp` | 0.55 |
+| Kabut depan | `olympus-awan-depan.webp` | 0.70 |
+| Tiang Korintus dan zaitun (kiri) | `olympus-kiri.webp` | 0.88 |
+| Patung Apollo dan tiang (kanan) | `olympus-kanan.webp` | 0.92 |
 
-Dua ornamen ikut menjadi lapisan hero: burung layang-layang (0.16) di langit kiri di antara awan dan pulau jauh, dan dahan zaitun (1.24) sebagai lapisan paling depan yang masuk dari tepi kanan bingkai.
+`layer-01-sky.png` dari paket tidak ikut terkirim, jadi langitnya dibuat dengan gradasi CSS. Bila file itu menyusul, cukup ganti `.layer--sky` dengan gambar tersebut.
 
-Nama raksasa (kecepatan 0.25) diletakkan di antara lapisan, sehingga Parthenon berdiri di depan kaki hurufnya. Saat digulir, nama itu makin kabur dan pudar, panggung membesar pelan, dan hero tetap di tempat (`position: sticky`) sementara bagian Tentang naik menutupinya seperti tirai. Di layar tegak, nama tampil sebagai judul biasa di atas Parthenon.
+Nama raksasa diletakkan di antara lapisan, sehingga atap istana menutupi kaki hurufnya. Kabut gelap lembut di belakang nama menjaga kontras di atas awan terang. `main.js` menghitung posisi nama dari tepi bawah sapaan. Di layar lebar tapi pendek bagian atas panggung terpotong, jadi nama dan cakrawala (awan, istana, merpati) ikut turun sejauh potongan itu (`--hz-auto`). Saat digulir, nama makin kabur dan pudar, panggung membesar pelan, dan hero tetap di tempat (`position: sticky`) sementara bagian Tentang naik menutupinya seperti tirai.
+
+Di layar tegak, nama tampil sebagai judul biasa di atas langit gelap. Cakrawala turun 150 px, lalu tiang kiri dan patung kanan mengecil menjadi bingkai di dua sudut bawah, ditambatkan ke tepi layar (`--vis-l` / `--vis-r`). Patung hanya terlihat dari kepala sampai dada.
 
 ### Animasi teks dan efek gulir
 
@@ -111,14 +111,13 @@ Setiap bagian punya sepasang ornamen yang bergerak dengan kedalaman berbeda. Atu
 
 | Bagian | Ornamen | Gerak |
 |---|---|---|
-| Hero | layang-layang · dahan zaitun | lapisan panggung 0.16 dan 1.24, ikut kursor |
 | Α · Tentang | koin Athena · fragmen kapitel Ionia | koin di dinding ceruk 0.14; fragmen di depan alas patung -0.16, naik ke tempatnya lalu diam (`data-settle`) |
 | Β · Keahlian | latar halaman kuil · benda di kartu | latar sticky dan tertinggal 0.08 saat bagian masuk; benda -0.07 lalu diam di alasnya (`data-settle`) |
 | Γ · Karya | pecahan palmet · pelita terakota | 0.18 dan -0.1; saat galeri dipin keduanya berdiri di atas petunjuk gulir dan bergeser berlawanan arah mengikuti galeri (`data-pan-x`) |
 | Δ · Perjalanan | peta pesisir · kapal · ranting zaitun | peta 0.1, ranting -0.14, kapal berlayar melintasi peta seiring lini masa digulir |
 | Ε · Kontak | bulan sabit · awan malam | bulan 0.34 (paling lambat), awan 0.14 sambil hanyut ke samping |
 
-Semua ornamen memakai `alt=""` di dalam pembungkus `aria-hidden="true"`, tidak bisa diklik (`pointer-events: none`), dan dimuat malas (`loading="lazy"`) kecuali dua lapisan hero. Bila gerak dikurangi, ornamen diam di posisinya. Bila `tentang.foto` diisi, koin dan fragmen kapitel ikut hilang supaya tidak menutupi foto Anda.
+Semua ornamen memakai `alt=""` di dalam pembungkus `aria-hidden="true"`, tidak bisa diklik (`pointer-events: none`), dan dimuat malas (`loading="lazy"`). Bila gerak dikurangi, ornamen diam di posisinya. Bila `tentang.foto` diisi, koin dan fragmen kapitel ikut hilang supaya tidak menutupi foto Anda.
 
 Karya pertama punya tautan "Lihat tangkapan layar aplikasi" ke `assets/karya/topologi-aset.webp`, tangkapan layar aplikasi aslinya, sebagai pelengkap demo yang memakai data contoh.
 
